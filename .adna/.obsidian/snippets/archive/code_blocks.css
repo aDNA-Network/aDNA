@@ -1,0 +1,77 @@
+/* @settings
+name: Code Blocks
+id: code-blocks
+settings:
+  -
+    id: code-border-width
+    title: Code block border width
+    type: variable-number-slider
+    default: 3
+    min: 1
+    max: 6
+    step: 1
+    format: px
+  -
+    id: code-border-color
+    title: Code block border color
+    type: variable-color
+    format: hex
+    default: "#663399"
+  -
+    id: code-inline-tint
+    title: Tinted inline code background
+    type: class-toggle
+    default: true
+*/
+
+/* Code Blocks — accent left border, rounded corners, tinted inline code
+ * Supports Reading View (.markdown-rendered) and Live Preview (.cm-s-obsidian)
+ */
+
+body {
+  --code-border-width: 3px;
+  --code-border-color: #663399;
+}
+
+/* Reading View — fenced code blocks */
+.markdown-rendered pre {
+  border-left: var(--code-border-width) solid var(--code-border-color);
+  border-radius: 4px;
+}
+
+/* Live Preview — code blocks */
+.cm-s-obsidian .HyperMD-codeblock-begin,
+.cm-s-obsidian .HyperMD-codeblock,
+.cm-s-obsidian .HyperMD-codeblock-end {
+  border-left: var(--code-border-width) solid var(--code-border-color);
+}
+
+.cm-s-obsidian .HyperMD-codeblock-begin {
+  border-top-left-radius: 4px;
+}
+
+.cm-s-obsidian .HyperMD-codeblock-end {
+  border-bottom-left-radius: 4px;
+}
+
+/* Inline code — tinted background (Reading View) */
+.code-inline-tint .markdown-rendered code:not(pre code) {
+  background-color: rgba(102, 51, 153, 0.1);
+  border-radius: 3px;
+  padding: 0.15em 0.35em;
+}
+
+.theme-dark .code-inline-tint .markdown-rendered code:not(pre code) {
+  background-color: rgba(153, 102, 204, 0.15);
+}
+
+/* Inline code — tinted background (Live Preview) */
+.code-inline-tint .cm-s-obsidian .cm-inline-code:not(.cm-formatting) {
+  background-color: rgba(102, 51, 153, 0.1);
+  border-radius: 3px;
+  padding: 0.1em 0.25em;
+}
+
+.theme-dark .code-inline-tint .cm-s-obsidian .cm-inline-code:not(.cm-formatting) {
+  background-color: rgba(153, 102, 204, 0.15);
+}

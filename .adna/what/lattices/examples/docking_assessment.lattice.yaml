@@ -1,0 +1,71 @@
+lattice:
+  name: docking_assessment
+  version: "1.0.0"
+  lattice_type: pipeline
+  description: >
+    Sub-lattice extracted from protein_binder_design — the structure prediction
+    and interface analysis stages as a standalone validation pipeline. Accepts
+    designed binder sequences and a target structure, predicts complex geometry,
+    and scores binding quality. Demonstrates federation properties including
+    parent_lattice and extracted_nodes cross-referencing.
+  execution:
+    mode: workflow
+    runtime: ray
+    tier: L2
+  nodes:
+    - id: structure_prediction
+      type: module
+      ref: "what/modules/module_chai_1"
+      description: "Predict binder-target complex structures"
+      config:
+        num_models: 5
+        num_recycles: 4
+        inference_mode: "multimer"
+    - id: interface_analysis
+      type: module
+      ref: "what/modules/module_pinal"
+      description: "Analyze binding interfaces and predict affinity"
+      config:
+        interface_cutoff: 8.0
+        calculate_sasa: true
+        energy_function: "ref2015"
+    - id: ranking
+      type: process
+      description: "Rank candidates by composite binding score"
+  edges:
+    - from: structure_prediction
+      to: interface_analysis
+      label: "predicted complexes"
+      data_mapping:
+        complex_structures: input_complexes
+    - from: interface_analysis
+      to: ranking
+      label: "binding metrics"
+      data_mapping:
+        interface_scores: scores
+    - from: structure_prediction
+      to: ranking
+      label: "confidence scores"
+      data_mapping:
+        plddt: plddt_scores
+        iptm: iptm_scores
+  fair:
+    license: "MIT"
+    creators:
+      - "Lattice Labs"
+    keywords:
+      - protein docking
+      - structure prediction
+      - interface analysis
+      - sub-lattice
+      - federation
+    provenance: "Extracted from protein_binder_design lattice — structure prediction and interface analysis stages"
+  federation:
+    shareable: true
+    source_instance: adna
+    parent_lattice: protein_binder_design
+    version_policy: locked
+    extracted_nodes:
+      - structure_prediction
+      - interface_analysis
+      - ranking

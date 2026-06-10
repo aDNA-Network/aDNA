@@ -1,0 +1,58 @@
+lattice:
+  name: learning_path
+  version: "1.0.0"
+  lattice_type: workflow
+  description: >
+    Personal learning workflow for structured skill development. Models the
+    cycle from selecting learning material through study, practice, assessment,
+    and review. The assessment node loops back to study if mastery thresholds
+    are not met, creating an iterative learning cycle.
+  execution:
+    mode: workflow
+    runtime: local
+    tier: L1
+  nodes:
+    - id: course_selection
+      type: process
+      description: "Choose learning resources — courses, books, tutorials, mentors — based on goals and current skill level"
+    - id: study
+      type: process
+      description: "Active learning — read, watch, take notes, highlight key concepts"
+    - id: practice
+      type: process
+      description: "Apply knowledge through exercises, projects, or real-world tasks"
+    - id: assessment
+      type: process
+      description: "Evaluate understanding — quizzes, peer review, self-assessment against learning objectives"
+    - id: review
+      type: dataset
+      description: "Completed learning record — skills acquired, gaps identified, next learning goals"
+  edges:
+    - from: course_selection
+      to: study
+      label: "selected resources"
+    - from: study
+      to: practice
+      label: "concepts learned"
+    - from: practice
+      to: assessment
+      label: "practice output"
+    - from: assessment
+      to: review
+      label: "mastery achieved"
+      condition: "assessment.score >= mastery_threshold"
+    - from: assessment
+      to: study
+      label: "review needed"
+      condition: "assessment.score < mastery_threshold"
+  fair:
+    license: "MIT"
+    creators:
+      - "Lattice Labs"
+    keywords:
+      - learning
+      - personal development
+      - education
+      - skill building
+      - workflow
+    provenance: "Personal learning workflow demonstrating iterative assessment loops"

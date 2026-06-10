@@ -1,0 +1,38 @@
+---
+type: directory_index
+created: {{created_date}}
+updated: {{created_date}}
+last_edited_by: agent_init
+tags: [directory_index, what]
+---
+
+# what/ — Knowledge Layer (Agent Reference)
+
+## Purpose
+
+`what/` holds knowledge objects — the **WHAT** of **{{project_name}}**. Context library, decisions, reference material, and domain-specific entities.
+
+## Subdirectories
+
+| Folder | Purpose | Status |
+|--------|---------|--------|
+| `context/` | Agent context library — synthesized knowledge for domain work | Required |
+| `decisions/` | Architecture Decision Records — significant decisions and rationale | Recommended |
+
+Add project-specific subdirectories as needed (e.g., `datasets/`, `experiments/`, `services/`).
+
+## Working Rules
+
+- All files follow `type_descriptive_name.md` (underscores only, never hyphens)
+- Context files carry `token_estimate` in frontmatter for budget planning
+- Each entry describes and links to objects — avoid duplicating source material
+
+## Load/Skip Decision
+
+**Load when**: Orienting on knowledge objects or deciding which subdirectory to work in.
+**Skip when**: Already know the target subdirectory — go directly to its AGENTS.md.
+
+## Cross-References
+
+- [who/AGENTS](../who/AGENTS.md) — Organization (WHO)
+- [how/AGENTS](../how/AGENTS.md) — Operations (HOW)

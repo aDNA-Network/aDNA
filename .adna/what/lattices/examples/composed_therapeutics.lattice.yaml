@@ -1,0 +1,69 @@
+lattice:
+  name: composed_therapeutics
+  version: "1.0.0"
+  lattice_type: pipeline
+  description: >
+    Therapeutics discovery pipeline demonstrating external reference composition.
+    Combines local target selection and candidate generation with imported
+    docking assessment from a remote instance via lattice:// URI. The
+    docking_assessment node is an opaque reference to the full structure
+    prediction and interface analysis sub-lattice, demonstrating how federated
+    lattices compose without exposing internal structure.
+  execution:
+    mode: workflow
+    runtime: ray
+    tier: L2
+  nodes:
+    - id: target_selection
+      type: process
+      description: "Select therapeutic targets from disease-associated gene list"
+    - id: candidate_generation
+      type: module
+      ref: "what/modules/module_rfdiffusion"
+      description: "Generate binder candidates for selected targets using RFdiffusion"
+      config:
+        num_designs: 50
+        scaffold_lengths: [80, 100, 120]
+        hotspot_weight: 3.0
+    - id: docking_assessment
+      type: module
+      ref: "lattice://adna/docking_assessment"
+      description: "Validate candidates via structure prediction and interface analysis (federated sub-lattice)"
+    - id: clinical_ranking
+      type: process
+      description: "Rank validated candidates by clinical feasibility criteria"
+  edges:
+    - from: target_selection
+      to: candidate_generation
+      label: "selected targets"
+      data_mapping:
+        target_structures: input_pdb
+    - from: candidate_generation
+      to: docking_assessment
+      label: "binder candidates"
+      data_mapping:
+        designed_sequences: input_sequences
+    - from: docking_assessment
+      to: clinical_ranking
+      label: "validation results"
+      data_mapping:
+        binding_scores: candidate_scores
+  fair:
+    license: "MIT"
+    creators:
+      - "Lattice Labs"
+    keywords:
+      - therapeutics
+      - drug discovery
+      - protein binder
+      - docking
+      - composition
+      - federation
+    provenance: >
+      Composed pipeline demonstrating federation — local target selection and
+      clinical ranking stages with imported docking_assessment sub-lattice
+      from adna instance via external reference composition pattern.
+  federation:
+    shareable: true
+    source_instance: adna
+    version_policy: minor

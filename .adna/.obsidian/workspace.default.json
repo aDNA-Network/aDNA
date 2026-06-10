@@ -1,0 +1,160 @@
+{
+  "main": {
+    "id": "main-split",
+    "type": "split",
+    "children": [
+      {
+        "id": "main-tabs",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "home-leaf",
+            "type": "leaf",
+            "pinned": true,
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "HOME.md",
+                "mode": "preview",
+                "source": false
+              },
+              "pinned": true,
+              "icon": "lucide-file",
+              "title": "HOME"
+            }
+          }
+        ],
+        "currentTab": 0
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "left-split",
+    "type": "split",
+    "children": [
+      {
+        "id": "left-tabs",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "nn-leaf",
+            "type": "leaf",
+            "state": {
+              "type": "notebook-navigator",
+              "state": {},
+              "icon": "notebook-navigator",
+              "title": "Notebook Navigator"
+            }
+          },
+          {
+            "id": "search-leaf",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "bookmarks-leaf",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": false
+  },
+  "right": {
+    "id": "right-split",
+    "type": "split",
+    "children": [
+      {
+        "id": "right-tabs",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "outline-leaf",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          },
+          {
+            "id": "backlink-leaf",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": true,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": true,
+      "daily-notes:Open today's daily note": true,
+      "audio-recorder:Start/stop recording": true,
+      "markdown-importer:Open format converter": true,
+      "workspaces:Manage workspace layouts": true,
+      "note-composer:Merge current file with another file...": true,
+      "note-composer:Extract current selection...": true,
+      "obsidian42-brat:BRAT": true,
+      "templater-obsidian:Templater": true,
+      "table-editor-obsidian:Advanced Tables Toolbar": true,
+      "obsidian-advanced-canvas:Advanced Canvas": true,
+      "obsidian-style-settings:Style Settings": true,
+      "obsidian-meta-bind-plugin:Meta Bind": true,
+      "obsidian-tasks-plugin:Tasks": true,
+      "pretty-properties:Pretty Properties": true,
+      "fold-properties-by-default:Fold Properties": true,
+      "notebook-navigator:Notebook Navigator": false,
+      "homepage:Open homepage": false,
+      "termy:Open Termy terminal": false
+    }
+  },
+  "active": "home-leaf",
+  "lastOpenFiles": [
+    "HOME.md"
+  ]
+}

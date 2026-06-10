@@ -1,0 +1,39 @@
+lattice:
+  name: hello_world
+  version: "1.0.0"
+  lattice_type: pipeline
+  description: >
+    Minimal valid lattice — the simplest possible pipeline for onboarding.
+    Reads input data, transforms it, and writes output. Use as a starting
+    template when learning the .lattice.yaml format.
+  execution:
+    mode: workflow
+    runtime: local
+    tier: L1
+  nodes:
+    - id: input_data
+      type: dataset
+      description: "Input dataset — any structured data source"
+    - id: transform
+      type: process
+      description: "Apply a transformation to the input data"
+    - id: output_data
+      type: dataset
+      description: "Transformed output ready for downstream use"
+  edges:
+    - from: input_data
+      to: transform
+      label: "raw data"
+    - from: transform
+      to: output_data
+      label: "processed data"
+  fair:
+    license: "MIT"
+    creators:
+      - "Lattice Labs"
+    keywords:
+      - hello world
+      - onboarding
+      - minimal example
+      - pipeline
+    provenance: "Minimal example lattice for onboarding and learning the .lattice.yaml format"

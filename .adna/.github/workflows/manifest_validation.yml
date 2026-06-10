@@ -1,0 +1,58 @@
+# manifest_validation.yml — reusable workflow that validates a deploy_manifest.yaml
+# against the lattice-protocol schema (protocol/schemas/deploy_manifest.schema.json).
+#
+# Caller usage (in <repo>/.github/workflows/ci.yaml):
+#
+#   manifest-validation:
+#     uses: LatticeProtocol/aDNA/.github/workflows/manifest_validation.yml@main
+#     with:
+#       manifest_path: deploy_manifest.yaml  # default
+#
+# Authoritative spec: M-B4.5 repo_hygiene_charter §6.1 + §6.2.
+# Implementation: M-D1.7.d Phase 1 (Federation-Beta Planning campaign).
+
+name: Manifest Validation
+
+on:
+  workflow_call:
+    inputs:
+      manifest_path:
+        description: "Path to deploy_manifest.yaml in the caller repo (relative to repo root)"
+        required: false
+        type: string
+        default: "deploy_manifest.yaml"
+      lattice_protocol_ref:
+        description: "Git ref of LatticeProtocol/lattice-protocol to fetch schema + validator from"
+        required: false
+        type: string
+        default: "main"
+
+jobs:
+  validate:
+    name: Validate deploy_manifest.yaml
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout caller repo
+        uses: actions/checkout@v4
+
+      - name: Checkout lattice-protocol (schema + validator)
+        uses: actions/checkout@v4
+        with:
+          repository: LatticeProtocol/lattice-protocol
+          ref: ${{ inputs.lattice_protocol_ref }}
+          path: .lattice-protocol-tmp
+          sparse-checkout: |
+            protocol/schemas
+          sparse-checkout-cone-mode: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install validator dependencies
+        run: pip install jsonschema pyyaml
+
+      - name: Validate ${{ inputs.manifest_path }}
+        run: |
+          python .lattice-protocol-tmp/protocol/schemas/validate_deploy_manifest.py "${{ inputs.manifest_path }}"

@@ -1,0 +1,211 @@
+/* =============================================================================
+ * editor_polish.css — Editor Enhancement Bundle
+ * Consolidated from: table_stripes, mermaid_override, popover_size,
+ *                    notebook_navigator
+ * Plus: callout types, tag contrast (as Style Settings toggles)
+ * ========================================================================== */
+
+
+/* =============================================================================
+ * 1. TABLE STRIPES
+ * Zebra stripes and hover highlight for Dataview and standard tables
+ * ========================================================================== */
+
+/* Alternating row backgrounds */
+.markdown-preview-view .dataview-result-table tbody tr:nth-child(even) {
+  background-color: var(--background-secondary);
+}
+
+.markdown-preview-view .dataview-result-table tbody tr:hover {
+  background-color: var(--background-modifier-hover);
+}
+
+/* Header border */
+.markdown-preview-view .dataview-result-table thead tr {
+  border-bottom: 2px solid var(--background-modifier-border);
+}
+
+/* Standard markdown tables */
+.markdown-preview-view table:not(.dataview-result-table) tbody tr:nth-child(even) {
+  background-color: var(--background-secondary);
+}
+
+.markdown-preview-view table:not(.dataview-result-table) tbody tr:hover {
+  background-color: var(--background-modifier-hover);
+}
+
+
+/* =============================================================================
+ * 2. MERMAID OVERRIDE
+ * Purple-tinted Mermaid diagrams on dashboard/homepage pages
+ * ========================================================================== */
+
+.dashboard .mermaid .node rect,
+.dashboard .mermaid .node circle,
+.dashboard .mermaid .node polygon,
+.homepage .mermaid .node rect,
+.homepage .mermaid .node circle,
+.homepage .mermaid .node polygon {
+  fill: rgba(var(--interactive-accent-rgb), 0.08) !important;
+  stroke: var(--interactive-accent) !important;
+  stroke-width: 1.5px !important;
+}
+
+.dashboard .mermaid .edgePath .path,
+.homepage .mermaid .edgePath .path {
+  stroke: rgba(var(--interactive-accent-rgb), 0.4) !important;
+  stroke-width: 1.5px !important;
+}
+
+.dashboard .mermaid .edgeLabel,
+.homepage .mermaid .edgeLabel {
+  color: var(--text-muted) !important;
+  font-size: 0.85em !important;
+}
+
+.dashboard .mermaid .cluster rect,
+.homepage .mermaid .cluster rect {
+  fill: rgba(var(--interactive-accent-rgb), 0.03) !important;
+  stroke: rgba(var(--interactive-accent-rgb), 0.2) !important;
+}
+
+
+/* =============================================================================
+ * 3. POPOVER SIZE
+ * Larger link preview popovers for better readability
+ * ========================================================================== */
+
+.popover.hover-popover {
+  min-width: 500px;
+  max-width: 700px;
+  min-height: 400px;
+}
+
+
+/* =============================================================================
+ * 4. NOTEBOOK NAVIGATOR
+ * Triad folder colors and status property pills
+ * ========================================================================== */
+
+/* @settings
+name: Notebook Navigator Colors
+id: nn-colors
+settings:
+  - id: nn-nav-bg-tint
+    title: Navigation Background Tint
+    type: variable-color
+    format: hex
+    default: '#1a1b26'
+  - id: nn-selected-accent
+    title: Selected Item Accent
+    type: variable-color
+    format: hex
+    default: '#663399'
+  - id: nn-org-color
+    title: org/ Color (WHO)
+    type: variable-color
+    format: hex
+    default: '#9d7cd8'
+  - id: nn-obs-color
+    title: obs/ Color (WHAT)
+    type: variable-color
+    format: hex
+    default: '#7dcfff'
+  - id: nn-ops-color
+    title: ops/ Color (HOW)
+    type: variable-color
+    format: hex
+    default: '#9ece6a'
+*/
+
+/* Status pills */
+.nn-property-pill[data-value="active"] { background-color: #9ece6a20; color: #9ece6a; }
+.nn-property-pill[data-value="completed"] { background-color: #7dcfff20; color: #7dcfff; }
+.nn-property-pill[data-value="draft"] { background-color: #bb9af720; color: #bb9af7; }
+.nn-property-pill[data-value="pending"] { background-color: #bb9af720; color: #bb9af7; }
+.nn-property-pill[data-value="in_progress"] { background-color: #ff9e6420; color: #ff9e64; }
+.nn-property-pill[data-value="deprecated"] { background-color: #f7768e20; color: #f7768e; }
+
+/* Triad folder colors */
+.nn-folder-item[data-path^="org"] .nn-folder-icon { color: var(--nn-org-color, #9d7cd8); }
+.nn-folder-item[data-path^="obs"] .nn-folder-icon { color: var(--nn-obs-color, #7dcfff); }
+.nn-folder-item[data-path^="ops"] .nn-folder-icon { color: var(--nn-ops-color, #9ece6a); }
+
+/* aDNA triad (who/what/how) */
+.nn-folder-item[data-path^="who"] .nn-folder-icon { color: var(--nn-org-color, #9d7cd8); }
+.nn-folder-item[data-path^="what"] .nn-folder-icon { color: var(--nn-obs-color, #7dcfff); }
+.nn-folder-item[data-path^="how"] .nn-folder-icon { color: var(--nn-ops-color, #9ece6a); }
+
+
+/* =============================================================================
+ * 5. CALLOUT TYPES (aDNA-specific)
+ * Custom callout types for operational vault patterns
+ * ========================================================================== */
+
+/* @settings
+name: Custom Callouts
+id: custom-callouts
+settings:
+  -
+    id: callout-decision
+    title: Decision callout styling
+    type: class-toggle
+    default: true
+  -
+    id: callout-status
+    title: Status callout styling
+    type: class-toggle
+    default: true
+*/
+
+/* Decision callout */
+.callout-decision .callout[data-callout="decision"] {
+  --callout-color: 255, 158, 100;
+  --callout-icon: lucide-gavel;
+}
+
+/* Status callout */
+.callout-status .callout[data-callout="status"] {
+  --callout-color: 158, 206, 106;
+  --callout-icon: lucide-activity;
+}
+
+/* Gate callout */
+.callout[data-callout="gate"] {
+  --callout-color: 187, 154, 247;
+  --callout-icon: lucide-shield-check;
+}
+
+/* Context callout */
+.callout[data-callout="context"] {
+  --callout-color: 125, 207, 255;
+  --callout-icon: lucide-book-open;
+}
+
+
+/* =============================================================================
+ * 6. TAG CONTRAST (opt-in)
+ * Higher contrast tags for better readability
+ * ========================================================================== */
+
+/* @settings
+name: Tag Contrast
+id: tag-contrast
+settings:
+  -
+    id: high-contrast-tags
+    title: High contrast tags
+    type: class-toggle
+    default: false
+*/
+
+.high-contrast-tags .tag,
+.high-contrast-tags a.tag {
+  font-weight: 500;
+  border: 1px solid rgba(102, 51, 153, 0.4);
+}
+
+.theme-dark .high-contrast-tags .tag,
+.theme-dark .high-contrast-tags a.tag {
+  border-color: rgba(153, 102, 204, 0.35);
+}

@@ -1,0 +1,95 @@
+# mypy_lattice_protocol.yml — reusable workflow that runs mypy --strict on PR-touched .py files only.
+#
+# Charter §5.4 (M-D1.5 SLO + Observability) closes BD-05 mypy posture: lattice-protocol IN
+# per-repo opt-in, strict per-touched-files, pre-existing untyped code grandfathered.
+# §4.5 placement contract puts the reusable workflow at this host.
+#
+# Caller usage (in <repo>/.github/workflows/ci.yaml):
+#
+#   mypy-touched:
+#     uses: LatticeProtocol/aDNA/.github/workflows/mypy_lattice_protocol.yml@main
+#
+# Behavior:
+#   - On pull_request events, mypy --strict runs against .py files changed in the PR diff.
+#   - On push events (non-PR), the workflow exits 0 (full-tree mypy handled by caller's existing typecheck job).
+#   - If no .py files changed in the PR, the workflow exits 0.
+#
+# Aux-repo opt-in (BD-07): forks invoke this workflow from their own ci.yaml. The
+# install_extras input lets non-lattice-protocol callers (e.g., spacelattice) pick a
+# different pip extras name.
+#
+# Authoritative spec: M-D1.5 slo_observability_charter §5.4 + §4.5.
+# Implementation: M-D1.7.d.2 (numbered per M-D1.7.b → b.1 spillover-routing precedent under M-D1.7.d).
+
+name: Mypy (touched files, lattice-protocol)
+
+on:
+  workflow_call:
+    inputs:
+      python_version:
+        description: "Python version for mypy run"
+        required: false
+        type: string
+        default: "3.11"
+      mypy_version:
+        description: "Pinned mypy version (omit for latest)"
+        required: false
+        type: string
+        default: ""
+      install_extras:
+        description: "Caller-repo pip extras to install (e.g. 'dev'). Empty string installs the package without extras."
+        required: false
+        type: string
+        default: "dev"
+
+jobs:
+  mypy-touched:
+    name: Mypy --strict on PR-touched .py files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout caller repo (full history for diff)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python_version }}
+
+      - name: Install caller package + mypy
+        run: |
+          python -m pip install --upgrade pip
+          if [ -n "${{ inputs.install_extras }}" ]; then
+            pip install -e ".[${{ inputs.install_extras }}]"
+          else
+            pip install -e .
+          fi
+          if [ -n "${{ inputs.mypy_version }}" ]; then
+            pip install "mypy==${{ inputs.mypy_version }}"
+          else
+            pip install mypy
+          fi
+
+      - name: Compute touched .py files
+        id: diff
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo "skipping: event=${{ github.event_name }} (full-tree mypy handled by caller's typecheck job)"
+            echo "files=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          base="${{ github.event.pull_request.base.sha }}"
+          head="${{ github.event.pull_request.head.sha }}"
+          touched=$(git diff --name-only --diff-filter=AM "$base" "$head" -- '*.py' | tr '\n' ' ')
+          echo "touched=$touched"
+          echo "files=$touched" >> "$GITHUB_OUTPUT"
+
+      - name: Mypy --strict (PR-touched only)
+        if: steps.diff.outputs.files != ''
+        run: mypy --strict ${{ steps.diff.outputs.files }}
+
+      - name: Skip note (no .py touched)
+        if: steps.diff.outputs.files == ''
+        run: echo "no .py files changed in PR — skipping mypy --strict check"

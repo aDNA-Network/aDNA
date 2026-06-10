@@ -1,0 +1,55 @@
+lattice:
+  name: product_launch
+  version: "1.0.0"
+  lattice_type: pipeline
+  description: >
+    Cross-functional product launch pipeline from market research through
+    go-to-market. Combines deterministic engineering stages with LLM-driven
+    market analysis. The market_research node uses an LLM to synthesize
+    competitive landscape and customer insights.
+  execution:
+    mode: hybrid
+    runtime: local
+    tier: L1
+  nodes:
+    - id: market_research
+      type: reasoning
+      description: "Analyze market landscape, competitors, and customer needs"
+      prompt: "Given the product concept {product_brief}, analyze the competitive landscape, identify target segments, and recommend positioning strategy."
+      model_override: "claude-sonnet-4-6"
+    - id: feature_prioritize
+      type: process
+      description: "Prioritize features based on market research, technical feasibility, and business impact"
+    - id: engineering
+      type: process
+      description: "Build the prioritized features — design, implement, integrate"
+    - id: qa_testing
+      type: process
+      description: "Quality assurance — unit tests, integration tests, user acceptance testing"
+    - id: gtm_launch
+      type: process
+      description: "Go-to-market execution — messaging, channels, launch event, sales enablement"
+  edges:
+    - from: market_research
+      to: feature_prioritize
+      label: "market insights"
+    - from: feature_prioritize
+      to: engineering
+      label: "prioritized backlog"
+    - from: engineering
+      to: qa_testing
+      label: "built features"
+    - from: qa_testing
+      to: gtm_launch
+      label: "tested release"
+      condition: "test_results.pass_rate >= 0.95"
+  fair:
+    license: "MIT"
+    creators:
+      - "Lattice Labs"
+    keywords:
+      - product launch
+      - go-to-market
+      - cross-functional
+      - hybrid pipeline
+    provenance: "Cross-functional product launch pipeline demonstrating hybrid execution mode"

@@ -1,0 +1,516 @@
+/* =============================================================================
+ * core_theme.css — Base Visual Identity Bundle
+ * Consolidated from: tokyo_night_purple, headings_styled, links_enhanced,
+ *                    code_blocks, scrollbar_custom, modals_translucent
+ * Theme: Tokyo Night + Rebecca Purple (#663399) accent
+ * ========================================================================== */
+
+
+/* =============================================================================
+ * 1. TOKYO NIGHT PURPLE ACCENT
+ * Replaces default Tokyo Night blue accent with Rebecca Purple
+ * ========================================================================== */
+
+:root {
+  --accent-h: 270;
+  --accent-s: 50%;
+  --accent-l: 40%;
+  --interactive-accent: #663399;
+  --interactive-accent-hover: #7744aa;
+  --interactive-accent-rgb: 102, 51, 153;
+
+  --text-accent: #663399;
+  --text-accent-hover: #7744aa;
+
+  --link-color: #663399;
+  --link-color-hover: #7744aa;
+  --link-external-color: #8855bb;
+  --link-external-color-hover: #9966cc;
+
+  --text-selection: rgba(102, 51, 153, 0.2);
+  --text-highlight-bg: rgba(102, 51, 153, 0.25);
+}
+
+.theme-dark {
+  --interactive-accent: #7744aa;
+  --interactive-accent-hover: #8855bb;
+  --text-accent: #9966cc;
+  --text-accent-hover: #aa77dd;
+  --link-color: #9966cc;
+  --link-color-hover: #aa77dd;
+}
+
+/* Buttons */
+.mod-cta,
+button.mod-cta {
+  background-color: #663399 !important;
+  color: white !important;
+}
+
+button.mod-cta:hover {
+  background-color: #7744aa !important;
+}
+
+/* Tags */
+.tag,
+a.tag {
+  background-color: rgba(102, 51, 153, 0.15);
+  color: #663399;
+  border-color: rgba(102, 51, 153, 0.3);
+}
+
+.theme-dark .tag,
+.theme-dark a.tag {
+  background-color: rgba(153, 102, 204, 0.2);
+  color: #aa88dd;
+}
+
+.tag:hover,
+a.tag:hover {
+  background-color: rgba(102, 51, 153, 0.25);
+  color: #7744aa;
+}
+
+/* Graph view */
+.graph-view.color-fill-highlight { color: #663399; }
+.graph-view.color-line-highlight { color: #9966cc; }
+
+/* Checkboxes */
+input[type="checkbox"]:checked {
+  background-color: #663399;
+  border-color: #663399;
+}
+
+.theme-dark input[type="checkbox"]:checked {
+  background-color: #7744aa;
+  border-color: #7744aa;
+}
+
+.task-list-item-checkbox:checked {
+  background-color: #663399;
+  border-color: #663399;
+}
+
+/* Internal links */
+.internal-link { color: #663399; }
+.theme-dark .internal-link { color: #9966cc; }
+.internal-link:hover { color: #7744aa; }
+
+/* Callouts */
+.callout[data-callout="tip"] { --callout-color: 102, 51, 153; }
+.callout[data-callout="info"] { --callout-color: 119, 68, 170; }
+
+/* Progress bars */
+progress::-webkit-progress-value { background-color: #663399; }
+progress::-moz-progress-bar { background-color: #663399; }
+
+/* Slider */
+input[type="range"]::-webkit-slider-thumb { background-color: #663399; }
+
+/* Search match */
+.search-result-file-matched-text,
+.cm-s-obsidian span.obsidian-search-match-highlight {
+  background-color: rgba(102, 51, 153, 0.3);
+}
+
+/* Nav active state */
+.nav-file-title.is-active,
+.nav-folder-title.is-active { color: #663399; }
+
+.theme-dark .nav-file-title.is-active,
+.theme-dark .nav-folder-title.is-active { color: #9966cc; }
+
+/* Sidebar tab active */
+.workspace-tab-header.is-active { color: #663399; }
+.theme-dark .workspace-tab-header.is-active { color: #9966cc; }
+
+/* Frontmatter property keys */
+.metadata-property-key { color: #663399; }
+.theme-dark .metadata-property-key { color: #9966cc; }
+
+
+/* =============================================================================
+ * 2. STYLED HEADINGS
+ * H1: centered, H2: accent left border, H3+: accent text color
+ * ========================================================================== */
+
+/* @settings
+name: Styled Headings
+id: styled-headings
+settings:
+  -
+    id: heading-h1-center
+    title: Center H1 headings
+    type: class-toggle
+    default: true
+  -
+    id: heading-h2-border
+    title: H2 accent left border
+    type: class-toggle
+    default: true
+  -
+    id: heading-scale
+    title: Heading scale multiplier
+    type: variable-number-slider
+    default: 1
+    min: 0.8
+    max: 1.3
+    step: 0.05
+    format: ""
+*/
+
+body {
+  --heading-scale: 1;
+}
+
+/* H1 — Centered */
+.heading-h1-center .markdown-rendered h1 {
+  text-align: center;
+  border-bottom: none;
+}
+
+.heading-h1-center .cm-s-obsidian .HyperMD-header-1 {
+  text-align: center;
+}
+
+/* H2 — Accent left border */
+.heading-h2-border .markdown-rendered h2 {
+  border-left: 4px solid var(--accent-color, #663399);
+  padding-left: 0.5em;
+  border-bottom: none;
+}
+
+.heading-h2-border .cm-s-obsidian .HyperMD-header-2 {
+  border-left: 4px solid var(--accent-color, #663399);
+  padding-left: 0.5em;
+}
+
+.theme-dark .heading-h2-border .markdown-rendered h2 {
+  border-left-color: var(--accent-color-hover, #7744aa);
+}
+
+.theme-dark .heading-h2-border .cm-s-obsidian .HyperMD-header-2 {
+  border-left-color: var(--accent-color-hover, #7744aa);
+}
+
+/* H3+ — Accent text color */
+.markdown-rendered h3,
+.markdown-rendered h4,
+.markdown-rendered h5,
+.markdown-rendered h6 {
+  color: var(--text-accent, #9966cc);
+}
+
+.cm-s-obsidian .HyperMD-header-3,
+.cm-s-obsidian .HyperMD-header-4,
+.cm-s-obsidian .HyperMD-header-5,
+.cm-s-obsidian .HyperMD-header-6 {
+  color: var(--text-accent, #9966cc);
+}
+
+/* Heading scale */
+.markdown-rendered h1 { font-size: calc(2em * var(--heading-scale)); }
+.markdown-rendered h2 { font-size: calc(1.5em * var(--heading-scale)); }
+.markdown-rendered h3 { font-size: calc(1.25em * var(--heading-scale)); }
+.markdown-rendered h4 { font-size: calc(1.1em * var(--heading-scale)); }
+
+
+/* =============================================================================
+ * 3. ENHANCED LINKS
+ * Internal: hover underline. External: arrow icon. Unresolved: dashed red.
+ * ========================================================================== */
+
+/* @settings
+name: Enhanced Links
+id: enhanced-links
+settings:
+  -
+    id: external-link-icon
+    title: External link arrow icon
+    type: class-toggle
+    default: true
+  -
+    id: unresolved-link-style
+    title: Unresolved link dashed underline
+    type: class-toggle
+    default: true
+*/
+
+/* Internal links — underline on hover only */
+.markdown-rendered .internal-link { text-decoration: none; }
+.markdown-rendered .internal-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cm-s-obsidian .cm-hmd-internal-link .cm-underline { text-decoration: none; }
+.cm-s-obsidian .cm-hmd-internal-link .cm-underline:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* External links — arrow indicator */
+.external-link-icon .markdown-rendered a.external-link::after {
+  content: " ↗";
+  font-size: 0.75em;
+  opacity: 0.6;
+  vertical-align: super;
+  line-height: 1;
+}
+
+.external-link-icon .markdown-rendered a.external-link:hover::after {
+  opacity: 1;
+}
+
+/* Unresolved links — dashed red underline */
+.unresolved-link-style .markdown-rendered .internal-link.is-unresolved {
+  color: var(--text-muted);
+  text-decoration: underline dashed;
+  text-decoration-color: rgba(239, 68, 68, 0.6);
+  text-underline-offset: 3px;
+}
+
+.theme-dark .unresolved-link-style .markdown-rendered .internal-link.is-unresolved {
+  text-decoration-color: rgba(248, 113, 113, 0.5);
+}
+
+.unresolved-link-style .cm-s-obsidian .is-unresolved .cm-underline {
+  color: var(--text-muted);
+  text-decoration: underline dashed;
+  text-decoration-color: rgba(239, 68, 68, 0.6);
+  text-underline-offset: 3px;
+}
+
+.theme-dark .unresolved-link-style .cm-s-obsidian .is-unresolved .cm-underline {
+  text-decoration-color: rgba(248, 113, 113, 0.5);
+}
+
+
+/* =============================================================================
+ * 4. CODE BLOCKS
+ * Accent left border, rounded corners, tinted inline code
+ * ========================================================================== */
+
+/* @settings
+name: Code Blocks
+id: code-blocks
+settings:
+  -
+    id: code-border-width
+    title: Code block border width
+    type: variable-number-slider
+    default: 3
+    min: 1
+    max: 6
+    step: 1
+    format: px
+  -
+    id: code-border-color
+    title: Code block border color
+    type: variable-color
+    format: hex
+    default: "#663399"
+  -
+    id: code-inline-tint
+    title: Tinted inline code background
+    type: class-toggle
+    default: true
+*/
+
+body {
+  --code-border-width: 3px;
+  --code-border-color: #663399;
+}
+
+/* Reading View */
+.markdown-rendered pre {
+  border-left: var(--code-border-width) solid var(--code-border-color);
+  border-radius: 4px;
+}
+
+/* Live Preview */
+.cm-s-obsidian .HyperMD-codeblock-begin,
+.cm-s-obsidian .HyperMD-codeblock,
+.cm-s-obsidian .HyperMD-codeblock-end {
+  border-left: var(--code-border-width) solid var(--code-border-color);
+}
+
+.cm-s-obsidian .HyperMD-codeblock-begin { border-top-left-radius: 4px; }
+.cm-s-obsidian .HyperMD-codeblock-end { border-bottom-left-radius: 4px; }
+
+/* Inline code — tinted background (Reading View) */
+.code-inline-tint .markdown-rendered code:not(pre code) {
+  background-color: rgba(102, 51, 153, 0.1);
+  border-radius: 3px;
+  padding: 0.15em 0.35em;
+}
+
+.theme-dark .code-inline-tint .markdown-rendered code:not(pre code) {
+  background-color: rgba(153, 102, 204, 0.15);
+}
+
+/* Inline code — tinted background (Live Preview) */
+.code-inline-tint .cm-s-obsidian .cm-inline-code:not(.cm-formatting) {
+  background-color: rgba(102, 51, 153, 0.1);
+  border-radius: 3px;
+  padding: 0.1em 0.25em;
+}
+
+.theme-dark .code-inline-tint .cm-s-obsidian .cm-inline-code:not(.cm-formatting) {
+  background-color: rgba(153, 102, 204, 0.15);
+}
+
+
+/* =============================================================================
+ * 5. CUSTOM SCROLLBAR
+ * Accent-tinted slim scrollbar (Webkit + Firefox)
+ * ========================================================================== */
+
+/* @settings
+name: Custom Scrollbar
+id: custom-scrollbar
+settings:
+  -
+    id: scrollbar-thumb-color
+    title: Scrollbar thumb color
+    type: variable-color
+    format: hex
+    default: "#663399"
+  -
+    id: scrollbar-width
+    title: Scrollbar width
+    type: variable-select
+    default: thin
+    options:
+      -
+        label: Thin
+        value: thin
+      -
+        label: Auto
+        value: auto
+  -
+    id: scrollbar-track-visible
+    title: Show scrollbar track
+    type: class-toggle
+    default: false
+*/
+
+body {
+  --scrollbar-thumb-color: #663399;
+  --scrollbar-width: thin;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: var(--scrollbar-width);
+  scrollbar-color: var(--scrollbar-thumb-color) transparent;
+}
+
+.scrollbar-track-visible * {
+  scrollbar-color: var(--scrollbar-thumb-color) rgba(0, 0, 0, 0.1);
+}
+
+/* Webkit (Obsidian uses Electron/Chromium) */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-color);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--accent-color-hover, #7744aa);
+}
+
+::-webkit-scrollbar-track { background: transparent; }
+
+.scrollbar-track-visible ::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.theme-dark .scrollbar-track-visible ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+
+/* =============================================================================
+ * 6. TRANSLUCENT MODALS
+ * Frosted glass effect on modals and command palette
+ * ========================================================================== */
+
+/* @settings
+name: Translucent Modals
+id: translucent-modals
+settings:
+  -
+    id: modal-blur-intensity
+    title: Modal blur intensity
+    type: variable-number-slider
+    default: 10
+    min: 4
+    max: 16
+    step: 1
+    format: px
+  -
+    id: modal-accent-border
+    title: Accent border on modals
+    type: class-toggle
+    default: true
+*/
+
+body {
+  --modal-blur-intensity: 10px;
+}
+
+/* Modal overlay */
+.modal-bg {
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(var(--modal-blur-intensity));
+  -webkit-backdrop-filter: blur(var(--modal-blur-intensity));
+}
+
+/* Modal container */
+.modal {
+  background-color: rgba(var(--background-primary-rgb, 30, 30, 30), 0.92);
+  backdrop-filter: blur(calc(var(--modal-blur-intensity) / 2));
+  -webkit-backdrop-filter: blur(calc(var(--modal-blur-intensity) / 2));
+}
+
+.modal-accent-border .modal {
+  border: 1px solid rgba(102, 51, 153, 0.3);
+}
+
+.theme-dark .modal-accent-border .modal {
+  border: 1px solid rgba(153, 102, 204, 0.25);
+}
+
+/* Command palette */
+.prompt {
+  background-color: rgba(var(--background-primary-rgb, 30, 30, 30), 0.92);
+  backdrop-filter: blur(var(--modal-blur-intensity));
+  -webkit-backdrop-filter: blur(var(--modal-blur-intensity));
+}
+
+.modal-accent-border .prompt {
+  border: 1px solid rgba(102, 51, 153, 0.3);
+}
+
+.theme-dark .modal-accent-border .prompt {
+  border: 1px solid rgba(153, 102, 204, 0.25);
+}
+
+/* Suggestion container */
+.suggestion-container {
+  background-color: rgba(var(--background-primary-rgb, 30, 30, 30), 0.95);
+}
+
+/* Selected suggestion */
+.suggestion-item.is-selected {
+  background-color: rgba(102, 51, 153, 0.15);
+}
+
+.theme-dark .suggestion-item.is-selected {
+  background-color: rgba(153, 102, 204, 0.2);
+}

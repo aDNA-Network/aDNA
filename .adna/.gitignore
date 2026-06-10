@@ -1,0 +1,69 @@
+# aDNA template repo .gitignore (post-v7.0 — campaign_adna_v2_infrastructure M03)
+# Template-level exclusions for the flattened repo structure (per Obj 5 G-1/G-2/G-4).
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Obsidian per-device (don't sync across clones — both pre-M03-flatten and post-M03-flatten paths covered)
+# Pre-flatten paths (resolve before M03 B6 flatten promotion):
+.adna/.obsidian/workspace.json
+.adna/.obsidian/workspace-mobile.json
+.adna/.obsidian/graph.json
+# Post-flatten paths (resolve after M03 B6 flatten promotion):
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/graph.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+
+# Note: Obsidian plugin binaries and themes ARE tracked so the vault works on clone.
+# Run ./setup.sh --force to update all plugins to latest versions.
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+
+# Claude Code / MCP (local credentials — never commit)
+.mcp.json
+.claude/
+
+# Local working context (not part of upstream)
+_meta/
+
+# Local-only triad extensions (NEW v7.0 — per Obj 5 G-1)
+what/local/
+how/local/
+who/operators/
+
+# Publishing pipeline artifacts (NEW v7.0 — per Obj 5 G-1 + pre-push hook R1)
+deploy/
+dist/                 # publish output dist (also covers Python's dist/ — single line serves both meanings)
+.publish-clone/
+.publish-clone.bak/
+private/
+*.dryrun.log
+
+# Milestone tarballs at repo root (NEW v7.0 — per Obj 5 G-4)
+/*.tar.gz             # only at repo root; preserves tarballs under who/peers/published/ if any
+
+# Note: `*.aDNA/` (workspace-level subproject exclusion) is intentionally OMITTED here per
+# Obj 5 G-2 — the template repo doesn't contain subprojects. The workspace-level
+# ~/lattice/.gitignore continues to carry `*.aDNA/`.

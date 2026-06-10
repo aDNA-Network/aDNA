@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lattice-protocol.dev/schemas/lattice-yaml/v1.0.0",
+  "title": "Lattice YAML Schema",
+  "description": "JSON Schema for .lattice.yaml files — the declarative definition format for Lattice context graphs. A Lattice connects Datasets and Modules into executable workflows with FAIR metadata.",
+  "type": "object",
+  "required": ["lattice"],
+  "additionalProperties": false,
+  "properties": {
+    "lattice": {
+      "type": "object",
+      "description": "Root lattice definition object.",
+      "required": ["name", "version", "description", "execution", "nodes", "edges", "fair"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "URL-safe lattice identifier. Lowercase, underscores allowed, no spaces.",
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "examples": ["protein_binder_design", "meteor_screening", "research_assistant"]
+        },
+        "version": {
+          "type": "string",
+          "description": "Semantic version (semver) of this lattice definition.",
+          "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9.]+)?(\\+[a-zA-Z0-9.]+)?$",
+          "examples": ["1.0.0", "0.2.1-alpha"]
+        },
+        "lattice_type": {
+          "type": "string",
+          "description": "Classification of the lattice. Maps to vault ontology discriminator. Pipeline = deterministic DAG of modules. Agent = LLM-driven reasoning (from AgentMode). Context_graph = knowledge structure. Workflow = operational process.",
+          "enum": ["pipeline", "agent", "context_graph", "workflow", "skill", "infrastructure", "context_set"],
+          "default": "pipeline"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of what this lattice does and its scientific/operational purpose.",
+          "minLength": 10
+        },
+        "execution": {
+          "type": "object",
+          "description": "Execution configuration. Maps to repo AgentMode enum (objects/agents/modes.py) and tier system.",
+          "required": ["mode", "runtime", "tier"],
+          "additionalProperties": false,
+          "properties": {
+            "mode": {
+              "type": "string",
+              "description": "Execution mode. Aligned with AgentMode enum: workflow (deterministic DAG), reasoning (LLM-driven), hybrid (mixed).",
+              "enum": ["workflow", "reasoning", "hybrid"]
+            },
+            "model": {
+              "type": "string",
+              "description": "Default model for reasoning nodes. Per-node model_override takes precedence.",
+              "examples": ["claude-opus-4-6", "gpt-4o"]
+            },
+            "runtime": {
+              "type": "string",
+              "description": "Target runtime environment. 'ray' for distributed execution (L2/L3), 'local' for single-machine (L1), 'kubernetes' for orchestrated (L3).",
+              "enum": ["ray", "local", "kubernetes"]
+            },
+            "tier": {
+              "type": "string",
+              "description": "Compute tier. L1=Edge/Local, L2=Regional/Cluster, L3=Cloud/HPC. Maps to repo deploy tier system.",
+              "enum": ["L1", "L2", "L3"]
+            }
+          }
+        },
+        "nodes": {
+          "type": "array",
+          "description": "Ordered list of nodes in the lattice graph. Each node represents a dataset, module, processing step, or reasoning step. Maps to AgentNode dataclass (objects/agents/nodes.py).",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "type"],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique node identifier within this lattice. Maps to AgentNode.id.",
+                "pattern": "^[a-z][a-z0-9_]*$"
+              },
+              "type": {
+                "type": "string",
+                "description": "Node type. Aligned with AgentNodeType enum (objects/agents/modes.py). Module=reference to a Lattice module. Dataset=reference to a Lattice dataset. Process=generic processing step. Reasoning=LLM reasoning step (hybrid/reasoning mode).",
+                "enum": ["module", "dataset", "process", "reasoning"]
+              },
+              "ref": {
+                "type": "string",
+                "description": "Reference to a vault record (wikilink path) or external URI. Used for module and dataset nodes to link to their registry entry.",
+                "examples": ["what/modules/module_rfdiffusion", "what/datasets/dataset_protein_structures", "https://registry.lattice-protocol.dev/modules/esm"]
+              },
+              "config": {
+                "type": "object",
+                "description": "Optional configuration overrides for this node. Keys are parameter names, values are parameter values. Maps to AgentNode.config.",
+                "additionalProperties": true
+              },
+              "description": {
+                "type": "string",
+                "description": "Human-readable description of what this node does in the lattice."
+              },
+              "prompt": {
+                "type": "string",
+                "description": "Prompt template for reasoning nodes. Supports {variable} interpolation from upstream node outputs. Maps to AgentNode.prompt. Only applicable when type=reasoning."
+              },
+              "model_override": {
+                "type": "string",
+                "description": "Override the lattice's default model for this specific reasoning node. Maps to AgentNode.model_override. Only applicable when type=reasoning.",
+                "examples": ["claude-opus-4-6", "gpt-4", "llama-3.1-70b"]
+              }
+            }
+          }
+        },
+        "edges": {
+          "type": "array",
+          "description": "Directed edges defining data flow between nodes. Uses explicit edge list (graph-native) rather than per-node depends_on (code-side pattern). Maps to AgentEdge dataclass (objects/agents/nodes.py). Note: AgentEdge uses source/target internally but serializes as from/to.",
+          "items": {
+            "type": "object",
+            "required": ["from", "to"],
+            "additionalProperties": false,
+            "properties": {
+              "from": {
+                "type": "string",
+                "description": "Source node ID. Maps to AgentEdge.source."
+              },
+              "to": {
+                "type": "string",
+                "description": "Target node ID. Maps to AgentEdge.target."
+              },
+              "port": {
+                "type": "string",
+                "description": "Named port for multi-output nodes. Disambiguates which output of the source node feeds into the target.",
+                "examples": ["predictions", "embeddings", "scores"]
+              },
+              "label": {
+                "type": "string",
+                "description": "Human-readable edge label for documentation and visualization. Maps to AgentEdge.label."
+              },
+              "data_mapping": {
+                "type": "object",
+                "description": "Explicit mapping of source outputs to target inputs. Keys are source output names, values are target input names. Maps to AgentEdge.data_mapping.",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "condition": {
+                "type": "string",
+                "description": "Condition expression for conditional edges. Edge is only traversed when condition evaluates to true. Maps to AgentEdge.condition.",
+                "examples": ["results.confidence > 0.8", "data.size > 0", "iteration < max_iterations"]
+              }
+            }
+          }
+        },
+        "fair": {
+          "type": "object",
+          "description": "FAIR metadata block. Required for marketplace compliance and reproducibility. Maps to ObjectMetadata fields (objects/metadata.py).",
+          "required": ["license", "keywords"],
+          "additionalProperties": false,
+          "properties": {
+            "license": {
+              "type": "string",
+              "description": "SPDX license identifier. Maps to ObjectMetadata.license.",
+              "examples": ["MIT", "Apache-2.0", "CC-BY-4.0", "Proprietary"]
+            },
+            "creators": {
+              "type": "array",
+              "description": "List of creator names or identifiers. Maps to ObjectMetadata.creators.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "keywords": {
+              "type": "array",
+              "description": "Semantic tags for findability (FAIR F4). Maps to ObjectMetadata.keywords.",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "identifier": {
+              "type": "string",
+              "description": "Digital Object Identifier or persistent ID (FAIR F1). Maps to ObjectMetadata.doi.",
+              "examples": ["10.5281/zenodo.123456"]
+            },
+            "provenance": {
+              "type": "string",
+              "description": "Free-text provenance description: origin, derivation, methodology. Maps to ObjectMetadata.provenance."
+            }
+          }
+        },
+        "federation": {
+          "type": "object",
+          "description": "Federation metadata for cross-instance sharing and composition.",
+          "additionalProperties": false,
+          "properties": {
+            "shareable": {
+              "type": "boolean",
+              "description": "Whether this lattice can be shared with other aDNA instances.",
+              "default": false
+            },
+            "source_instance": {
+              "type": "string",
+              "description": "Identifier of the aDNA instance that originated this lattice.",
+              "examples": ["adna", "my-project-vault"]
+            },
+            "parent_lattice": {
+              "type": "string",
+              "description": "Name of the lattice this was extracted from (for sub-lattice extraction).",
+              "examples": ["protein_binder_design", "deep_research"]
+            },
+            "version_policy": {
+              "type": "string",
+              "description": "How this lattice tracks upstream version changes. locked=pinned, patch/minor=auto-update within range, latest=always latest.",
+              "enum": ["locked", "patch", "minor", "latest"],
+              "default": "minor"
+            },
+            "extracted_nodes": {
+              "type": "array",
+              "description": "Node IDs extracted from parent_lattice. All listed IDs must exist in this lattice's nodes array.",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+	"nodes":[
+		{"id":"_lattice_meta","type":"group","label":"template_architecture v1.0.0","x":-300,"y":-200,"width":350,"height":150,"color":"5"},
+		{"id":"g_l1","type":"group","label":"L1 Edge","x":-50,"y":-80,"width":500,"height":800,"color":"5"},
+		{"id":"g_l2","type":"group","label":"L2 Regional","x":550,"y":-80,"width":500,"height":800,"color":"4"},
+		{"id":"g_l3","type":"group","label":"L3 Cloud","x":1150,"y":-80,"width":500,"height":800,"color":"6"},
+		{"id":"l1_hardware","x":25,"y":50,"type":"text","text":"## L1 Hardware\n\nEdge compute device.\nReplace with actual hardware reference.\n\n**Type**: hardware · **Shape**: database","width":350,"height":200,"color":"4","shape":"database"},
+		{"id":"l1_service","x":25,"y":380,"type":"text","text":"## L1 Service\n\nLocal inference or lightweight module.\nReplace with actual module reference.\n\n**Type**: module · **Shape**: predefined-process","width":350,"height":200,"color":"4","shape":"predefined-process"},
+		{"id":"l2_hardware","x":625,"y":50,"type":"text","text":"## L2 Hardware\n\nRegional cluster or HPC node.\nReplace with actual hardware reference.\n\n**Type**: hardware · **Shape**: database","width":350,"height":200,"color":"4","shape":"database"},
+		{"id":"l2_service_1","x":625,"y":280,"type":"text","text":"## L2 Service A\n\nPrimary compute module.\nReplace with actual module reference.\n\n**Type**: module · **Shape**: predefined-process","width":350,"height":200,"color":"4","shape":"predefined-process"},
+		{"id":"l2_service_2","x":625,"y":510,"type":"text","text":"## L2 Service B\n\nSecondary compute module.\nReplace with actual module reference.\n\n**Type**: module · **Shape**: predefined-process","width":350,"height":200,"color":"4","shape":"predefined-process"},
+		{"id":"l3_hardware","x":1225,"y":50,"type":"text","text":"## L3 Hardware\n\nCloud GPU fleet or HPC cluster.\nReplace with actual hardware reference.\n\n**Type**: hardware · **Shape**: database","width":350,"height":200,"color":"4","shape":"database"},
+		{"id":"l3_service","x":1225,"y":380,"type":"text","text":"## L3 Service\n\nCloud-scale training or inference.\nReplace with actual module reference.\n\n**Type**: module · **Shape**: predefined-process","width":350,"height":200,"color":"4","shape":"predefined-process"}
+	],
+	"edges":[
+		{"id":"e_l1_to_l2_data","fromNode":"l1_service","fromSide":"right","toNode":"l2_service_1","toSide":"left","toEnd":"arrow","label":"data flow"},
+		{"id":"e_l2_to_l3_data","fromNode":"l2_service_2","fromSide":"right","toNode":"l3_service","toSide":"left","toEnd":"arrow","label":"data flow"},
+		{"id":"e_l1_to_l2_fed","fromNode":"l1_hardware","fromSide":"right","toNode":"l2_hardware","toSide":"left","toEnd":"arrow","label":"federation","pathStyle":"long-dashed","pathfindingMethod":"a-star"},
+		{"id":"e_l2_to_l3_fed","fromNode":"l2_hardware","fromSide":"right","toNode":"l3_hardware","toSide":"left","toEnd":"arrow","label":"federation","pathStyle":"long-dashed","pathfindingMethod":"a-star"}
+	],
+	"metadata":{
+		"version":"1.0-1.0",
+		"frontmatter":{},
+		"_reserved":{
+			"authority":"view",
+			"source_yaml":"",
+			"last_sync":"2026-03-02T00:00:00Z",
+			"sync_hash":"sha256:none"
+		}
+	}
+}

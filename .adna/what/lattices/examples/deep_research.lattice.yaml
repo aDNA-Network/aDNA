@@ -1,0 +1,109 @@
+lattice:
+  name: deep_research
+  version: "1.0.0"
+  lattice_type: pipeline
+  description: >
+    Orchestrator-worker DAG that transforms a research query into optimized
+    context objects. 4 phases (7 stages) with effort-scaled resource allocation
+    and bounded validation loops. Outputs conform to what/context/ standards.
+  execution:
+    mode: hybrid
+    runtime: local
+    tier: L1
+    model: "claude-opus-4-6"
+  nodes:
+    - id: research_query
+      type: dataset
+      description: "Input research query in natural language with optional effort override"
+    - id: planning
+      type: reasoning
+      description: "Classify query, budget effort, generate research plan"
+      prompt: >
+        Analyze the research query across 5 classification dimensions.
+        Determine effort level (minimal/focused/standard/comprehensive).
+        Decompose into sub-questions and assign source modules.
+    - id: source_dispatch
+      type: process
+      description: "Dispatch parallel source queries via Task tool to source worker agents"
+    - id: raw_findings
+      type: dataset
+      description: "Collected raw findings from all source workers (one file per source per sub-question)"
+    - id: merge_dedup
+      type: reasoning
+      description: "Align findings by sub-question, merge corroborating evidence, flag contradictions"
+      prompt: >
+        Merge raw findings from multiple sources into a unified document.
+        Build provenance map. Deduplicate semantically identical claims.
+        Flag contradictions for explicit presentation.
+    - id: validate
+      type: reasoning
+      description: "Fact-check, completeness-check, coherence-check, citation audit"
+      prompt: >
+        Validate the merged document: verify claims against sources,
+        check coverage against research plan, assess internal consistency,
+        audit citations. Iterate if budget allows.
+    - id: optimize
+      type: reasoning
+      description: "Progressive disclosure structuring, signal density maximization"
+      prompt: >
+        Transform validated research into token-optimized context object.
+        Apply 6-step pipeline: audit, structure, compress, format, fit, audit.
+        Structure output into Tier 1/2/3 information hierarchy.
+    - id: standardize
+      type: process
+      description: "Format as context object, generate metadata, prepare for vault filing"
+    - id: review_gate
+      type: process
+      description: "Human review quality gate for effort >= standard"
+    - id: context_output
+      type: dataset
+      description: "Final context object ready for what/context/"
+  edges:
+    - from: research_query
+      to: planning
+      label: "raw query"
+    - from: planning
+      to: source_dispatch
+      label: "research plan"
+    - from: source_dispatch
+      to: raw_findings
+      label: "parallel source queries"
+    - from: raw_findings
+      to: merge_dedup
+      label: "raw source findings"
+    - from: merge_dedup
+      to: validate
+      label: "merged document"
+    - from: validate
+      to: validate
+      label: "iteration loop"
+      condition: "!validation_passed && iterations_remaining > 0"
+    - from: validate
+      to: optimize
+      label: "validated document"
+      condition: "validation_passed"
+    - from: optimize
+      to: standardize
+      label: "optimized document"
+    - from: standardize
+      to: review_gate
+      label: "formatted context object"
+      condition: "effort_level >= 'standard'"
+    - from: standardize
+      to: context_output
+      label: "direct filing"
+      condition: "effort_level < 'standard'"
+    - from: review_gate
+      to: context_output
+      label: "approved output"
+  fair:
+    license: "MIT"
+    creators:
+      - "Lattice Labs"
+    keywords:
+      - research
+      - context engineering
+      - orchestrator-worker
+      - multi-agent
+      - progressive disclosure
+    provenance: "Multi-phase deep research pipeline — transforms queries into token-optimized context objects via parallel source dispatch, synthesis, and validation"

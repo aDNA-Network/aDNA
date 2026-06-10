@@ -1,0 +1,26 @@
+{
+	"nodes":[
+		{"id":"_lattice_meta","type":"group","label":"template_agent_graph v1.0.0","x":-550,"y":-550,"width":350,"height":150,"color":"5"},
+		{"id":"orchestrator","x":0,"y":0,"type":"text","text":"## Orchestrator\n\nCentral LLM agent that coordinates tool\ncalls and reasoning steps.\n\nReplace with your agent's system prompt\nor reasoning logic.\n\n**Type**: reasoning · **Shape**: diamond","width":250,"height":200,"color":"6","shape":"diamond"},
+		{"id":"tool_1","x":450,"y":0,"type":"text","text":"## Tool 1\n\nReplace with an actual tool module.\nDrag a vault module `.md` file here.\n\n**Type**: module · **Shape**: predefined-process","width":350,"height":200,"color":"4","shape":"predefined-process"},
+		{"id":"tool_2","x":-500,"y":0,"type":"text","text":"## Tool 2\n\nReplace with an actual tool module.\nDrag a vault module `.md` file here.\n\n**Type**: module · **Shape**: predefined-process","width":350,"height":200,"color":"4","shape":"predefined-process"},
+		{"id":"context_source","x":-50,"y":-400,"type":"text","text":"## Context Source\n\nReplace with your input dataset or\nknowledge base reference.\n\n**Type**: dataset · **Shape**: database","width":350,"height":200,"color":"5","shape":"database"},
+		{"id":"output_sink","x":-50,"y":400,"type":"text","text":"## Output Sink\n\nReplace with your output dataset\nor delivery target.\n\n**Type**: dataset · **Shape**: database","width":350,"height":200,"color":"5","shape":"database"}
+	],
+	"edges":[
+		{"id":"e_context_to_orch","fromNode":"context_source","fromSide":"bottom","toNode":"orchestrator","toSide":"top","toEnd":"arrow","label":"context","pathfindingMethod":"straight"},
+		{"id":"e_orch_to_tool1","fromNode":"orchestrator","fromSide":"right","toNode":"tool_1","toSide":"left","toEnd":"arrow","label":"tool call","pathfindingMethod":"straight"},
+		{"id":"e_orch_to_tool2","fromNode":"orchestrator","fromSide":"left","toNode":"tool_2","toSide":"right","toEnd":"arrow","label":"tool call","pathfindingMethod":"straight"},
+		{"id":"e_orch_to_output","fromNode":"orchestrator","fromSide":"bottom","toNode":"output_sink","toSide":"top","toEnd":"arrow","label":"final output","pathfindingMethod":"straight"}
+	],
+	"metadata":{
+		"version":"1.0-1.0",
+		"frontmatter":{},
+		"_reserved":{
+			"authority":"view",
+			"source_yaml":"",
+			"last_sync":"2026-03-02T00:00:00Z",
+			"sync_hash":"sha256:none"
+		}
+	}
+}

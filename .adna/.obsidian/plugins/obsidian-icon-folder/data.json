@@ -1,0 +1,115 @@
+{
+  "settings": {
+    "migrated": 4,
+    "iconPacksPath": ".obsidian/icons",
+    "fontSize": 16,
+    "iconColor": null,
+    "recentlyUsedIcons": [],
+    "recentlyUsedIconsSize": 5,
+    "rules": [
+      {"rule": "AGENTS", "icon": "LiBot", "for": "files"},
+      {"rule": "README", "icon": "LiBookOpen", "for": "files"},
+      {"rule": "template_", "icon": "LiFileText", "for": "files"},
+      {"rule": "session_", "icon": "LiClock", "for": "files"},
+      {"rule": "mission_", "icon": "LiClipboardList", "for": "files"},
+      {"rule": "campaign_", "icon": "LiFlag", "for": "files"},
+      {"rule": "context_", "icon": "LiLibrary", "for": "files"},
+      {"rule": "idea_", "icon": "LiLightbulb", "for": "files"},
+      {"rule": "skill_", "icon": "LiWrench", "for": "files"},
+      {"rule": "pipeline_", "icon": "LiGitBranch", "for": "files"}
+    ],
+    "extraMargin": {
+      "top": 0,
+      "right": 4,
+      "bottom": 0,
+      "left": 0
+    },
+    "iconInTabsEnabled": true,
+    "iconInLinksEnabled": true,
+    "iconInFrontmatterEnabled": false,
+    "iconsBackgroundCheckEnabled": false,
+    "iconsInNotesEnabled": true,
+    "iconsInLinksEnabled": false,
+    "emojiStyle": "native"
+  },
+  "who": {
+    "iconName": "LiUsers",
+    "iconColor": "#9d7cd8"
+  },
+  "what": {
+    "iconName": "LiDatabase",
+    "iconColor": "#7dcfff"
+  },
+  "how": {
+    "iconName": "LiSettings",
+    "iconColor": "#9ece6a"
+  },
+  "who/contacts": {
+    "iconName": "LiContact",
+    "iconColor": "#9d7cd8"
+  },
+  "who/customers": {
+    "iconName": "LiBuilding2",
+    "iconColor": "#9d7cd8"
+  },
+  "who/partners": {
+    "iconName": "LiHandshake",
+    "iconColor": "#9d7cd8"
+  },
+  "who/governance": {
+    "iconName": "LiShield",
+    "iconColor": "#9d7cd8"
+  },
+  "who/coordination": {
+    "iconName": "LiMessageSquare",
+    "iconColor": "#9d7cd8"
+  },
+  "what/context": {
+    "iconName": "LiBookOpen",
+    "iconColor": "#7dcfff"
+  },
+  "what/decisions": {
+    "iconName": "LiGavel",
+    "iconColor": "#7dcfff"
+  },
+  "what/modules": {
+    "iconName": "LiBox",
+    "iconColor": "#7dcfff"
+  },
+  "what/lattices": {
+    "iconName": "LiNetwork",
+    "iconColor": "#7dcfff"
+  },
+  "what/datasets": {
+    "iconName": "LiTable2",
+    "iconColor": "#7dcfff"
+  },
+  "how/campaigns": {
+    "iconName": "LiFlag",
+    "iconColor": "#9ece6a"
+  },
+  "how/missions": {
+    "iconName": "LiTarget",
+    "iconColor": "#9ece6a"
+  },
+  "how/sessions": {
+    "iconName": "LiClock",
+    "iconColor": "#9ece6a"
+  },
+  "how/skills": {
+    "iconName": "LiWrench",
+    "iconColor": "#9ece6a"
+  },
+  "how/templates": {
+    "iconName": "LiFileText",
+    "iconColor": "#9ece6a"
+  },
+  "how/backlog": {
+    "iconName": "LiLightbulb",
+    "iconColor": "#9ece6a"
+  },
+  "how/pipelines": {
+    "iconName": "LiGitBranch",
+    "iconColor": "#9ece6a"
+  }
+}

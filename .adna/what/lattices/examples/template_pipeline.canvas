@@ -1,0 +1,29 @@
+{
+	"nodes":[
+		{"id":"_lattice_meta","type":"group","label":"template_pipeline v1.0.0","x":-250,"y":-150,"width":300,"height":150,"color":"5"},
+		{"id":"g_stage1","type":"group","label":"Stage 1: Input","x":-50,"y":-80,"width":420,"height":420,"color":"5"},
+		{"id":"g_stage2","type":"group","label":"Stage 2: Process A","x":450,"y":-80,"width":420,"height":420,"color":"4"},
+		{"id":"g_stage3","type":"group","label":"Stage 3: Process B","x":950,"y":-80,"width":420,"height":420,"color":"4"},
+		{"id":"g_stage4","type":"group","label":"Stage 4: Output","x":1450,"y":-80,"width":420,"height":420,"color":"5"},
+		{"id":"input","x":0,"y":0,"type":"text","text":"## Input\n\nReplace with your input dataset or data source.\n\n**Type**: dataset · **Shape**: database","width":350,"height":250,"color":"5","shape":"database"},
+		{"id":"process_1","x":500,"y":0,"type":"text","text":"## Process 1\n\nReplace with your first processing module.\n\nDrag a vault module file here to convert\nto a `file` node, or keep as `text` for\na generic process step.\n\n**Type**: module · **Shape**: predefined-process","width":350,"height":250,"color":"4","shape":"predefined-process"},
+		{"id":"process_2","x":1000,"y":0,"type":"text","text":"## Process 2\n\nReplace with your second processing module.\n\nAdd more stages by duplicating this group\n+ node pattern at 500px horizontal increments.\n\n**Type**: module · **Shape**: predefined-process","width":350,"height":250,"color":"4","shape":"predefined-process"},
+		{"id":"output","x":1500,"y":0,"type":"text","text":"## Output\n\nReplace with your output dataset or sink.\n\n**Type**: dataset · **Shape**: database","width":350,"height":250,"color":"5","shape":"database"},
+		{"id":"_usage_guide","x":-250,"y":400,"type":"text","text":"## How to Customize This Template\n\n1. Rename stage groups to match your pipeline\n2. Replace placeholder nodes with actual modules\n3. Drag vault `.md` files onto canvas for `file` nodes\n4. Update edge labels with actual data flow names\n5. Add stages by copying group+node at 500px intervals\n6. Delete this guide card when done\n\n**Color key**: green=dataset (5) · cyan=module (4) · purple=reasoning (6) · default=process","width":400,"height":280}
+	],
+	"edges":[
+		{"id":"e_input_to_p1","fromNode":"input","fromSide":"right","toNode":"process_1","toSide":"left","toEnd":"arrow","label":"input data"},
+		{"id":"e_p1_to_p2","fromNode":"process_1","fromSide":"right","toNode":"process_2","toSide":"left","toEnd":"arrow","label":"intermediate"},
+		{"id":"e_p2_to_output","fromNode":"process_2","fromSide":"right","toNode":"output","toSide":"left","toEnd":"arrow","label":"results"}
+	],
+	"metadata":{
+		"version":"1.0-1.0",
+		"frontmatter":{},
+		"_reserved":{
+			"authority":"view",
+			"source_yaml":"",
+			"last_sync":"2026-03-02T00:00:00Z",
+			"sync_hash":"sha256:none"
+		}
+	}
+}

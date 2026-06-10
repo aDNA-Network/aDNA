@@ -1,0 +1,78 @@
+# ruff_on_touched.yml — reusable workflow that runs ruff on PR-touched .py files only.
+#
+# Charter §4.1 (M-D1) declares per-PR blast-radius matrix; ruff-on-touched-files
+# is the additive primitive that complements (does not replace) full-tree ruff.
+#
+# Caller usage (in <repo>/.github/workflows/ci.yaml):
+#
+#   ruff-touched:
+#     uses: LatticeProtocol/aDNA/.github/workflows/ruff_on_touched.yml@main
+#
+# Behavior:
+#   - On pull_request events, ruff runs against files changed in the PR diff.
+#   - On push events (non-PR), the workflow exits 0 (full-tree ruff handled by caller).
+#   - If no .py files changed in the PR, the workflow exits 0.
+#
+# Authoritative spec: M-D1.7 test_ci_hardening_charter §5.2 + M-D1 code_quality_charter §4.1.
+# Implementation: M-D1.7.d Phase 1.
+
+name: Ruff (touched files)
+
+on:
+  workflow_call:
+    inputs:
+      ruff_version:
+        description: "Pinned ruff version (omit for latest)"
+        required: false
+        type: string
+        default: ""
+
+jobs:
+  ruff-touched:
+    name: Ruff on PR-touched .py files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout caller repo (full history for diff)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ruff
+        run: |
+          if [ -n "${{ inputs.ruff_version }}" ]; then
+            pip install "ruff==${{ inputs.ruff_version }}"
+          else
+            pip install ruff
+          fi
+
+      - name: Compute touched .py files
+        id: diff
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo "skipping: event=${{ github.event_name }} (full-tree ruff handled by caller)"
+            echo "files=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          base="${{ github.event.pull_request.base.sha }}"
+          head="${{ github.event.pull_request.head.sha }}"
+          touched=$(git diff --name-only --diff-filter=AM "$base" "$head" -- '*.py' | tr '\n' ' ')
+          echo "touched=$touched"
+          echo "files=$touched" >> "$GITHUB_OUTPUT"
+
+      - name: Ruff check (PR-touched only)
+        if: steps.diff.outputs.files != ''
+        run: ruff check ${{ steps.diff.outputs.files }}
+
+      - name: Ruff format check (PR-touched only)
+        if: steps.diff.outputs.files != ''
+        run: ruff format --check ${{ steps.diff.outputs.files }}
+
+      - name: Skip note (no .py touched)
+        if: steps.diff.outputs.files == ''
+        run: echo "no .py files changed in PR — skipping ruff check"

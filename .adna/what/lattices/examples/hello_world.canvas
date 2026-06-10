@@ -1,0 +1,22 @@
+{
+	"nodes":[
+		{"id":"_lattice_meta","type":"group","label":"hello_world v1.0.0","x":-250,"y":-150,"width":300,"height":150,"color":"5"},
+		{"id":"input_data","x":0,"y":0,"type":"text","text":"## Input Data\n\nInput dataset — any structured data source","width":350,"height":200,"color":"5","shape":"database"},
+		{"id":"transform","x":500,"y":0,"type":"text","text":"## Transform\n\nApply a transformation to the input data","width":350,"height":200},
+		{"id":"output_data","x":1000,"y":0,"type":"text","text":"## Output Data\n\nTransformed output ready for downstream use","width":350,"height":200,"color":"5","shape":"database"}
+	],
+	"edges":[
+		{"id":"e_input_to_transform","fromNode":"input_data","fromSide":"right","toNode":"transform","toSide":"left","toEnd":"arrow","label":"raw data"},
+		{"id":"e_transform_to_output","fromNode":"transform","fromSide":"right","toNode":"output_data","toSide":"left","toEnd":"arrow","label":"processed data"}
+	],
+	"metadata":{
+		"version":"1.0-1.0",
+		"frontmatter":{},
+		"_reserved":{
+			"authority":"view",
+			"source_yaml":"hello_world.lattice.yaml",
+			"last_sync":"2026-03-02T00:00:00Z",
+			"sync_hash":"sha256:pending"
+		}
+	}
+}

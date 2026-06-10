@@ -1,0 +1,53 @@
+# deploy_manifest.yaml — adna template (display name: Agentic-DNA; URL slug: adna per ADR-006)
+#
+# Authoritative spec: M-B4.5 repo_hygiene_charter §3 (Federation-Beta Planning).
+# Schema: github.com/LatticeProtocol/lattice-protocol/protocol/schemas/deploy_manifest.schema.json.
+# Wired by M-D1.7.d Phase 2.
+#
+# adna is a template + reusable-workflow host. No pytest suite, no image build,
+# no PyPI distribution. ci_gates limited to manifest_validation +
+# branch_policy_enforcement (the only gates this repo can self-apply); others
+# false because they have no surface to enforce against.
+
+schema_version: 1
+repo_id: adna
+repo_class: strict
+license: Apache-2.0
+
+branch_policy:
+  default: main
+  allowed_refs:
+    - main
+
+worktree_policy:
+  primitive: none
+  isolation: clean-checkout-from-main
+
+sync_includes:
+  # Post-v7.0 (M03 flatten): .adna/ nested directory retired; repo root IS the template.
+  # Pre-v7.0 entry `.adna` removed; root-level files + triad directories enumerated.
+  - README.md
+  - CLAUDE.md
+  - .github
+  - how
+  - what
+  - who
+
+sync_excludes:
+  - .venv
+  - .pytest_cache
+  - .ruff_cache
+
+ci_gates:
+  manifest_validation: true
+  worktree_clean_on_deploy: true
+  branch_policy_enforcement: true
+  cross_repo_dep_check: false
+  ruff_on_touched_files: false
+  pytest_no_new_failures: false
+  coverage_floor: false
+
+per_mission_isolation:
+  enabled: false
+  mission_id_pattern: "^m_[a-z0-9_]+(_\\d+)?$"
+  isolation_primitive: branch

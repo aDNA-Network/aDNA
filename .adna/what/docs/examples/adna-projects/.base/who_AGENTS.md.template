@@ -1,0 +1,38 @@
+---
+type: directory_index
+created: {{created_date}}
+updated: {{created_date}}
+last_edited_by: agent_init
+tags: [directory_index, who]
+---
+
+# who/ — Organization (Agent Reference)
+
+## Purpose
+
+`who/` holds organization records — the **WHO** of **{{project_name}}**. People, teams, coordination notes, governance policies, and domain-specific extensions.
+
+## Subdirectories
+
+| Folder | Purpose | Status |
+|--------|---------|--------|
+| `coordination/` | Cross-agent ephemeral notes — handoffs, urgency signals | Required |
+| `governance/` | Roles, decision authority, policies | Required |
+
+Add project-specific subdirectories as needed (e.g., `customers/`, `partners/`, `contacts/`, `team/`).
+
+## Working Rules
+
+- All files follow `type_descriptive_name.md` (underscores only, never hyphens)
+- Check `updated` field before modifying files — if today and you didn't make the last edit, confirm with the user
+- Set `last_edited_by` and `updated` in frontmatter when modifying any file
+
+## Load/Skip Decision
+
+**Load when**: Orienting on organizational systems or deciding which subdirectory to work in.
+**Skip when**: Already know the target subdirectory — go directly to its AGENTS.md.
+
+## Cross-References
+
+- [what/AGENTS](../what/AGENTS.md) — Knowledge objects (WHAT)
+- [how/AGENTS](../how/AGENTS.md) — Operations (HOW)

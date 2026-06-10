@@ -1,0 +1,26 @@
+{
+  "command_timeout": 5,
+  "templates_folder": "how/templates",
+  "templates_pairs": [
+    ["what/context", "how/templates/template_context.md"],
+    ["what/decisions", "how/templates/template_adr.md"],
+    ["how/sessions/active", "how/templates/template_session.md"],
+    ["how/missions", "how/templates/template_mission.md"],
+    ["who/coordination", "how/templates/template_coordination.md"],
+    ["how/backlog", "how/templates/template_backlog.md"],
+    ["how/campaigns", "how/templates/template_campaign.md"],
+    ["how/skills", "how/templates/template_skill.md"],
+    ["how/pipelines/prd_rfc/02_requirements", "how/templates/template_prd.md"],
+    ["how/pipelines/prd_rfc/03_design", "how/templates/template_rfc.md"],
+    ["how/quests", "how/templates/template_side_quest.md"]
+  ],
+  "trigger_on_file_creation": true,
+  "auto_jump_to_cursor": false,
+  "enable_system_commands": false,
+  "shell_path": "",
+  "user_scripts_folder": "",
+  "enable_folder_templates": true,
+  "syntax_highlighting": true,
+  "syntax_highlighting_mobile": false,
+  "intellisense_render": 1
+}

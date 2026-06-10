@@ -1,0 +1,9 @@
+{
+  "accentColor": "#663399",
+  "theme": "obsidian",
+  "cssTheme": "Tokyo Night",
+  "enabledCssSnippets": [
+    "core_theme",
+    "editor_polish"
+  ]
+}

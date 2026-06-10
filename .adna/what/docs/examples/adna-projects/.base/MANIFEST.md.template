@@ -1,0 +1,38 @@
+---
+type: manifest
+created: {{created_date}}
+updated: {{created_date}}
+status: active
+last_edited_by: agent_init
+tags: [manifest, {{domain}}]
+---
+
+# {{project_name}}
+
+## What This Is
+
+{{project_description}}
+
+## Architecture
+
+This project uses the aDNA knowledge architecture:
+
+```
+{{project_name}}/
+├── CLAUDE.md          # Agent governance
+├── MANIFEST.md        # This file — project overview
+├── STATE.md           # Current phase and next steps
+├── README.md          # Human getting-started guide
+├── what/              # Knowledge objects and context
+├── how/               # Operations and processes
+└── who/               # People and coordination
+```
+
+## Entry Points
+
+| Starting point | When to use |
+|---------------|-------------|
+| `CLAUDE.md` | Agent orientation (auto-loaded) |
+| `STATE.md` | Current status and next steps |
+| `what/context/` | Domain knowledge library |
+| `how/sessions/active/` | In-progress work |

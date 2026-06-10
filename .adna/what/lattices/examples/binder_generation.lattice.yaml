@@ -1,0 +1,87 @@
+lattice:
+  name: binder_generation
+  version: "1.0.0"
+  lattice_type: pipeline
+  description: >
+    Sub-lattice extracted from protein_binder_design — the generative design
+    stages as a standalone pipeline. Accepts a target protein structure and
+    produces designed binder sequences with optimized amino acid compositions.
+    Demonstrates federation extraction with interface descriptor for cross-instance
+    composition.
+  execution:
+    mode: workflow
+    runtime: ray
+    tier: L2
+    model: rfdiffusion
+  nodes:
+    - id: lattice_interface
+      type: process
+      description: "Interface descriptor — not an execution node"
+      config:
+        interface_version: "1.0.0"
+        entry_nodes:
+          target_structure:
+            accepts:
+              pdb_file: "str"
+        exit_nodes:
+          sequence_design:
+            produces:
+              designed_sequences: "list[dict]"
+              backbone_pdbs: "list[str]"
+        ports:
+          input:
+            - name: target_pdb
+              node: backbone_design
+              field: input_pdb
+          output:
+            - name: designed_sequences
+              node: sequence_design
+              field: sequences
+    - id: backbone_design
+      type: module
+      ref: "what/modules/module_rfdiffusion"
+      description: "Generate diverse backbone scaffolds targeting binding interface"
+      config:
+        num_designs: 100
+        scaffold_lengths: [80, 100, 120, 150]
+        hotspot_weight: 3.0
+        diffusion_steps: 200
+    - id: sequence_design
+      type: module
+      ref: "what/modules/module_ligand_mpnn"
+      description: "Design amino acid sequences for generated backbones"
+      config:
+        temperature: 0.1
+        num_sequences_per_backbone: 10
+        omit_AAs: ["C"]
+        design_only_positions: "interface"
+  edges:
+    - from: backbone_design
+      to: sequence_design
+      label: "backbone PDBs"
+      data_mapping:
+        backbone_pdbs: input_structures
+  fair:
+    license: "Component-dependent"
+    creators:
+      - "Lattice Labs"
+    keywords:
+      - protein design
+      - backbone generation
+      - sequence optimization
+      - RFdiffusion
+      - LigandMPNN
+      - sub-lattice
+      - federation
+    provenance: >
+      Extracted from protein_binder_design lattice — backbone design and
+      sequence design stages as a standalone generative pipeline. Federation
+      extraction per lattice_federation.md protocol.
+  federation:
+    shareable: true
+    source_instance: example-vault
+    parent_lattice: protein_binder_design
+    version_policy: locked
+    extracted_nodes:
+      - backbone_design
+      - sequence_design

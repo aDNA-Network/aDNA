@@ -1,0 +1,74 @@
+/* @settings
+name: Enhanced Links
+id: enhanced-links
+settings:
+  -
+    id: external-link-icon
+    title: External link arrow icon
+    type: class-toggle
+    default: true
+  -
+    id: unresolved-link-style
+    title: Unresolved link dashed underline
+    type: class-toggle
+    default: true
+*/
+
+/* Enhanced Links — differentiated styling for internal, external, and unresolved links */
+
+/* Internal links — underline on hover only */
+.markdown-rendered .internal-link {
+  text-decoration: none;
+}
+
+.markdown-rendered .internal-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Live Preview internal links */
+.cm-s-obsidian .cm-hmd-internal-link .cm-underline {
+  text-decoration: none;
+}
+
+.cm-s-obsidian .cm-hmd-internal-link .cm-underline:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* External links — subtle arrow indicator */
+.external-link-icon .markdown-rendered a.external-link::after {
+  content: " ↗";
+  font-size: 0.75em;
+  opacity: 0.6;
+  vertical-align: super;
+  line-height: 1;
+}
+
+.external-link-icon .markdown-rendered a.external-link:hover::after {
+  opacity: 1;
+}
+
+/* Unresolved links — dashed red underline */
+.unresolved-link-style .markdown-rendered .internal-link.is-unresolved {
+  color: var(--text-muted);
+  text-decoration: underline dashed;
+  text-decoration-color: rgba(239, 68, 68, 0.6);
+  text-underline-offset: 3px;
+}
+
+.theme-dark .unresolved-link-style .markdown-rendered .internal-link.is-unresolved {
+  text-decoration-color: rgba(248, 113, 113, 0.5);
+}
+
+/* Live Preview unresolved links */
+.unresolved-link-style .cm-s-obsidian .is-unresolved .cm-underline {
+  color: var(--text-muted);
+  text-decoration: underline dashed;
+  text-decoration-color: rgba(239, 68, 68, 0.6);
+  text-underline-offset: 3px;
+}
+
+.theme-dark .unresolved-link-style .cm-s-obsidian .is-unresolved .cm-underline {
+  text-decoration-color: rgba(248, 113, 113, 0.5);
+}

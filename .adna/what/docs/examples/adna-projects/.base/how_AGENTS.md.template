@@ -1,0 +1,39 @@
+---
+type: directory_index
+created: {{created_date}}
+updated: {{created_date}}
+last_edited_by: agent_init
+tags: [directory_index, how]
+---
+
+# how/ — Operations (Agent Reference)
+
+## Purpose
+
+`how/` holds operations — the **HOW** of **{{project_name}}**. Missions, sessions, templates, and optionally backlog, pipelines, and skills.
+
+## Subdirectories
+
+| Folder | Purpose | Status |
+|--------|---------|--------|
+| `missions/` | Build plans for multi-session work | Required |
+| `sessions/` | Session tracking and audit trail | Required |
+| `templates/` | Reusable templates for all content types | Required |
+
+Add operational subdirectories as needed (e.g., `backlog/`, `campaigns/`, `pipelines/`, `skills/`).
+
+## Working Rules
+
+- All files follow `type_descriptive_name.md` (underscores only, never hyphens)
+- Sessions go in `sessions/active/` while open, then archive to `sessions/history/YYYY-MM/`
+- Missions are multi-session plans — decompose large tasks into missions before starting
+
+## Load/Skip Decision
+
+**Load when**: Orienting on operational systems or deciding which subdirectory to work in.
+**Skip when**: Already know the target subdirectory — go directly to its AGENTS.md.
+
+## Cross-References
+
+- [who/AGENTS](../who/AGENTS.md) — Organization (WHO)
+- [what/AGENTS](../what/AGENTS.md) — Knowledge objects (WHAT)

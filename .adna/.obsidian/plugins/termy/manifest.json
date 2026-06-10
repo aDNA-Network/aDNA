@@ -1,0 +1,10 @@
+{
+  "id": "termy",
+  "name": "Termy",
+  "version": "1.2.3",
+  "minAppVersion": "0.15.0",
+  "description": "Full terminal emulator with split panes, preset scripts, multiple shells, and native Rust PTY backend.",
+  "author": "ZyphrZero",
+  "authorUrl": "https://github.com/ZyphrZero",
+  "isDesktopOnly": true
+}

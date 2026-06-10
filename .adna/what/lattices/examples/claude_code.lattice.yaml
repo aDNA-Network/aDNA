@@ -1,0 +1,103 @@
+lattice:
+  name: claude_code
+  version: "1.0.0"
+  lattice_type: context_graph
+  runtime: claude_code
+  description: >
+    Context graph for the Claude Code runtime implementation of aDNA. Nodes
+    reference Claude Code-specific documentation; the patterns they document
+    apply to any runtime. Maps how system components — config cascade, hook
+    system, memory layers, vault architecture, and orchestration tiers — relate
+    to and depend on each other.
+  updated: "2026-03-28"
+  execution:
+    mode: reasoning
+    runtime: local
+    tier: L1
+  nodes:
+    - id: agent_protocol
+      type: process
+      ref: "who/governance/governance_agent_protocol.md"
+      description: "Behavioral contract defining how agents operate — startup checklist, session tracking, execution hierarchy"
+    - id: config_cascade
+      type: dataset
+      ref: "what/context/claude_code/context_claude_code_config_cascade.md"
+      description: "CLAUDE.md inheritance chain and settings hierarchy — global, vault, project levels"
+    - id: hook_system
+      type: process
+      ref: "what/context/claude_code/context_claude_code_hook_system.md"
+      description: "Six lifecycle hooks enforcing constraints at session boundaries and commit gates"
+    - id: agentdb
+      type: dataset
+      ref: "what/context/claude_code/context_claude_code_agentdb.md"
+      description: "SQLite operational memory for cross-session state, contracts, and checkpoints"
+    - id: memory_layers
+      type: reasoning
+      ref: "what/context/claude_code/context_claude_code_memory_integration.md"
+      description: "Four persistence layers composing into unified memory — synthesizes across operational, session, project, and global state"
+      prompt: >
+        Given the four memory persistence layers (CLAUDE.md project memory,
+        auto-memory, AgentDB operational state, session files), determine how
+        they compose for the current context. Identify which layer holds
+        authority for a given piece of state and flag any conflicts.
+    - id: vault_architecture
+      type: dataset
+      ref: "what/context/claude_code/context_claude_code_vault_architecture.md"
+      description: "Multi-vault structure, _meta routing, output rules, and .claude read-only invariant"
+    - id: orchestration_tiers
+      type: process
+      ref: "how/skills/skill_orchestration_tiers.md"
+      description: "Tier-based model routing and multi-agent coordination patterns"
+    - id: adna_triad
+      type: dataset
+      ref: "what/context/adna_core/context_adna_core_paradigm_overview.md"
+      description: "The who/what/how triad — the foundational aDNA structure this lattice complements"
+  edges:
+    - from: config_cascade
+      to: hook_system
+      label: "hooks configured via settings"
+    - from: config_cascade
+      to: agent_protocol
+      label: "protocol defined in CLAUDE.md"
+    - from: config_cascade
+      to: vault_architecture
+      label: "inheritance follows vault structure"
+    - from: hook_system
+      to: agentdb
+      label: "session hooks read/write agent state"
+    - from: agentdb
+      to: memory_layers
+      label: "operational state feeds persistence"
+    - from: agent_protocol
+      to: orchestration_tiers
+      label: "protocol governs execution behavior"
+    - from: vault_architecture
+      to: adna_triad
+      label: "vaults implement triad structure"
+    - from: orchestration_tiers
+      to: agentdb
+      label: "contracts stored in agent database"
+    - from: memory_layers
+      to: adna_triad
+      label: "memory layers serve the knowledge architecture"
+    - from: config_cascade
+      to: memory_layers
+      label: "auto-memory scoped by project config"
+  fair:
+    license: "MIT"
+    creators:
+      - "Lattice Labs"
+    keywords:
+      - claude code
+      - context graph
+      - operating environment
+      - claude code
+      - hooks
+      - agentdb
+      - memory
+      - config cascade
+    provenance: "Reference context graph modeling the Claude Code operating environment for AI-native projects. Complements the adna_core paradigm by documenting the infrastructure layer that enables the knowledge architecture."
+  federation:
+    shareable: true
+    source_instance: adna
+    version_policy: minor

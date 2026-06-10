@@ -1,0 +1,44 @@
+/* Notebook Navigator — aDNA triad colors via Style Settings */
+/* @settings
+name: Notebook Navigator Colors
+id: nn-colors
+settings:
+  - id: nn-nav-bg-tint
+    title: Navigation Background Tint
+    type: variable-color
+    format: hex
+    default: '#1a1b26'
+  - id: nn-selected-accent
+    title: Selected Item Accent
+    type: variable-color
+    format: hex
+    default: '#663399'
+  - id: nn-org-color
+    title: org/ Color (WHO)
+    type: variable-color
+    format: hex
+    default: '#9d7cd8'
+  - id: nn-obs-color
+    title: obs/ Color (WHAT)
+    type: variable-color
+    format: hex
+    default: '#7dcfff'
+  - id: nn-ops-color
+    title: ops/ Color (HOW)
+    type: variable-color
+    format: hex
+    default: '#9ece6a'
+*/
+
+/* Property pills — status */
+.nn-property-pill[data-value="active"] { background-color: #9ece6a20; color: #9ece6a; }
+.nn-property-pill[data-value="completed"] { background-color: #7dcfff20; color: #7dcfff; }
+.nn-property-pill[data-value="draft"] { background-color: #bb9af720; color: #bb9af7; }
+.nn-property-pill[data-value="pending"] { background-color: #bb9af720; color: #bb9af7; }
+.nn-property-pill[data-value="in_progress"] { background-color: #ff9e6420; color: #ff9e64; }
+.nn-property-pill[data-value="deprecated"] { background-color: #f7768e20; color: #f7768e; }
+
+/* Triad folder colors */
+.nn-folder-item[data-path^="org"] .nn-folder-icon { color: var(--nn-org-color, #9d7cd8); }
+.nn-folder-item[data-path^="obs"] .nn-folder-icon { color: var(--nn-obs-color, #7dcfff); }
+.nn-folder-item[data-path^="ops"] .nn-folder-icon { color: var(--nn-ops-color, #9ece6a); }

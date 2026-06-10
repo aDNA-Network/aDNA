@@ -1,0 +1,87 @@
+lattice:
+  name: brand_doctor
+  version: "1.0.0"
+  lattice_type: pipeline
+  description: >
+    End-to-end brand strategy pipeline from brand audit through competitive
+    analysis, positioning, messaging, visual identity, and content strategy.
+    Uses LLM reasoning for positioning synthesis and messaging framework
+    generation. Demonstrates domain-agnostic lattice composition outside
+    the default bio/science focus.
+  execution:
+    mode: hybrid
+    runtime: local
+    tier: L1
+  nodes:
+    - id: brand_audit
+      type: dataset
+      description: "Brand assets inventory, performance metrics, customer perception surveys, and existing guidelines"
+    - id: competitor_analysis
+      type: process
+      description: "Market landscape mapping — competitor positioning, messaging gaps, share of voice, and differentiation opportunities"
+    - id: positioning
+      type: reasoning
+      description: "Synthesize audit findings and competitive landscape into a positioning statement and strategic platform"
+      prompt: "Given the brand audit {brand_audit_summary} and competitive analysis {competitor_landscape}, identify the strongest positioning opportunity. Produce a positioning statement (For [target], [brand] is the [category] that [differentiator] because [reasons to believe]) and supporting strategic platform with 3 pillars."
+      model_override: "claude-sonnet-4-6"
+    - id: messaging_framework
+      type: reasoning
+      description: "Generate taglines, value propositions, elevator pitch, and audience-specific messaging variants"
+      prompt: "Using the positioning statement {positioning_statement} and strategic platform {strategic_platform}, generate: (1) 5 tagline candidates ranked by memorability and differentiation, (2) 3 value propositions for distinct audience segments, (3) a 30-second elevator pitch, (4) key proof points and reasons to believe."
+      model_override: "claude-sonnet-4-6"
+    - id: visual_identity_spec
+      type: process
+      description: "Color palette (primary, secondary, accent), typography system, logo usage guidelines, and visual mood board direction"
+    - id: content_strategy
+      type: process
+      description: "Content calendar framework, channel strategy with priority ranking, tone-of-voice guidelines, and content pillar definitions"
+  edges:
+    - from: brand_audit
+      to: competitor_analysis
+      label: "brand context"
+      data_mapping:
+        brand_summary: market_context
+    - from: brand_audit
+      to: positioning
+      label: "audit findings"
+      data_mapping:
+        audit_report: brand_audit_summary
+    - from: competitor_analysis
+      to: positioning
+      label: "competitive landscape"
+      data_mapping:
+        competitor_report: competitor_landscape
+    - from: positioning
+      to: messaging_framework
+      label: "strategic platform"
+      data_mapping:
+        positioning_statement: positioning_statement
+        platform: strategic_platform
+    - from: messaging_framework
+      to: visual_identity_spec
+      label: "brand voice"
+      data_mapping:
+        taglines: headline_candidates
+        tone: brand_tone
+    - from: messaging_framework
+      to: content_strategy
+      label: "messaging assets"
+      data_mapping:
+        value_props: content_themes
+        audience_segments: target_audiences
+  fair:
+    license: "MIT"
+    creators:
+      - "Lattice Labs"
+    keywords:
+      - brand strategy
+      - marketing
+      - positioning
+      - messaging
+      - visual identity
+      - content strategy
+    provenance: "Marketing/brand strategy pipeline demonstrating domain-agnostic lattice composition with LLM-powered positioning and messaging synthesis"
+  federation:
+    shareable: true
+    source_instance: adna
+    version_policy: minor

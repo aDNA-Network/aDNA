@@ -1,0 +1,91 @@
+lattice:
+  name: research_orchestrator
+  version: "1.0.0"
+  lattice_type: agent
+  description: >
+    Lead orchestrator for the deep research process. Manages full lifecycle
+    from query classification through source dispatch, synthesis coordination,
+    and vault integration. Hybrid mode: workflow structure with reasoning at
+    decision points.
+  execution:
+    mode: hybrid
+    runtime: local
+    tier: L1
+  nodes:
+    - id: query_input
+      type: dataset
+      description: "Research query with optional effort override and topic hint"
+    - id: classify
+      type: reasoning
+      description: "Analyze query across 5 classification dimensions, determine effort level"
+      prompt: >
+        Classify the research query: scope (narrow/broad), depth (surface/deep),
+        novelty (established/emerging), sensitivity (public/restricted),
+        output_type (factual/analytical/creative). Assign effort level.
+      model_override: "claude-opus-4-6"
+      config:
+        temperature: 0.3
+        max_tokens: 4000
+    - id: plan
+      type: reasoning
+      description: "Decompose into sub-questions, select sources, create research plan"
+      prompt: >
+        Generate research plan: decompose query into sub-questions,
+        assign source modules per sub-question, set budgets and timeouts,
+        define quality criteria.
+      model_override: "claude-opus-4-6"
+      config:
+        temperature: 0.3
+        max_tokens: 8000
+    - id: dispatch_workers
+      type: process
+      description: "Dispatch source worker sub-agents via Task tool for parallel research"
+    - id: gap_analysis
+      type: reasoning
+      description: "Identify coverage gaps and dispatch follow-up queries"
+      prompt: >
+        Review collected findings against research plan. Identify
+        sub-questions with insufficient coverage. Generate targeted
+        follow-up queries for gap-filling.
+      model_override: "claude-opus-4-6"
+    - id: coordinate_synthesis
+      type: process
+      description: "Orchestrate the 4-stage synthesis pipeline (merge, validate, optimize, standardize)"
+    - id: quality_gate
+      type: process
+      description: "Enforce quality gates at each phase transition, manage session state"
+  edges:
+    - from: query_input
+      to: classify
+      label: "raw query"
+    - from: classify
+      to: plan
+      label: "classified query + effort level"
+    - from: plan
+      to: dispatch_workers
+      label: "research plan"
+    - from: dispatch_workers
+      to: gap_analysis
+      label: "raw findings"
+    - from: gap_analysis
+      to: dispatch_workers
+      label: "follow-up queries"
+      condition: "gaps_found && budget_remaining"
+    - from: gap_analysis
+      to: coordinate_synthesis
+      label: "complete findings"
+      condition: "!gaps_found || !budget_remaining"
+    - from: coordinate_synthesis
+      to: quality_gate
+      label: "synthesis output"
+  fair:
+    license: "MIT"
+    creators:
+      - "Lattice Labs"
+    keywords:
+      - research
+      - orchestrator
+      - deep research
+      - context engineering
+      - multi-agent coordination
+    provenance: "Lead orchestrator agent for the deep research process — manages query classification, source dispatch, gap analysis, and synthesis coordination"

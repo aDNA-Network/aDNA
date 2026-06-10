@@ -1,0 +1,79 @@
+/* @settings
+name: Translucent Modals
+id: translucent-modals
+settings:
+  -
+    id: modal-blur-intensity
+    title: Modal blur intensity
+    type: variable-number-slider
+    default: 10
+    min: 4
+    max: 16
+    step: 1
+    format: px
+  -
+    id: modal-accent-border
+    title: Accent border on modals
+    type: class-toggle
+    default: true
+*/
+
+/* Translucent Modals — frosted glass effect on modals and command palette
+ * Uses backdrop-filter for blur effect
+ */
+
+body {
+  --modal-blur-intensity: 10px;
+}
+
+/* Modal overlay background */
+.modal-bg {
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(var(--modal-blur-intensity));
+  -webkit-backdrop-filter: blur(var(--modal-blur-intensity));
+}
+
+/* Modal container */
+.modal {
+  background-color: rgba(var(--background-primary-rgb, 30, 30, 30), 0.92);
+  backdrop-filter: blur(calc(var(--modal-blur-intensity) / 2));
+  -webkit-backdrop-filter: blur(calc(var(--modal-blur-intensity) / 2));
+}
+
+/* Accent border on modal */
+.modal-accent-border .modal {
+  border: 1px solid rgba(102, 51, 153, 0.3);
+}
+
+.theme-dark .modal-accent-border .modal {
+  border: 1px solid rgba(153, 102, 204, 0.25);
+}
+
+/* Command palette / quick switcher */
+.prompt {
+  background-color: rgba(var(--background-primary-rgb, 30, 30, 30), 0.92);
+  backdrop-filter: blur(var(--modal-blur-intensity));
+  -webkit-backdrop-filter: blur(var(--modal-blur-intensity));
+}
+
+.modal-accent-border .prompt {
+  border: 1px solid rgba(102, 51, 153, 0.3);
+}
+
+.theme-dark .modal-accent-border .prompt {
+  border: 1px solid rgba(153, 102, 204, 0.25);
+}
+
+/* Suggestion container inside command palette */
+.suggestion-container {
+  background-color: rgba(var(--background-primary-rgb, 30, 30, 30), 0.95);
+}
+
+/* Selected suggestion highlight */
+.suggestion-item.is-selected {
+  background-color: rgba(102, 51, 153, 0.15);
+}
+
+.theme-dark .suggestion-item.is-selected {
+  background-color: rgba(153, 102, 204, 0.2);
+}

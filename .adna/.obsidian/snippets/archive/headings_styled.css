@@ -1,0 +1,95 @@
+/* @settings
+name: Styled Headings
+id: styled-headings
+settings:
+  -
+    id: heading-h1-center
+    title: Center H1 headings
+    type: class-toggle
+    default: true
+  -
+    id: heading-h2-border
+    title: H2 accent left border
+    type: class-toggle
+    default: true
+  -
+    id: heading-scale
+    title: Heading scale multiplier
+    type: variable-number-slider
+    default: 1
+    min: 0.8
+    max: 1.3
+    step: 0.05
+    format: ""
+*/
+
+/* Styled Headings — visual hierarchy with accent integration
+ * H1: centered, no bottom border
+ * H2: accent left border (4px)
+ * H3+: accent text color
+ */
+
+body {
+  --heading-scale: 1;
+}
+
+/* === H1 — Centered, no border === */
+
+/* Reading View */
+.heading-h1-center .markdown-rendered h1 {
+  text-align: center;
+  border-bottom: none;
+}
+
+/* Live Preview */
+.heading-h1-center .cm-s-obsidian .HyperMD-header-1 {
+  text-align: center;
+}
+
+/* === H2 — Accent left border === */
+
+/* Reading View */
+.heading-h2-border .markdown-rendered h2 {
+  border-left: 4px solid var(--accent-color, #663399);
+  padding-left: 0.5em;
+  border-bottom: none;
+}
+
+/* Live Preview */
+.heading-h2-border .cm-s-obsidian .HyperMD-header-2 {
+  border-left: 4px solid var(--accent-color, #663399);
+  padding-left: 0.5em;
+}
+
+.theme-dark .heading-h2-border .markdown-rendered h2 {
+  border-left-color: var(--accent-color-hover, #7744aa);
+}
+
+.theme-dark .heading-h2-border .cm-s-obsidian .HyperMD-header-2 {
+  border-left-color: var(--accent-color-hover, #7744aa);
+}
+
+/* === H3+ — Accent text color === */
+
+/* Reading View */
+.markdown-rendered h3,
+.markdown-rendered h4,
+.markdown-rendered h5,
+.markdown-rendered h6 {
+  color: var(--text-accent, #9966cc);
+}
+
+/* Live Preview */
+.cm-s-obsidian .HyperMD-header-3,
+.cm-s-obsidian .HyperMD-header-4,
+.cm-s-obsidian .HyperMD-header-5,
+.cm-s-obsidian .HyperMD-header-6 {
+  color: var(--text-accent, #9966cc);
+}
+
+/* === Heading scale === */
+
+.markdown-rendered h1 { font-size: calc(2em * var(--heading-scale)); }
+.markdown-rendered h2 { font-size: calc(1.5em * var(--heading-scale)); }
+.markdown-rendered h3 { font-size: calc(1.25em * var(--heading-scale)); }
+.markdown-rendered h4 { font-size: calc(1.1em * var(--heading-scale)); }

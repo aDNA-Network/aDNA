@@ -1,0 +1,69 @@
+lattice:
+  name: knowledge_base
+  version: "1.0.0"
+  lattice_type: context_graph
+  description: >
+    Knowledge retrieval and reasoning lattice. Ingests documents into a
+    structured knowledge store, indexes them for retrieval, answers queries
+    via LLM reasoning over retrieved context, and validates answers against
+    source material. Demonstrates the context_graph lattice type with
+    reasoning execution mode.
+  execution:
+    mode: reasoning
+    runtime: local
+    tier: L1
+    model: "claude-sonnet-4-5-20250929"
+  nodes:
+    - id: document_corpus
+      type: dataset
+      description: "Source documents — markdown, PDF, or structured text files"
+    - id: indexer
+      type: process
+      description: "Chunk documents, generate embeddings, build retrieval index"
+    - id: query_input
+      type: dataset
+      description: "User query in natural language"
+    - id: retriever
+      type: process
+      description: "Retrieve top-k relevant chunks from the index for the query"
+      config:
+        top_k: 10
+        similarity_threshold: 0.7
+    - id: reasoner
+      type: reasoning
+      description: "Synthesize an answer from retrieved context using LLM reasoning"
+      prompt: >
+        Given the retrieved context chunks, synthesize a comprehensive answer
+        to the user query. Cite specific sources. Flag any gaps where the
+        corpus lacks sufficient information to answer confidently.
+  edges:
+    - from: document_corpus
+      to: indexer
+      label: "raw documents"
+    - from: indexer
+      to: retriever
+      label: "search index"
+    - from: query_input
+      to: retriever
+      label: "user query"
+    - from: retriever
+      to: reasoner
+      label: "retrieved context"
+    - from: query_input
+      to: reasoner
+      label: "original query"
+  fair:
+    license: "MIT"
+    creators:
+      - "Lattice Labs"
+    keywords:
+      - knowledge base
+      - context graph
+      - retrieval augmented generation
+      - RAG
+      - reasoning
+    provenance: "Reference implementation of a context_graph lattice with reasoning-mode execution for knowledge retrieval"
+  federation:
+    shareable: true
+    source_instance: adna
+    version_policy: minor

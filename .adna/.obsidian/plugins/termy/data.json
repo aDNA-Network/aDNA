@@ -1,0 +1,44 @@
+{
+  "platformShells": { "windows": "cmd", "darwin": "zsh", "linux": "bash" },
+  "platformCustomShellPaths": { "windows": "", "darwin": "", "linux": "" },
+  "shellArgs": [],
+  "autoEnterVaultDirectory": true,
+  "newInstanceBehavior": "newHorizontalSplit",
+  "createInstanceNearExistingOnes": true,
+  "focusNewInstance": true,
+  "lockNewInstance": false,
+  "fontSize": 16,
+  "fontFamily": "Consolas, \"Courier New\", monospace",
+  "cursorStyle": "block",
+  "cursorBlink": true,
+  "useObsidianTheme": true,
+  "preferredRenderer": "canvas",
+  "scrollback": 1000,
+  "backgroundImageOpacity": 0.5,
+  "backgroundImageSize": "cover",
+  "backgroundImagePosition": "center",
+  "enableBlur": false,
+  "blurAmount": 10,
+  "textOpacity": 1,
+  "visibility": {
+    "enabled": true,
+    "showInCommandPalette": true,
+    "showInRibbon": true,
+    "showInNewTab": true,
+    "showInStatusBar": true
+  },
+  "serverConnection": { "downloadAcceleratorUrl": "", "offlineMode": false },
+  "presetScripts": [
+    {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "icon": "terminal",
+      "command": "claude",
+      "terminalTitle": "Claude Code",
+      "showInStatusBar": true,
+      "autoOpenTerminal": true,
+      "runInNewTerminal": false
+    }
+  ],
+  "enableDebugLog": false
+}

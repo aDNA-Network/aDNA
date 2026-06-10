@@ -1,0 +1,23 @@
+# .obsidianignore — Excluded from Obsidian's file watcher and indexer
+# These paths are completely invisible to Obsidian (no FSEvents, no indexing).
+# Separate from app.json userIgnoreFilters which only affect search/links/graph.
+
+# Git metadata
+.git/
+
+# Python build artifacts
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.ipynb_checkpoints/
+
+# Node.js build artifacts
+node_modules/
+
+# System files
+.DS_Store
+
+# Large binary directories (add project-specific exclusions below)
+# If you symlink git repos into this vault, add them here to prevent
+# Obsidian from watching thousands of files it doesn't need to index.

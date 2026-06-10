@@ -1,0 +1,33 @@
+---
+type: state
+created: {{created_date}}
+updated: {{created_date}}
+status: active
+last_edited_by: agent_init
+tags: [state, {{domain}}]
+---
+
+# STATE — {{project_name}}
+
+## Current Phase
+
+**Phase 1 — Setup Complete**
+
+The vault has been scaffolded with aDNA architecture. Governance files are populated. Domain-specific directories are in place.
+
+## What's Working
+
+- Vault structure created and configured
+- CLAUDE.md customized for {{domain}} domain
+- Agent sessions ready (`how/sessions/active/`)
+
+## Next Steps
+
+1. Create your first context entry in `what/context/` for a key domain topic
+2. Start a mission in `how/missions/` for your first real task
+3. Add team members or contacts to `who/` (if applicable)
+4. Review and customize templates in `how/templates/`
+
+## Blockers
+
+None.

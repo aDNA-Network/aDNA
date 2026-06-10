@@ -1,0 +1,42 @@
+# ── aDNA workspace .gitignore ─────────────────────────────────────────
+# The tracked base = CLAUDE.md, README.md, LICENSE, .adna/, this file.
+# Everything a USER creates in the workspace is ignored by design:
+# projects are self-contained sibling repos, never committed here.
+
+# User projects — each <Name>.aDNA/ directory is its own git repo.
+# Pattern note: `?*` requires a non-empty name so this can NEVER match
+# the embedded `.adna/` base (which is case-insensitively `.aDNA` on
+# macOS/Windows filesystems); the explicit negation is belt-and-braces.
+/?*.aDNA/
+!/.adna/
+
+# Workspace working dirs (created as you use the system) — root-anchored
+# so they never shadow paths inside .adna/.
+/modules/
+/lattices/
+/datasets/
+/results/
+/shared/
+/_archive/
+
+# Agent harness + environment
+/.claude/
+.env
+.env.*
+.mcp.json
+
+# Workspace-level Obsidian per-device state (if you open ~/aDNA/ itself as a vault)
+/.obsidian/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Milestone tarballs at workspace root
+/*.tar.gz

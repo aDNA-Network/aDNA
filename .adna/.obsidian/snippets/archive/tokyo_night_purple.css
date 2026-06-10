@@ -1,0 +1,168 @@
+/* Tokyo Night Purple Accent
+ * Primary color: #663399 (Rebecca Purple)
+ * Replaces default Tokyo Night blue accent with Rebecca Purple
+ */
+
+:root {
+  /* Primary purple accent replacing blue */
+  --accent-h: 270;
+  --accent-s: 50%;
+  --accent-l: 40%;
+  --interactive-accent: #663399;
+  --interactive-accent-hover: #7744aa;
+  --interactive-accent-rgb: 102, 51, 153;
+
+  /* Text accent */
+  --text-accent: #663399;
+  --text-accent-hover: #7744aa;
+
+  /* Links */
+  --link-color: #663399;
+  --link-color-hover: #7744aa;
+  --link-external-color: #8855bb;
+  --link-external-color-hover: #9966cc;
+
+  /* Selection */
+  --text-selection: rgba(102, 51, 153, 0.2);
+
+  /* Highlight */
+  --text-highlight-bg: rgba(102, 51, 153, 0.25);
+}
+
+/* Dark theme specific overrides */
+.theme-dark {
+  --interactive-accent: #7744aa;
+  --interactive-accent-hover: #8855bb;
+  --text-accent: #9966cc;
+  --text-accent-hover: #aa77dd;
+  --link-color: #9966cc;
+  --link-color-hover: #aa77dd;
+}
+
+/* Buttons and interactive elements */
+.mod-cta,
+button.mod-cta {
+  background-color: #663399 !important;
+  color: white !important;
+}
+
+button.mod-cta:hover {
+  background-color: #7744aa !important;
+}
+
+/* Tags with purple tint */
+.tag,
+a.tag {
+  background-color: rgba(102, 51, 153, 0.15);
+  color: #663399;
+  border-color: rgba(102, 51, 153, 0.3);
+}
+
+.theme-dark .tag,
+.theme-dark a.tag {
+  background-color: rgba(153, 102, 204, 0.2);
+  color: #aa88dd;
+}
+
+.tag:hover,
+a.tag:hover {
+  background-color: rgba(102, 51, 153, 0.25);
+  color: #7744aa;
+}
+
+/* Graph view accent */
+.graph-view.color-fill-highlight {
+  color: #663399;
+}
+
+.graph-view.color-line-highlight {
+  color: #9966cc;
+}
+
+/* Checkbox accent */
+input[type="checkbox"]:checked {
+  background-color: #663399;
+  border-color: #663399;
+}
+
+.theme-dark input[type="checkbox"]:checked {
+  background-color: #7744aa;
+  border-color: #7744aa;
+}
+
+/* Task list checkboxes */
+.task-list-item-checkbox:checked {
+  background-color: #663399;
+  border-color: #663399;
+}
+
+/* Internal links */
+.internal-link {
+  color: #663399;
+}
+
+.theme-dark .internal-link {
+  color: #9966cc;
+}
+
+.internal-link:hover {
+  color: #7744aa;
+}
+
+/* Callout accent colors */
+.callout[data-callout="tip"] {
+  --callout-color: 102, 51, 153;
+}
+
+.callout[data-callout="info"] {
+  --callout-color: 119, 68, 170;
+}
+
+/* Progress bars */
+progress::-webkit-progress-value {
+  background-color: #663399;
+}
+
+progress::-moz-progress-bar {
+  background-color: #663399;
+}
+
+/* Slider accent */
+input[type="range"]::-webkit-slider-thumb {
+  background-color: #663399;
+}
+
+/* Search match highlight */
+.search-result-file-matched-text,
+.cm-s-obsidian span.obsidian-search-match-highlight {
+  background-color: rgba(102, 51, 153, 0.3);
+}
+
+/* Nav folder/file icons when selected */
+.nav-file-title.is-active,
+.nav-folder-title.is-active {
+  color: #663399;
+}
+
+.theme-dark .nav-file-title.is-active,
+.theme-dark .nav-folder-title.is-active {
+  color: #9966cc;
+}
+
+/* Sidebar tab active state */
+.workspace-tab-header.is-active {
+  color: #663399;
+}
+
+.theme-dark .workspace-tab-header.is-active {
+  color: #9966cc;
+}
+
+/* Frontmatter/Properties accent */
+.metadata-property-key {
+  color: #663399;
+}
+
+.theme-dark .metadata-property-key {
+  color: #9966cc;
+}

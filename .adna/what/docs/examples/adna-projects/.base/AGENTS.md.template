@@ -1,0 +1,27 @@
+---
+type: agents
+created: {{created_date}}
+updated: {{created_date}}
+last_edited_by: agent_init
+---
+
+# AGENTS.md — {{project_name}}
+
+## Vault Root
+
+This is the root agent guide for the **{{project_name}}** vault.
+
+## Directory Index
+
+| Directory | Contents | AGENTS.md |
+|-----------|----------|-----------|
+| `what/` | Knowledge objects, context, domain entities | `what/AGENTS.md` |
+| `how/` | Operations, missions, sessions, templates | `how/AGENTS.md` |
+| `who/` | People, coordination, governance | `who/AGENTS.md` |
+
+## Quick Orientation
+
+1. Read `CLAUDE.md` for agent protocol and project identity
+2. Read `MANIFEST.md` for project overview and architecture
+3. Read `STATE.md` for current phase and next steps
+4. Read the `AGENTS.md` in the directory you're about to work in

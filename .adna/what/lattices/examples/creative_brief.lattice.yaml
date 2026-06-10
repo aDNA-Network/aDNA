@@ -1,0 +1,54 @@
+lattice:
+  name: creative_brief
+  version: "1.0.0"
+  lattice_type: pipeline
+  description: >
+    Creative project workflow from client brief through design, revision,
+    and delivery. The revision_cycle node uses an LLM to synthesize client
+    feedback and suggest design adjustments, while a conditional loop
+    handles multiple revision rounds until approval.
+  execution:
+    mode: hybrid
+    runtime: local
+    tier: L1
+  nodes:
+    - id: brief_intake
+      type: dataset
+      description: "Client brief — project goals, brand guidelines, deliverables, timeline, budget"
+    - id: design_draft
+      type: process
+      description: "Create initial design concepts based on brief — sketches, mockups, prototypes"
+    - id: revision_cycle
+      type: reasoning
+      description: "Synthesize client feedback and recommend design adjustments"
+      prompt: "Given the client feedback {client_feedback} on the current design {current_draft}, identify the key changes requested, assess feasibility, and recommend specific adjustments that honor both the client's vision and design best practices."
+      model_override: "claude-sonnet-4-6"
+    - id: delivery
+      type: process
+      description: "Final asset preparation — export formats, handoff documentation, archive project files"
+  edges:
+    - from: brief_intake
+      to: design_draft
+      label: "project requirements"
+    - from: design_draft
+      to: revision_cycle
+      label: "draft for review"
+    - from: revision_cycle
+      to: design_draft
+      label: "revisions needed"
+      condition: "client.approved == false"
+    - from: revision_cycle
+      to: delivery
+      label: "approved design"
+      condition: "client.approved == true"
+  fair:
+    license: "MIT"
+    creators:
+      - "Lattice Labs"
+    keywords:
+      - creative
+      - design
+      - client work
+      - revision cycle
+      - hybrid pipeline
+    provenance: "Creative project workflow demonstrating revision loops with LLM-assisted feedback synthesis"

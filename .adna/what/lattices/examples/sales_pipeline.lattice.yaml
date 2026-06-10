@@ -1,0 +1,54 @@
+lattice:
+  name: sales_pipeline
+  version: "1.0.0"
+  lattice_type: pipeline
+  description: >
+    A standard B2B sales pipeline tracking deals from first contact to close.
+    Five stages model the typical sales funnel. Each stage is a process node
+    where leads are evaluated and advanced or disqualified. Useful for startups,
+    sales teams, and anyone tracking deal flow.
+  execution:
+    mode: workflow
+    runtime: local
+    tier: L1
+  nodes:
+    - id: lead_capture
+      type: dataset
+      description: "Inbound leads from marketing, referrals, events, and outreach"
+    - id: qualification
+      type: process
+      description: "Evaluate fit against ideal customer profile — budget, authority, need, timeline"
+    - id: proposal
+      type: process
+      description: "Draft and deliver proposal with pricing, scope, and timeline"
+    - id: negotiation
+      type: process
+      description: "Handle objections, negotiate terms, align on contract details"
+    - id: close
+      type: process
+      description: "Finalize contract, process signatures, hand off to onboarding"
+  edges:
+    - from: lead_capture
+      to: qualification
+      label: "raw leads"
+    - from: qualification
+      to: proposal
+      label: "qualified leads"
+      condition: "lead.score >= qualification_threshold"
+    - from: proposal
+      to: negotiation
+      label: "proposal accepted"
+    - from: negotiation
+      to: close
+      label: "terms agreed"
+  fair:
+    license: "MIT"
+    creators:
+      - "Lattice Labs"
+    keywords:
+      - sales
+      - pipeline
+      - business
+      - crm
+      - deal flow
+    provenance: "Standard B2B sales pipeline pattern for business use case demonstration"

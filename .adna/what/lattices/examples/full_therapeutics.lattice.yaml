@@ -1,0 +1,74 @@
+lattice:
+  name: full_therapeutics
+  version: "1.0.0"
+  lattice_type: pipeline
+  description: >
+    End-to-end therapeutics pipeline composing two federated sub-lattices via
+    external references. Demonstrates multi-lattice composition: binder_generation
+    (generative design from example-vault) feeds into docking_assessment
+    (structure validation from adna), with local target selection and
+    clinical ranking stages. Both sub-lattices are opaque external references
+    resolved via lattice:// URIs.
+  execution:
+    mode: workflow
+    runtime: ray
+    tier: L2
+  nodes:
+    - id: target_selection
+      type: process
+      description: "Select therapeutic targets from disease-associated gene list"
+    - id: binder_generation
+      type: module
+      ref: "lattice://example-vault/binder_generation"
+      description: "Generate binder candidates via RFdiffusion + LigandMPNN (federated sub-lattice)"
+      config:
+        ref_version: "1.0.0"
+        ref_interface_version: "1.0.0"
+    - id: docking_assessment
+      type: module
+      ref: "lattice://adna/docking_assessment"
+      description: "Validate candidates via structure prediction and interface analysis (federated sub-lattice)"
+      config:
+        ref_version: "1.0.0"
+        ref_interface_version: "1.0.0"
+    - id: clinical_ranking
+      type: process
+      description: "Rank validated candidates by clinical feasibility and druggability criteria"
+  edges:
+    - from: target_selection
+      to: binder_generation
+      label: "target structures"
+      port: target_pdb
+      data_mapping:
+        target_structures: pdb_file
+    - from: binder_generation
+      to: docking_assessment
+      label: "designed sequences"
+      port: designed_sequences
+      data_mapping:
+        designed_sequences: input_sequences
+    - from: docking_assessment
+      to: clinical_ranking
+      label: "validation results"
+      data_mapping:
+        binding_scores: candidate_scores
+  fair:
+    license: "MIT"
+    creators:
+      - "Lattice Labs"
+    keywords:
+      - therapeutics
+      - drug discovery
+      - protein binder
+      - composition
+      - federation
+      - multi-lattice
+    provenance: >
+      Composed pipeline demonstrating multi-lattice federation — local target
+      selection and clinical ranking stages with two imported sub-lattices
+      (binder_generation from example-vault, docking_assessment from
+      adna) connected via external reference composition pattern.
+  federation:
+    shareable: true
+    source_instance: adna
+    version_policy: minor

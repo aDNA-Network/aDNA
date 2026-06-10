@@ -1,0 +1,32 @@
+/* Mermaid diagram theming for dashboard pages
+ * Scoped to .dashboard .mermaid only -- no effect on other pages
+ */
+
+.dashboard .mermaid .node rect,
+.dashboard .mermaid .node circle,
+.dashboard .mermaid .node polygon,
+.homepage .mermaid .node rect,
+.homepage .mermaid .node circle,
+.homepage .mermaid .node polygon {
+  fill: rgba(var(--interactive-accent-rgb), 0.08) !important;
+  stroke: var(--interactive-accent) !important;
+  stroke-width: 1.5px !important;
+}
+
+.dashboard .mermaid .edgePath .path,
+.homepage .mermaid .edgePath .path {
+  stroke: rgba(var(--interactive-accent-rgb), 0.4) !important;
+  stroke-width: 1.5px !important;
+}
+
+.dashboard .mermaid .edgeLabel,
+.homepage .mermaid .edgeLabel {
+  color: var(--text-muted) !important;
+  font-size: 0.85em !important;
+}
+
+.dashboard .mermaid .cluster rect,
+.homepage .mermaid .cluster rect {
+  fill: rgba(var(--interactive-accent-rgb), 0.03) !important;
+  stroke: rgba(var(--interactive-accent-rgb), 0.2) !important;
+}

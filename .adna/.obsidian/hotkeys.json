@@ -1,0 +1,9 @@
+{
+  "app:toggle-left-sidebar": [{"modifiers": ["Mod"], "key": "B"}],
+  "app:toggle-right-sidebar": [{"modifiers": ["Mod", "Alt"], "key": "B"}],
+  "editor:toggle-fold": [{"modifiers": ["Mod", "Shift"], "key": "["}],
+  "editor:toggle-source": [{"modifiers": ["Mod", "Shift"], "key": "E"}],
+  "graph:open": [{"modifiers": ["Mod", "Shift"], "key": "G"}],
+  "app:go-back": [{"modifiers": ["Mod"], "key": "["}],
+  "app:go-forward": [{"modifiers": ["Mod"], "key": "]"}]
+}

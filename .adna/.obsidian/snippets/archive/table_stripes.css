@@ -1,0 +1,29 @@
+/* Zebra Stripes + Hover for Dataview Tables
+ * Alternating row backgrounds and hover highlight.
+ * Uses Obsidian design tokens for theme consistency.
+ * Scoped to preview mode to avoid affecting editor tables.
+ */
+
+/* Alternating row backgrounds */
+.markdown-preview-view .dataview-result-table tbody tr:nth-child(even) {
+  background-color: var(--background-secondary);
+}
+
+/* Hover highlight */
+.markdown-preview-view .dataview-result-table tbody tr:hover {
+  background-color: var(--background-modifier-hover);
+}
+
+/* Subtle header bottom border for visual separation */
+.markdown-preview-view .dataview-result-table thead tr {
+  border-bottom: 2px solid var(--background-modifier-border);
+}
+
+/* Also apply to standard markdown tables in preview */
+.markdown-preview-view table:not(.dataview-result-table) tbody tr:nth-child(even) {
+  background-color: var(--background-secondary);
+}
+
+.markdown-preview-view table:not(.dataview-result-table) tbody tr:hover {
+  background-color: var(--background-modifier-hover);
+}

@@ -1,0 +1,19 @@
+{
+  "promptDelete": true,
+  "showLineNumber": true,
+  "monospaceFontFamily": "JetBrains Mono, Fira Code, monospace",
+  "vimMode": false,
+  "alwaysUpdateLinks": true,
+  "defaultViewMode": "preview",
+  "livePreview": true,
+  "showFrontmatter": true,
+  "foldHeading": true,
+  "foldIndent": true,
+  "pdfExportSettings": {
+    "pageSize": "Letter",
+    "landscape": false,
+    "margin": "0",
+    "downscalePercent": 100
+  },
+  "userIgnoreFilters": ["**/*.js", "**/*.pyc", "**/__pycache__/", "**/*.log", "**/dist/", "**/node_modules/", "**/.venv/"]
+}

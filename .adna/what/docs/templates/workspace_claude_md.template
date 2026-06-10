@@ -1,0 +1,106 @@
+---
+type: governance
+version: "1.0"
+created: {{created_date}}
+updated: {{created_date}}
+last_edited_by: agent_init
+compute_tier: {{compute_tier}}
+tags: [workspace, adna, governance]
+---
+
+# CLAUDE.md — aDNA Workspace
+
+This is a **multi-project aDNA workspace**. The `{{adna_folder}}/` directory is the base template for creating new projects.
+
+## Orientation
+
+You are operating at the **workspace level** — one level above individual projects. Your role here is to help the user discover, create, and manage aDNA projects. When the user wants to work *inside* a project, they should open that project's directory directly (in Claude Code or Obsidian).
+
+**Workspace path**: This file lives at the root of the workspace folder (recommended: `~/lattice/`). The aDNA base template is at `{{adna_folder}}/`.
+
+**Compute tier**: `{{compute_tier}}`
+- **L0** — Local only. Obsidian + Claude Code. No JupyterHub, no federation.
+- **L1** — JupyterHub running locally. `latlab/` and optionally `lattice-protocol/` are workspace peers.
+- **L2+** — Connected to a regional compute cluster via federation relay.
+
+---
+
+## Project Discovery
+
+To find existing projects in this workspace, list all directories that contain a `CLAUDE.md` file. Each is an independent aDNA project with its own governance, triad structure, and session history.
+
+Exclude the `{{adna_folder}}/` directory from this list — it is the template source, not a working project.
+
+If `latlab/` or `lattice-protocol/` exist, they are infrastructure repos (not aDNA projects).
+
+---
+
+## New Project Creation
+
+When the user asks to create a new project, follow this procedure:
+
+### Step 1: Interview
+
+Ask the user:
+1. **Project name** — what should the folder be called? (Use underscores, lowercase. Example: `my_research_lab`)
+2. **What is this project for?** — brief description (1-2 sentences)
+3. **Any initial context to seed?** — a name, organization, topic, dataset, or goal they want the project to start with
+
+### Step 2: Fork the Template
+
+```bash
+cp -r {{adna_folder}}/ <project_name>/
+cd <project_name>
+rm -rf .git/ .obsidian/
+git init
+```
+
+Then prepare the fork for onboarding:
+- Remove `role: template` from `MANIFEST.md` frontmatter (this marker identifies the base template — forked projects must not have it)
+- Set `last_edited_by: agent_init` in MANIFEST.md, STATE.md, and CLAUDE.md frontmatter
+
+This gives the new project the full aDNA structure (who/what/how triad, templates, skills, context library) without any git history or Obsidian config from the base repo. The `agent_init` markers trigger the onboarding interview on first run.
+
+### Step 3: Run Onboarding
+
+The new project's `CLAUDE.md` will detect it as a fresh vault and trigger `how/skills/skill_onboarding.md` — the 5-question interactive onboarding that customizes governance files, creates domain-specific directories, and sets the agent personality.
+
+If the user provided answers in Step 1, carry them forward into the onboarding interview so they don't repeat themselves.
+
+### Step 4: Seed Initial Context (if provided)
+
+If the user gave initial context in Step 1 (a person, org, topic, etc.), create the appropriate files:
+- Person/contact → `who/` directory
+- Organization → `who/governance/` or `who/` depending on whether it's their own org or external
+- Topic/domain knowledge → `what/context/`
+- Dataset or data source → `what/` with appropriate entity type
+- Goal or objective → `how/backlog/`
+
+### Step 5: Report
+
+Tell the user:
+- What was created and where
+- How to open the project (Claude Code: `cd <project_name>`, Obsidian: open folder)
+- That the project is now self-contained — all future work happens inside it
+
+---
+
+## L0 to L1 Upgrade
+
+To upgrade this workspace from local-only (L0) to L1 compute (JupyterHub):
+
+1. Read `{{adna_folder}}/how/skills/skill_l1_upgrade.md` — the phased upgrade guide
+2. Run `{{adna_folder}}/prepare_for_onboarding.sh` — pre-flight checks and environment prep
+3. Follow Phase 1 of the upgrade skill (requires admin to push `latlab` repo)
+4. After upgrade: `latlab/` appears as a workspace peer. Update this file's `compute_tier` to `L1`.
+
+For full self-service (no admin needed), a public L1 deployment package is planned but not yet available.
+
+---
+
+## Standing Rules
+
+1. **Never modify `{{adna_folder}}/`** — it is the template source. Keep it as a clean reference. Pull updates from upstream (`git pull` inside `{{adna_folder}}/`).
+2. **Each project is self-contained** — no cross-project dependencies. A project can be moved out of this workspace and still function.
+3. **This CLAUDE.md governs workspace operations only** — project creation, discovery, and L1 upgrade. When working inside a project, that project's own CLAUDE.md is authoritative.
+4. **Infrastructure repos are not projects** — `latlab/` and `lattice-protocol/` (if present) are code repos, not aDNA vaults. They have their own CLAUDE.md files for code-level agent work.
