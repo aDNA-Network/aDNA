@@ -50,7 +50,7 @@ Skills can serve as operational runbooks — not just automated recipes, but doc
 | `onboarding` | Customer, partner, or team onboarding |
 | `review` | Model review, code review, audit |
 | `emergency` | Incident response and emergency procedures |
-| `node_operations` | Per-node operational maintenance (inventory refresh, health checks, credential audits, cross-vault git pulls) — typically invoked from `LatticeHome.aDNA/` operator persona |
+| `node_operations` | Per-node operational maintenance (inventory refresh, health checks, credential audits, cross-vault git pulls) — typically invoked from `Home.aDNA/` operator persona |
 
 ## Directory Structure
 
@@ -79,10 +79,10 @@ Examples:
 - `skill_version_migration.md` (agent)
 - `skill_workspace_upgrade.md` (agent)
 - `skill_vault_review.md` (process)
-- `skill_node_bootstrap_interview.md` (agent) — hybrid 19-question interview filling operator-specific fields of a freshly-forked `LatticeHome.aDNA/` (invoked from workspace router Step 0.3 between `skill_inventory_refresh` auto-detect and `skill_node_health_check` validation; Hestia voice; 4-7 min runtime)
+- `skill_node_bootstrap_interview.md` (agent) — hybrid 19-question interview filling operator-specific fields of a freshly-forked `Home.aDNA/` (invoked from workspace router Step 0.3 between `skill_inventory_refresh` auto-detect and `skill_node_health_check` validation; Hestia voice; 4-7 min runtime)
 - `skill_inventory_refresh.md` (agent) — rebuild `inventory_vaults.{md,yaml}` + `inventory_system.{md,yaml}` from current node state; detect new/removed vaults + version drift + tool-chain drift (graduated from LatticeHome.aDNA@411660e at M-H.1.5)
 - `skill_node_credentials_audit.md` (agent) — enumerate credential SOURCES on a node (env-var NAMES, gh CLI auth status, SSH pubkeys, keychain entry NAMES). NAMES-only discipline; never persists values (graduated at M-H.1.5)
-- `skill_node_health_check.md` (agent) — D10 reproducibility gate for `LatticeHome.aDNA/`; validates file presence + frontmatter + YAML companion + federation block + inventory-vs-disk consistency + identity drift (graduated at M-H.1.5)
+- `skill_node_health_check.md` (agent) — D10 reproducibility gate for `Home.aDNA/`; validates file presence + frontmatter + YAML companion + federation block + inventory-vs-disk consistency + identity drift (graduated at M-H.1.5)
 - `skill_update_all_vaults.md` (agent) — `git pull --ff-only` across every vault listed in `inventory_vaults.yaml`; safe-by-default + flags conflicts as `#needs-human` (graduated at M-H.1.5)
 
 ## Template

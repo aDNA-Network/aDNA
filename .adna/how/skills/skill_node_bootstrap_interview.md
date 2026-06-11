@@ -5,7 +5,7 @@ created: 2026-05-12
 updated: 2026-05-12
 status: active
 category: onboarding
-trigger: Workspace router Step 0.3 — operator accepts `LatticeHome.aDNA/` bootstrap; runs after `skill_project_fork.md` + `skill_inventory_refresh.md` to fill operator-specific fields the auto-detect engine cannot infer
+trigger: Workspace router Step 0.3 — operator accepts `Home.aDNA/` bootstrap; runs after `skill_project_fork.md` + `skill_inventory_refresh.md` to fill operator-specific fields the auto-detect engine cannot infer
 last_edited_by: agent_stanley
 related_skills: [skill_project_fork, skill_inventory_refresh, skill_node_health_check]
 related_artifacts:
@@ -20,14 +20,14 @@ tags: [skill, agent, onboarding, dynamic_bootstrap, interview, node_adna, hestia
 
 # skill_node_bootstrap_interview
 
-Hybrid interview that fills the **operator-specific** fields of a freshly-forked `LatticeHome.aDNA/` vault — purpose, user-info, stack overlay, hardware confirm, and lattice connections. The interview NEVER re-asks what the auto-detect engine (`skill_inventory_refresh.md`) already captured. 19 questions across 5 topics; 4-7 min runtime; Hestia voice register.
+Hybrid interview that fills the **operator-specific** fields of a freshly-forked `Home.aDNA/` vault — purpose, user-info, stack overlay, hardware confirm, and lattice connections. The interview NEVER re-asks what the auto-detect engine (`skill_inventory_refresh.md`) already captured. 19 questions across 5 topics; 4-7 min runtime; Hestia voice register.
 
 ## Trigger
 
-Invoked by the workspace router Step 0.3 flow after operator accepts `LatticeHome.aDNA/` bootstrap. This skill runs as **Step 3** of the bootstrap chain:
+Invoked by the workspace router Step 0.3 flow after operator accepts `Home.aDNA/` bootstrap. This skill runs as **Step 3** of the bootstrap chain:
 
 ```
-Step 1: skill_project_fork.md    → empty LatticeHome.aDNA/ from template
+Step 1: skill_project_fork.md    → empty Home.aDNA/ from template
 Step 2: skill_inventory_refresh   → auto-detect inventory_*.yaml
 Step 3: skill_node_bootstrap_interview  ← THIS SKILL
 Step 4: skill_node_health_check   → validate vault is healthy
@@ -41,15 +41,15 @@ Before asking any question, load:
 
 | File | Purpose |
 |---|---|
-| `LatticeHome.aDNA/MANIFEST.md` | Existing template values to confirm/override |
-| `LatticeHome.aDNA/STATE.md` | Current operational state (preserve unrelated content) |
-| `LatticeHome.aDNA/what/inventory/inventory_system.yaml` | Auto-detected machine class, GPU, languages, IDEs, frameworks (Step 2 output) |
-| `LatticeHome.aDNA/what/inventory/inventory_vaults.yaml` | Existing `.aDNA/` vaults on the node (informs C1 default suggestions) |
-| `LatticeHome.aDNA/who/identity/identity_node.yaml` | Current operator alias from `skill_project_fork` |
-| `LatticeHome.aDNA/who/identity/identity_lattice_protocol.yaml` | LP placeholders (operator may fill C3) |
-| `LatticeHome.aDNA/what/inventory/inventory_memberships.yaml` | Federation defaults (privacy-first; operator may override at C2) |
-| `LatticeHome.aDNA/CLAUDE.md` | Hestia persona block — confirm voice register for prompts |
-| `LatticeHome.aDNA/CHANGELOG.md` | Append v0.1 footnote at completion |
+| `Home.aDNA/MANIFEST.md` | Existing template values to confirm/override |
+| `Home.aDNA/STATE.md` | Current operational state (preserve unrelated content) |
+| `Home.aDNA/what/inventory/inventory_system.yaml` | Auto-detected machine class, GPU, languages, IDEs, frameworks (Step 2 output) |
+| `Home.aDNA/what/inventory/inventory_vaults.yaml` | Existing `.aDNA/` vaults on the node (informs C1 default suggestions) |
+| `Home.aDNA/who/identity/identity_node.yaml` | Current operator alias from `skill_project_fork` |
+| `Home.aDNA/who/identity/identity_lattice_protocol.yaml` | LP placeholders (operator may fill C3) |
+| `Home.aDNA/what/inventory/inventory_memberships.yaml` | Federation defaults (privacy-first; operator may override at C2) |
+| `Home.aDNA/CLAUDE.md` | Hestia persona block — confirm voice register for prompts |
+| `Home.aDNA/CHANGELOG.md` | Append v0.1 footnote at completion |
 
 ## Produce
 
@@ -66,11 +66,11 @@ Before asking any question, load:
 | `CLAUDE.md` | 1-sentence persona-context paragraph (after Identity & Personality, before Operating Style) | P1 excerpt |
 | `CHANGELOG.md` | v0.1 footnote — interview-complete + non-default license note if applicable | (always; C5 footnote) |
 
-**Not touched**: any partner vault · `~/aDNA/CLAUDE.md` (workspace router) · `~/aDNA/.adna/` (template) · `LatticeHome.aDNA/AGENTS.md` · `LatticeHome.aDNA/README.md` · `LatticeHome.aDNA/CHANGELOG.md` body · all node-protocol AGENTS.md stubs · all 4 node-skills · `inventory_vaults.{md,yaml}` · `inventory_memberships.md` narrative (only YAML mutates).
+**Not touched**: any partner vault · `~/aDNA/CLAUDE.md` (workspace router) · `~/aDNA/.adna/` (template) · `Home.aDNA/AGENTS.md` · `Home.aDNA/README.md` · `Home.aDNA/CHANGELOG.md` body · all node-protocol AGENTS.md stubs · all 4 node-skills · `inventory_vaults.{md,yaml}` · `inventory_memberships.md` narrative (only YAML mutates).
 
 ## Steps
 
-1. **Verify preconditions**: `LatticeHome.aDNA/` exists (forked by `skill_project_fork.md`); `inventory_vaults.yaml` + `inventory_system.yaml` exist (auto-detected by `skill_inventory_refresh.md`). If any precondition fails → exit `2: precondition_unmet`.
+1. **Verify preconditions**: `Home.aDNA/` exists (forked by `skill_project_fork.md`); `inventory_vaults.yaml` + `inventory_system.yaml` exist (auto-detected by `skill_inventory_refresh.md`). If any precondition fails → exit `2: precondition_unmet`.
 2. **Greet operator in Hestia voice**: "Welcome to your new node vault. I'm Hestia — the hearth-keeper. Let me ask 19 quick questions to fill in the operator-specific fields. Most have sensible defaults; press Enter to accept. We'll be done in 4-7 minutes."
 3. **Run Topic 1 (Purpose, P1-P2)** → write to `MANIFEST.md` `purpose:` + FAIR `keywords:` (append).
 4. **Run Topic 2 (User-info, U1-U5)** → write to `identity_node.yaml`; reflect persona tone in `STATE.md` Hestia greeting block.
@@ -78,7 +78,7 @@ Before asking any question, load:
 6. **Run Topic 4 (Hardware, H1-H3)** → write to `identity_node.yaml` `machine_class` / `gpu` / `peripherals`.
 7. **Run Topic 5 (Connections, C1-C5)** → write to `inventory_memberships.yaml` + `identity_lattice_protocol.yaml`.
 8. **Apply C5 license override**: if operator chose anything other than `private`, update `MANIFEST.md` FAIR `license:` accordingly and emit a one-line note in `CHANGELOG.md` v0.1 entry.
-9. **Substitute HOME.md template `{{VARS}}`** (NEW per 2026-05-12 scope amendment): if `LatticeHome.aDNA/HOME.md` exists with `{{VARS}}` (operator forked from v7.x+ template), substitute the 8 vars from interview answers + auto-detected inventory:
+9. **Substitute HOME.md template `{{VARS}}`** (NEW per 2026-05-12 scope amendment): if `Home.aDNA/HOME.md` exists with `{{VARS}}` (operator forked from v7.x+ template), substitute the 8 vars from interview answers + auto-detected inventory:
    - `{{node_hostname}}` ← `hostname -s` (or operator U1 override)
    - `{{operator}}` ← interview U1
    - `{{machine_class}}` ← interview H1
@@ -88,7 +88,7 @@ Before asking any question, load:
    - `{{named_project_count}}` ← derived from `inventory_vaults.yaml` count
    - `{{drift_count}}` ← derived from `inventory_vaults.yaml` drift section
    - Table generators (`{{vaults_table}}`, `{{named_projects_table}}`, `{{drift_table}}`): render from `inventory_vaults.yaml` rows (markdown tables grouped by aDNA class per template structure)
-   - If `inventory_vaults.yaml` is empty (new operator, no other vaults yet): render gallery with only this LatticeHome.aDNA row + add a "Next Steps" section linking to `skill_project_fork.md` for the first vault fork
+   - If `inventory_vaults.yaml` is empty (new operator, no other vaults yet): render gallery with only this Home.aDNA row + add a "Next Steps" section linking to `skill_project_fork.md` for the first vault fork
 10. **Show summary**: all 19 answers in a single readable block; ask "Confirm and continue, or revise any?" — if revise, jump back to specific question by ID (P1/U2/S1/etc.).
 11. **Commit answers**: write all file mutations atomically (track via `files_modified:` list); produce summary report.
 12. **Hand off to `skill_node_health_check.md`** — run validator; if exit 0, bootstrap complete; if exit >0, surface drift to operator.
@@ -156,7 +156,7 @@ Each row: question wording (operator-facing, Hestia voice) · type · default ·
 
 | Upstream skill | Contract |
 |---|---|
-| `skill_project_fork.md` | MUST run first; produces empty `LatticeHome.aDNA/` with template defaults. This skill assumes the template structure is intact (CLAUDE.md, MANIFEST.md, STATE.md, AGENTS.md, README.md, HOME.md present). |
+| `skill_project_fork.md` | MUST run first; produces empty `Home.aDNA/` with template defaults. This skill assumes the template structure is intact (CLAUDE.md, MANIFEST.md, STATE.md, AGENTS.md, README.md, HOME.md present). |
 | `skill_inventory_refresh.md` | MUST run before this skill. Auto-detected values from `inventory_system.yaml` are consumed as **defaults** for S1-S4 and H1-H2. If `inventory_system.yaml` is missing, this skill falls back to live re-detection but logs `#fallback_inventory_refresh_not_run` in the session. |
 
 | Downstream skill | Contract |

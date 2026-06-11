@@ -7,7 +7,7 @@
 
 # aDNA — Agentic DNA
 
-[![Governance v7.0](https://img.shields.io/badge/governance-v7.0-663399.svg)](https://github.com/LatticeProtocol/aDNA/releases/tag/v7.0) [![Standard v2.2](https://img.shields.io/badge/standard-v2.2-blue.svg)](https://github.com/LatticeProtocol/aDNA/blob/main/what/docs/adna_standard.md) [![Docs](https://img.shields.io/badge/docs-adna--docs.vercel.app-44cc11.svg)](https://adna-docs.vercel.app/)
+[![Governance v7.2](https://img.shields.io/badge/governance-v7.2-663399.svg)](https://github.com/aDNA-Network/aDNA/releases/tag/v7.2) [![Standard v2.2](https://img.shields.io/badge/standard-v2.2-blue.svg)](https://github.com/aDNA-Network/aDNA/blob/main/.adna/what/docs/adna_standard.md) [![Docs](https://img.shields.io/badge/docs-adna--docs.vercel.app-44cc11.svg)](https://adna-docs.vercel.app/)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Obsidian](https://img.shields.io/badge/Obsidian-Compatible-7C3AED)](https://obsidian.md)

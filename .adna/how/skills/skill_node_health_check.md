@@ -5,7 +5,7 @@ created: 2026-05-11
 updated: 2026-05-14
 status: active
 category: node_operations
-trigger: "Validate LatticeHome.aDNA vault state — file presence, frontmatter validity, inventory-vs-disk consistency, federation block validity, freshness. Run as the D10 reproducibility gate (post-bootstrap; pre-AAR; periodically)."
+trigger: "Validate Home.aDNA vault state — file presence, frontmatter validity, inventory-vs-disk consistency, federation block validity, freshness. Run as the D10 reproducibility gate (post-bootstrap; pre-AAR; periodically)."
 last_edited_by: agent_stanley
 graduated_from: LatticeHome.aDNA@411660e  # v0.1 initial bootstrap, M04 S2 of campaign_adna_v2_infrastructure
 graduated_at: 2026-05-14
@@ -15,14 +15,14 @@ tags: [skill, node_adna, health_check, d10, reproducibility_gate, graduated]
 requirements:
   tools: [grep, ls, find, python3, yq-or-python-yaml]
   context: [CLAUDE.md, MANIFEST.md, STATE.md, inventory/*, identity/*]
-  permissions: [read all LatticeHome.aDNA files, read ~/aDNA/ directory listing]
+  permissions: [read all Home.aDNA files, read ~/aDNA/ directory listing]
 ---
 
 # Skill: Node Health Check
 
 ## Overview
 
-The **D10 reproducibility gate** for `LatticeHome.aDNA/`. Validates the vault is internally consistent and aligned with ground truth (disk + tool-chain). Reports drift in SITREP form. Exit code 0 = healthy; >0 = drift detected.
+The **D10 reproducibility gate** for `Home.aDNA/`. Validates the vault is internally consistent and aligned with ground truth (disk + tool-chain). Reports drift in SITREP form. Exit code 0 = healthy; >0 = drift detected.
 
 Designed to run in <30 seconds so it can be invoked frequently (post-bootstrap, pre-AAR, periodically, on session start when stale-state suspected).
 
@@ -50,7 +50,7 @@ Invoked when:
 - `ls`, `find` for filesystem checks
 - `grep` for frontmatter scanning
 - `python3` + `yaml` module for YAML companion validation
-- Read access to `LatticeHome.aDNA/` and `~/aDNA/` (for inventory-vs-disk reconciliation)
+- Read access to `Home.aDNA/` and `~/aDNA/` (for inventory-vs-disk reconciliation)
 
 ### Context Files
 
@@ -61,9 +61,9 @@ Invoked when:
 
 ### Permissions
 
-- Read all `LatticeHome.aDNA/` files
+- Read all `Home.aDNA/` files
 - Read `~/aDNA/` directory listing (to reconcile against `inventory_vaults.md`)
-- Write to `LatticeHome.aDNA/STATE.md` if `update_state: true`
+- Write to `Home.aDNA/STATE.md` if `update_state: true`
 
 ## Implementation
 
@@ -109,7 +109,7 @@ Required files (exit 5 if any missing):
 
 ### Step 6: Frontmatter Validity (yaml.safe_load)
 
-For every `.md` file in `LatticeHome.aDNA/` (recursively), parse the YAML frontmatter (between `---` markers). Fail (exit 6) if:
+For every `.md` file in `Home.aDNA/` (recursively), parse the YAML frontmatter (between `---` markers). Fail (exit 6) if:
 
 - YAML doesn't parse
 - Missing required fields: `type`, `created`, `updated`, `last_edited_by`
@@ -160,7 +160,7 @@ blocked_count: 0
 ### On success (exit 0)
 
 ```
-=== LatticeHome.aDNA health check ===
+=== Home.aDNA health check ===
 ✓ Top-level files: 6/6
 ✓ Scaffold directories: 5/5
 ✓ Inventory scaffolds: 6/6 (3 MD + 3 YAML)
@@ -180,7 +180,7 @@ Exit 0.
 ### On failure (exit >0)
 
 ```
-=== LatticeHome.aDNA health check FAILED ===
+=== Home.aDNA health check FAILED ===
 ✗ Step <N>: <description of failure>
 <details>
 

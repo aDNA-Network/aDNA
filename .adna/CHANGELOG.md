@@ -28,9 +28,17 @@ Changelog entries are organized by **governance version** (primary heading). Sta
 
 ---
 
-## [Unreleased]
+## [v7.2] — 2026-06-11
 
-> Minor **Governance** change. **Standard track: no change.**
+> Minor **Governance** change (7.0 → 7.2; the v7.1 image release carried the [v7.1] block below without a frontmatter bump — both minors are formalized here so the governance version re-aligns with the image tag line). **Standard track: no change** (stays at v2.2).
+
+### Fixed
+- **Home-vault fork naming defect**: live-prose `LatticeHome.aDNA` → **`Home.aDNA`** across the standard tree (`skill_node_bootstrap_interview.md`, `skill_node_health_check.md`, `HOME.md`, `skill_update_all_vaults.md`, `how/skills/AGENTS.md`, `CLAUDE.md` node-routing rules). The per-node operational vault's canonical name has been **`Home.aDNA/`** since 2026-05-30 (rename chain `node.aDNA` → `LatticeHome.aDNA` 2026-05-28, transient → `Home.aDNA` 2026-05-30, generic-canonical doctrine; governed at `aDNA.aDNA` ADR-013 §Exception.5). The stale transient value mis-forked `LatticeHome.aDNA/` on fresh nodes (observed live on a partner onboarding 2026-06-11). Lineage pins (`graduated_from: LatticeHome.aDNA@411660e`) and historical records are intentionally preserved (archive-never-delete).
+- Governance badge in `README.md` re-pointed to the live repo (`aDNA-Network/aDNA`) and bumped to v7.2.
+
+## [v7.1] — 2026-06-10
+
+> Minor **Governance** change. **Standard track: no change.** *(Released as the inaugural `aDNA-Network/aDNA` clone-and-run workspace-image tag `v7.1` — the public-face restructure per `aDNA.aDNA` ADR-034; this block was authored pre-release as `[Unreleased]` and is formalized here at v7.2.)*
 
 ### Changed
 - **Workspace-root default flipped `~/lattice/` → `~/aDNA/`** across all prescriptive onboarding/usage docs (README, CONTRIBUTING, STATE, quests, skills, templates, overview/pattern docs). Documentation-default flip, **not a breaking change** — `<workspace_root>` is detected (the directory containing `.adna/`), never hardcoded; any path works. Historical records (this changelog, v6→v7 upgrade guide, v5.2→v6.0 migration) intentionally keep their original `~/lattice` paths, now with forward-pointer notes.

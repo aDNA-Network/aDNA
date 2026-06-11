@@ -1,13 +1,13 @@
 ---
 type: governance
-version: "7.0"
+version: "7.2"
 token_estimate: ~3000
-updated: 2026-05-18
+updated: 2026-06-11
 last_edited_by: agent_stanley
 ---
 
 # CLAUDE.md — aDNA
-<!-- v7.0 | 2026-05-18 -->
+<!-- v7.2 | 2026-06-11 -->
 
 ## Identity & Personality
 
@@ -163,15 +163,15 @@ Every session, in order:
 
 ### Cross-project routing hook (NEW v7.0)
 
-If a `LatticeHome.aDNA/` exists at the workspace root **and** the current session involves any of:
+If a `Home.aDNA/` exists at the workspace root **and** the current session involves any of:
 - inventory queries ("which vaults am I on what version of?")
 - health-state queries ("are all my vaults healthy?")
 - lattice membership queries ("what networks does this node participate in?")
 - node-credentials queries ("what tokens/keys are configured?")
 
-…then **route the question to `LatticeHome.aDNA/`** (Hestia) rather than answering from the current project's context. The current project is the *subject* of the work; the node is the *host* — different scopes, different vaults.
+…then **route the question to `Home.aDNA/`** (Hestia) rather than answering from the current project's context. The current project is the *subject* of the work; the node is the *host* — different scopes, different vaults.
 
-Forward-reference: aDNA-standard development campaigns live in `aDNA.aDNA/how/campaigns/` per ADR-004 of campaign_adna_v2_infrastructure (in aDNA.aDNA), not in `LatticeHome.aDNA/`. If a session is about evolving the standard (skills, ontology, frontmatter schema, CLAUDE.md format, version policy), route to `aDNA.aDNA/` instead.
+Forward-reference: aDNA-standard development campaigns live in `aDNA.aDNA/how/campaigns/` per ADR-004 of campaign_adna_v2_infrastructure (in aDNA.aDNA), not in `Home.aDNA/`. If a session is about evolving the standard (skills, ontology, frontmatter schema, CLAUDE.md format, version policy), route to `aDNA.aDNA/` instead.
 
 ### Session Greeting
 

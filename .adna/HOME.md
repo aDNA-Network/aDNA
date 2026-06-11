@@ -41,7 +41,7 @@ Grouped by aDNA class. Click a vault name to open it in a file manager; from the
   Format: markdown tables grouped by aDNA class — Forges / Frameworks / Platforms /
   Org-Vaults / Documents-Knowledge-Tooling-Workspace-Standard / Superseded.
   Each row: [vault](relative-path) · Persona · Notes. Empty-inventory case shows only
-  this LatticeHome.aDNA row and adds a Next Steps section linking to skill_project_fork.md.
+  this Home.aDNA row and adds a Next Steps section linking to skill_project_fork.md.
 -->
 
 ---
@@ -102,7 +102,7 @@ Triage and resolution belong in node-operational campaigns or the aDNA standard'
 
 <!--
   The next_steps_section placeholder renders ONLY when inventory_vaults.yaml has 0 .aDNA vaults
-  beyond this newly-forked LatticeHome.aDNA (i.e., empty-inventory case). It links the
+  beyond this newly-forked Home.aDNA (i.e., empty-inventory case). It links the
   operator to skill_project_fork.md for forking their first non-node vault.
   When there are existing vaults, this section is empty (renders as nothing).
 -->
@@ -123,7 +123,7 @@ The gallery is intentionally a **static markdown view** of inventory state so it
 
 <!--
   TEMPLATE NOTES (this comment block stays in `.adna/HOME.md` but skill_node_bootstrap_interview.md
-  strips it during fork-time substitution; the substituted HOME.md in a fresh LatticeHome.aDNA/ does not
+  strips it during fork-time substitution; the substituted HOME.md in a fresh Home.aDNA/ does not
   include these notes):
 
   Substitution points (all `{{VARS}}` are filled at fork-time by
@@ -133,7 +133,7 @@ The gallery is intentionally a **static markdown view** of inventory state so it
   - {{operator}}             ← interview U1
   - {{operator_lower}}       ← {{operator}} lowercased for tags
   - {{machine_class}}        ← interview H1
-  - {{persona}}              ← `Hestia` (constant for LatticeHome.aDNA class)
+  - {{persona}}              ← `Hestia` (constant for Home.aDNA class)
   - {{persona_lower}}        ← `hestia`
   - {{workspace_root}}       ← `pwd -P` parent (or `$LATTICE_ROOT`)
   - {{vault_count}}          ← derived from inventory_vaults.yaml count
@@ -147,8 +147,8 @@ The gallery is intentionally a **static markdown view** of inventory state so it
   - {{next_steps_section}}   ← Next Steps block when inventory is empty; nothing otherwise
 
   Empty-inventory case (new operator who has not forked any .aDNA/ vaults yet beyond
-  this LatticeHome.aDNA):
-  - {{vaults_table}} shows only the LatticeHome.aDNA row
+  this Home.aDNA):
+  - {{vaults_table}} shows only the Home.aDNA row
   - {{named_projects_table}} shows "No named projects on this node yet."
   - {{drift_table}} shows "No drift detected..."
   - {{next_steps_section}} renders:
@@ -160,6 +160,6 @@ The gallery is intentionally a **static markdown view** of inventory state so it
     - Pick a name following ADR-009 (`<name>.aDNA/`, snake_case, single-word lowercase OK)
     - The new vault becomes a new row in the gallery above on next inventory refresh
 
-  Pattern reference: `LatticeHome.aDNA/HOME.md` on the canonical reference node is the live working
+  Pattern reference: `Home.aDNA/HOME.md` on the canonical reference node is the live working
   example this template was extracted from (M-LWX-02 close 2026-05-12).
 -->
