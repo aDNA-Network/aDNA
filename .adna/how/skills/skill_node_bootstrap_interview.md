@@ -2,25 +2,29 @@
 type: skill
 skill_type: agent
 created: 2026-05-12
-updated: 2026-05-12
+updated: 2026-06-19
 status: active
 category: onboarding
 trigger: Workspace router Step 0.3 — operator accepts `Home.aDNA/` bootstrap; runs after `skill_project_fork.md` + `skill_inventory_refresh.md` to fill operator-specific fields the auto-detect engine cannot infer
-last_edited_by: agent_stanley
+last_edited_by: agent_hestia
 related_skills: [skill_project_fork, skill_inventory_refresh, skill_node_health_check]
 related_artifacts:
   - aDNA.aDNA/how/campaigns/campaign_adna_v2_infrastructure/missions/artifacts/m04b_obj2_skill_node_bootstrap_interview_spec.md  # source spec
   - aDNA.aDNA/how/campaigns/campaign_adna_v2_infrastructure/missions/artifacts/m04b_obj1_dynamic_ux_gap_analysis.md  # 7+2 gaps this skill closes
-question_count: 19  # 5 topics × {2,5,4,3,5} questions
-estimated_runtime: "4-7 minutes"  # operator-paced; defaults speed it up
+question_count: 19  # base mode: 5 topics × {2,5,4,3,5}. Exemplar mode adds an OPTIONAL Topic 6 (theming, T1-T5) — default-driven, does not change the base 19.
+estimated_runtime: "4-7 minutes"  # operator-paced; defaults speed it up (+~1 min if exemplar Topic 6 runs)
 operator_persona: Hestia
 exit_codes: [0, 2, 3, 4]
-tags: [skill, agent, onboarding, dynamic_bootstrap, interview, node_adna, hestia, hybrid_d1_b, v7_x]
+tags: [skill, agent, onboarding, dynamic_bootstrap, interview, node_adna, hestia, hybrid_d1_b, v7_x, exemplar_invocation, hearthstone_p4]
 ---
 
 # skill_node_bootstrap_interview
 
 Hybrid interview that fills the **operator-specific** fields of a freshly-forked `Home.aDNA/` vault — purpose, user-info, stack overlay, hardware confirm, and lattice connections. The interview NEVER re-asks what the auto-detect engine (`skill_inventory_refresh.md`) already captured. 19 questions across 5 topics; 4-7 min runtime; Hestia voice register.
+
+When the operator opts into the **premium themed HOME** (`exemplar_mode` — chosen at the router/fork or via `skill_project_fork --exemplar-home`), an OPTIONAL **Topic 6 (theming)** runs and Step 9 materializes the exemplar bundle instead of the plain base HOME. Declining keeps the plain base `.adna/HOME.md` — exemplar is always opt-in.
+
+> **Dev-graph canonical source (mirror established Hearthstone P4, 2026-06-19).** This is the dev-graph copy of the skill; `.adna/how/skills/skill_node_bootstrap_interview.md` is assembled from *here* by `skill_template_release` (the dev graph is the source of truth — there is no auto-sync). It was a missing mirror until P4 (the `.adna/` copy had been the only canonical version); the exemplar-invocation wiring below (Topic 6 + the Step-9 exemplar branch) is authored here and ships to `.adna/` at Hearthstone P5. **Edit here, never `.adna/`** (Workspace Standing Rule 1).
 
 ## Trigger
 
@@ -68,6 +72,8 @@ Before asking any question, load:
 
 **Not touched**: any partner vault · `~/aDNA/CLAUDE.md` (workspace router) · `~/aDNA/.adna/` (template) · `Home.aDNA/AGENTS.md` · `Home.aDNA/README.md` · `Home.aDNA/CHANGELOG.md` body · all node-protocol AGENTS.md stubs · all 4 node-skills · `inventory_vaults.{md,yaml}` · `inventory_memberships.md` narrative (only YAML mutates).
 
+**Exemplar mode adds** (only when `exemplar_mode == true`): the 5 Topic-6 theming answers → `identity_node.yaml` `persona_preferences.theme:` (accent triple + canvas text pair + greeting + banner), and the materialized exemplar bundle over the fork — the themed `HOME.md` (replaces the base), the `{{persona_lower}}_accent.css` + `{{persona_lower}}_canvas.css` snippets, the `what/code/` generators, the `who/assets/` + `who/curation/` skeleton, and `ONBOARDING.md`. This overlay is the same one `skill_project_fork.md` Step 4.5 performs; whichever runs first lays it down (idempotent).
+
 ## Steps
 
 1. **Verify preconditions**: `Home.aDNA/` exists (forked by `skill_project_fork.md`); `inventory_vaults.yaml` + `inventory_system.yaml` exist (auto-detected by `skill_inventory_refresh.md`). If any precondition fails → exit `2: precondition_unmet`.
@@ -78,17 +84,23 @@ Before asking any question, load:
 6. **Run Topic 4 (Hardware, H1-H3)** → write to `identity_node.yaml` `machine_class` / `gpu` / `peripherals`.
 7. **Run Topic 5 (Connections, C1-C5)** → write to `inventory_memberships.yaml` + `identity_lattice_protocol.yaml`.
 8. **Apply C5 license override**: if operator chose anything other than `private`, update `MANIFEST.md` FAIR `license:` accordingly and emit a one-line note in `CHANGELOG.md` v0.1 entry.
-9. **Substitute HOME.md template `{{VARS}}`** (NEW per 2026-05-12 scope amendment): if `Home.aDNA/HOME.md` exists with `{{VARS}}` (operator forked from v7.x+ template), substitute the 8 vars from interview answers + auto-detected inventory:
-   - `{{node_hostname}}` ← `hostname -s` (or operator U1 override)
-   - `{{operator}}` ← interview U1
-   - `{{machine_class}}` ← interview H1
-   - `{{persona}}` ← `Hestia` (constant for this vault class)
-   - `{{workspace_root}}` ← `pwd -P` parent (or `$LATTICE_ROOT` if set)
-   - `{{vault_count}}` ← derived from `inventory_vaults.yaml` count
-   - `{{named_project_count}}` ← derived from `inventory_vaults.yaml` count
-   - `{{drift_count}}` ← derived from `inventory_vaults.yaml` drift section
-   - Table generators (`{{vaults_table}}`, `{{named_projects_table}}`, `{{drift_table}}`): render from `inventory_vaults.yaml` rows (markdown tables grouped by aDNA class per template structure)
-   - If `inventory_vaults.yaml` is empty (new operator, no other vaults yet): render gallery with only this Home.aDNA row + add a "Next Steps" section linking to `skill_project_fork.md` for the first vault fork
+8.5. **Run Topic 6 (Theming, T1-T5) — EXEMPLAR MODE ONLY** (skip entirely when `exemplar_mode == false`): collect the persona accent triple + canvas text pair + greeting + banner, each defaulting to the `SUBSTITUTIONS.md` §2 per-persona lookup so the operator can accept all defaults in one keypress. Writes `identity_node.yaml` `persona_preferences.theme:` and feeds the Step-9 exemplar profile. `exemplar_mode` normally arrives from the router/fork (`skill_project_fork --exemplar-home`, or any Home-class fork); if it did not but `Home.aDNA/HOME.md` is the themed exemplar template, offer it here ("Use the premium themed HOME — banner · §Gallery · §Topology · persona accent? Default: yes for a Home node."). Decline → `exemplar_mode = false`, plain base HOME at Step 9.
+9. **Substitute HOME.md template `{{VARS}}`** (NEW 2026-05-12; exemplar branch added Hearthstone P4): if `Home.aDNA/HOME.md` exists with `{{VARS}}` (operator forked from v7.x+ template), substitute from interview answers + auto-detected inventory. **Two profiles — pick by `exemplar_mode`:**
+
+   **(a) Base profile** — `exemplar_mode == false` (default): keep the plain base `.adna/HOME.md`; substitute the 8 base vars, tables as **markdown** grouped by aDNA class:
+   - `{{node_hostname}}` ← `hostname -s` (or operator U1 override) · `{{operator}}` ← interview U1 · `{{machine_class}}` ← interview H1 · `{{persona}}` ← `Hestia` (constant for this vault class) · `{{workspace_root}}` ← `pwd -P` parent (or `$LATTICE_ROOT` if set)
+   - `{{vault_count}}` / `{{named_project_count}}` / `{{drift_count}}` ← derived from `inventory_vaults.yaml` (count + drift section)
+   - Table generators (`{{vaults_table}}`, `{{named_projects_table}}`, `{{drift_table}}`): render from `inventory_vaults.yaml` rows as **markdown tables** grouped by aDNA class (base template structure)
+   - If `inventory_vaults.yaml` is empty (new operator, no other vaults yet): render gallery with only this Home.aDNA row + a "Next Steps" section linking to `skill_project_fork.md` for the first vault fork
+
+   **(b) Exemplar profile** — `exemplar_mode == true` (Topic 6 ran / `--exemplar-home`): materialize `how/templates/template_node_adna_exemplar/HOME.md.template` *over* the base HOME and substitute the **full shared + theming catalog** per the bundle's `SUBSTITUTIONS.md`:
+   - all base vars above **plus** `{{persona_lower}}` (derived), `{{healthy_count}}` / `{{blocked_count}}` (← `inventory_vaults.yaml` health section), `{{last_inventory_refresh}}` (← `inventory_vaults.yaml` `updated:`), `{{interview_date}}` (today), `{{last_health_check}}` (← `STATE.md` / last `skill_node_health_check`)
+   - the 9 theming vars from Topic 6: `{{persona_greeting}}`, `{{banner_image}}`, `{{banner_title}}`, `{{accent_primary_hex}}` / `secondary` / `tertiary`, `{{canvas_text_strong_hex}}` / `em_hex`; `{{health_detail_note}}` defaults to the **empty string** (live-node narration field — not asked; keeps skeleton parity per SUBSTITUTIONS §parity)
+   - **Callout-fold `>`-prefix profile (LOAD-BEARING — M3.4 / Hearthstone P4):** in the exemplar HOME the all-vaults index and the non-vault list live INSIDE `> [!abstract]-` / `> [!note]-` disclosure folds, so `{{vaults_table}}` and `{{named_projects_table}}` must supply **callout-body lines ONLY, each `>`-prefixed**:
+     - `{{vaults_table}}` → one `> - **<Category> (n)** · [Name](../Name.aDNA/) · …` line per aDNA class (links flow from `inventory_vaults.yaml`, never hand-pasted)
+     - `{{named_projects_table}}` → `> - **<group>** · [name](../path/) · …` lines for named-projects / external-deps / archived groups; or `> No named projects on this node yet.` when inventory has none
+     - **Do NOT** emit a `<div class="vault-grid">` or a blank-line-bearing markdown table here — either breaks the callout open. (The base profile's grid/table is the WRONG shape for the exemplar HOME; this is the single substitution difference that most often renders incorrectly.)
+   - then materialize the rest of the bundle (the `{{persona_lower}}_accent.css` + `{{persona_lower}}_canvas.css` snippets, the `what/code/` generators, the `who/assets/` + `who/curation/` skeleton, `ONBOARDING.md`) and run the first `build_topology_canvas.py` / `build_curation_cards.py` regen — identical to `skill_project_fork.md` Step 4.5 (whichever runs first lays it down; idempotent). Accent defaults: `SUBSTITUTIONS.md` §2 per-persona lookup.
 10. **Show summary**: all 19 answers in a single readable block; ask "Confirm and continue, or revise any?" — if revise, jump back to specific question by ID (P1/U2/S1/etc.).
 11. **Commit answers**: write all file mutations atomically (track via `files_modified:` list); produce summary report.
 12. **Hand off to `skill_node_health_check.md`** — run validator; if exit 0, bootstrap complete; if exit >0, surface drift to operator.
@@ -141,7 +153,21 @@ Each row: question wording (operator-facing, Hestia voice) · type · default ·
 | **C4** | "Marketplace categories of interest (for HOME.md gallery suggestions): `[decks, sites, video, comics, scientific_papers, code, clinical_research, design, other]`." | multi-select or skip | skip | `inventory_memberships.yaml` `marketplace_interests:` | snake_case | If `other`: free-text |
 | **C5** | "Default license for new vaults you create on this node: (a) **private** / (b) Apache-2.0 / (c) MIT / (d) CC-BY-4.0 / (e) other-SPDX." | single-select | `private` (matches `MANIFEST.md` FAIR `license: private`) | `identity_node.yaml` `default_new_vault_license:` (consumed by `skill_project_fork.md`) | valid SPDX if `other` | If `other`: free-text SPDX |
 
-**Question count check**: 2 + 5 + 4 + 3 + 5 = **19 questions across 5 topics**.
+### Topic 6: Exemplar theming (OPTIONAL — exemplar mode only; 0 questions in base mode)
+
+Runs at Step 8.5 only when `exemplar_mode == true` (operator chose the premium themed HOME, or `skill_project_fork --exemplar-home`). Every question defaults to the persona accent lookup (`how/templates/template_node_adna_exemplar/SUBSTITUTIONS.md` §2), so accepting all defaults is one keypress. Covers the 9 exemplar theming vars + the persona pick. Does **not** count toward the base 19.
+
+| # | Question | Type | Default | Output | Validation | Branching |
+|---|---|---|---|---|---|---|
+| **T1** | "Persona for this node's hearth (drives accent + greeting + CSS): default `Hestia`, or name another (e.g., Athena)?" | confirm-or-override | `Hestia` | `{{persona}}` / `{{persona_lower}}`; swaps the CLAUDE persona-accent blocks (per `skill_project_fork` Step 3.5) | non-empty | If non-Hestia **and** no `SUBSTITUTIONS.md` §2 lookup row: T2/T3 become required (operator supplies hexes) |
+| **T2** | "Accent triple (primary / secondary / tertiary hex)? Default = the `{{persona}}` lookup (Hestia: `#663399` / `#f5c97a` / `#7dcfff`)." | 3-hex form or accept default | persona §2 lookup row | `{{accent_primary_hex}}` / `{{accent_secondary_hex}}` / `{{accent_tertiary_hex}}` | each matches `#[0-9a-fA-F]{6}` | — |
+| **T3** | "Canvas card text pair (strong / em hex) — a near-white tinted toward your primary, and a soft pastel of it. Default = the `{{persona}}` lookup." | 2-hex form or accept default | persona §2 lookup row | `{{canvas_text_strong_hex}}` / `{{canvas_text_em_hex}}` | each matches `#[0-9a-fA-F]{6}` | — |
+| **T4** | "Persona greeting — the home's one-line epigraph. Default = the persona archetype line." | free-text or accept default | persona archetype (`Tending the hearth.` for Hestia) | `{{persona_greeting}}` | max 80 chars | — |
+| **T5** | "Banner image filename (drop the file into `who/assets/banners/`; a placeholder ships until you supply one) + banner title?" | 2-field or accept default | `banner_{{persona_lower}}.jpg` / `{{node_hostname}} Home` | `{{banner_image}}` / `{{banner_title}}` | filename basename; title max 60 | — |
+
+> `{{health_detail_note}}` is **not** asked (defaults to empty — a live-node narration field filled later; keeps skeleton parity). The count-derived vars (`{{vault_count}}`, `{{healthy_count}}`, `{{blocked_count}}`, `{{drift_count}}`, `{{last_inventory_refresh}}`) come from `inventory_vaults.yaml`, not the operator.
+
+**Question count check**: base mode = 2 + 5 + 4 + 3 + 5 = **19 questions across 5 topics**. Exemplar mode adds an OPTIONAL **Topic 6** (T1-T5, theming) — default-driven, accept-all-in-one-keypress; not counted in the base 19.
 
 ## Exit codes
 
@@ -156,7 +182,7 @@ Each row: question wording (operator-facing, Hestia voice) · type · default ·
 
 | Upstream skill | Contract |
 |---|---|
-| `skill_project_fork.md` | MUST run first; produces empty `Home.aDNA/` with template defaults. This skill assumes the template structure is intact (CLAUDE.md, MANIFEST.md, STATE.md, AGENTS.md, README.md, HOME.md present). |
+| `skill_project_fork.md` | MUST run first; produces empty `Home.aDNA/` with template defaults. This skill assumes the template structure is intact (CLAUDE.md, MANIFEST.md, STATE.md, AGENTS.md, README.md, HOME.md present). **Passes `exemplar_mode`** (set by its `--exemplar-home` flag or a Home-class fork) into this skill — Topic 6 + the Step-9 exemplar branch consume it. If `skill_project_fork` already ran its Step 4.5 overlay, Step 9 here is idempotent (re-substitutes the same themed HOME from the same answers). |
 | `skill_inventory_refresh.md` | MUST run before this skill. Auto-detected values from `inventory_system.yaml` are consumed as **defaults** for S1-S4 and H1-H2. If `inventory_system.yaml` is missing, this skill falls back to live re-detection but logs `#fallback_inventory_refresh_not_run` in the session. |
 
 | Downstream skill | Contract |

@@ -452,7 +452,7 @@ AI agents auto-load `CLAUDE.md` from the project root. If it's inside `.agentic/
 
 ### Over-engineering Day 1
 
-You don't need 14 entity types, custom templates, campaign hierarchies, and a context library on your first day. Start with the minimum viable set (5 files + 3 directories). Add structure as you discover you need it — the triad grows organically.
+You don't need 16 entity types, custom templates, campaign hierarchies, and a context library on your first day. Start with the minimum viable set (5 files + 3 directories). Add structure as you discover you need it — the triad grows organically.
 
 ### Frontmatter perfectionism
 

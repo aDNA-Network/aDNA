@@ -1,0 +1,71 @@
+---
+type: consumer_wrapper
+wrapper: canvasforge
+created: "{{interview_date}}"
+updated: "{{interview_date}}"
+last_edited_by: "agent_{{operator}}"
+status: active
+tags: [consumer_wrapper, canvasforge, federation, canvas, node_adna, "{{persona_lower}}"]
+---
+
+# canvasforge/ — node consumer wrapper (Canvas.aDNA `canvas_core` substrate)
+
+This node consumes the **`canvas_core` substrate library** (the `CanvasBuilder` canvas generator +
+`spatial` analysis) to build its topology canvas (`what/canvas/topology.canvas` via
+`what/code/build_topology_canvas.py`). This wrapper documents that cross-vault code dependency.
+
+> **Substrate ownership (pt09; path fixed by ADR-004; code lands at P5).** `canvas_core` is owned by
+> **Canvas.aDNA** since the CanvasForge→Canvas governance merge (Production Tidy **pt09**, 2026-06-17;
+> Hermes→Mondrian — Canvas.aDNA now owns the Canvas Standard *and* its production substrate). Canonical home
+> (Canvas.aDNA **ADR-004**, Mondrian 2026-06-19): **`Canvas.aDNA/what/production/canvas_core/`** — the code
+> physically relocates there at **PT P5**; until then `canvas_core` resolves from the archived CanvasForge
+> via the `CanvasForge.aDNA` shim. **★ Resolution rule (ADR-004 §4):** `canvas_core` hard-imports
+> `canvas_std`, so **both** must be importable — install `adna-canvas-std` (published, zero-dep) **or** add
+> `Canvas.aDNA/what/code/canvas_std/src` to `sys.path` as a second entry; otherwise the topology canvas
+> silently never renders on a fresh node. NB: `canvas_std` is the *standard's* validate/conformance tooling,
+> a **different** module from this generation substrate. Locator env var: **`CANVAS_CORE_HOME`**
+> (`CANVASFORGE_CODE` kept as a deprecated alias to 2027-06-13). The wrapper dir keeps the `canvasforge/`
+> name until the P5 relocation.
+
+> **Substrate, not application.** Canonical Canvas production wrappers federate to *application lattices*
+> (decks, comics). A node consumes the lower-level **substrate library** directly to render its
+> vault-of-vaults topology — there is no "diagram/topology" application lattice (yet).
+
+## federation_ref
+
+```yaml
+federation_ref:
+  source_vault: Canvas.aDNA                       # owner since pt09 (absorbed CanvasForge); substrate code relocation pending PT P5
+  source_module: what/production/canvas_core      # CanvasBuilder + spatial (producer engine; ADR-004). Lands at PT P5; interim via the CanvasForge.aDNA archive shim
+  consumes: [CanvasBuilder, spatial.detect_overlaps, spatial.containment_check]
+  builder_version: "1.0.0"                       # CanvasBuilder self-reported version (re-verify at bootstrap)
+  advanced_canvas_target: "5.6.6"                # confirm against the Advanced Canvas version on your node
+  version_policy: minor                          # auto-adopt MINOR; re-verify on MAJOR
+  import_mechanism: sys.path                      # sys.path.insert($CANVAS_CORE_HOME) + canvas_std/src (ADR-004 §4)
+  consumer: what/code/build_topology_canvas.py
+```
+
+## What the node gets
+
+- **`CanvasBuilder`** — typed node/group/edge construction + `validate()` (Canvas Standard schema) +
+  `compute_sync_hash()` (deterministic topology hash) + round-trip (`read_back`/`diff`).
+- **`canvas_core.spatial`** — `detect_overlaps` / `containment_check` / `bounding_box`, used in the
+  generator's `--check` as an objective layout gate (no band collisions, all nodes contained).
+
+## Dependency + portability notes
+
+- **Runtime coupling**: `build_topology_canvas.py` imports `canvas_core` at run time, located via
+  **`$CANVAS_CORE_HOME`** (deprecated alias `$CANVASFORGE_CODE`; default falls through
+  `Canvas.aDNA/what/production` [P5+] → the `CanvasForge.aDNA` archive [interim]). It also adds
+  `Canvas.aDNA/what/code/canvas_std/src` to `sys.path` (the §4 resolution rule). Set `$CANVAS_CORE_HOME` to
+  the substrate's location on your node. If the substrate is absent the generator degrades with a clear
+  message — the topology canvas is an optional polish layer; the §Gallery still renders without it.
+- **Serialization is not format-locked**: `canvas_core` controls the `.canvas` JSON formatting
+  (compact vs pretty). A `canvas_core` upgrade can reformat the whole file on the next regen (large but
+  semantically-empty diff) — expected, not drift.
+- **Interpreter**: needs `python` (has PyYAML + canvas_core deps), not `python3`.
+- **Not** a deck/comic consumer — no voice registers, no application-lattice gating.
+
+> Whether a node's topology canvas should become the first materialization of a future Canvas.aDNA
+> diagram/topology *application lattice* is an open coordination question with **Mondrian** (Canvas.aDNA) —
+> inform, don't unilaterally declare one.

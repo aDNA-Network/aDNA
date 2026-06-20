@@ -1,8 +1,8 @@
 ---
 type: directory_index
 created: 2026-02-19
-updated: 2026-03-19
-last_edited_by: agent_init
+updated: 2026-06-19
+last_edited_by: agent_rosetta
 tags: [directory_index, templates]
 ---
 
@@ -14,7 +14,7 @@ Templates for all content types in the vault. Each template defines the frontmat
 
 ## Template Index
 
-### Auto-Triggered Templates (10)
+### Auto-Triggered Templates (12)
 
 These templates are applied by Templater when creating a new file in the mapped directory:
 
@@ -25,13 +25,15 @@ These templates are applied by Templater when creating a new file in the mapped 
 | `template_campaign.md` | Campaign master document | `how/campaigns/` | `campaign` |
 | `template_context.md` | Context library file | `what/context/` | `context_research` / `context_guide` / `context_core` |
 | `template_coordination.md` | Coordination note | `who/coordination/` | `coordination` |
+| `template_inventory_entry.md` | Inventory record (base type) | `what/inventory/` | `inventory` |
+| `template_identity_entry.md` | Identity record (base type) | `who/identity/` | `identity` |
 | `template_mission.md` | Mission / plan | `how/missions/` | `mission` |
 | `template_prd.md` | Product Requirements Document | `how/pipelines/prd_rfc/02_requirements` | `prd` |
 | `template_rfc.md` | Request for Comments | `how/pipelines/prd_rfc/03_design` | `rfc` |
 | `template_session.md` | Session tracking file | `how/sessions/active/` | `session` |
 | `template_skill.md` | Skill recipe or procedure | `how/skills/` | `skill` |
 
-### Manual-Apply Templates (12)
+### Manual-Apply Templates (13)
 
 These templates have no Templater auto-trigger. Copy their structure manually or use `Templater: Insert template` command:
 
@@ -41,12 +43,21 @@ These templates have no Templater auto-trigger. Copy their structure manually or
 | `template_aar_lightweight.md` | Lightweight 5-line AAR | any mission/campaign | `template` | Appended to existing files, not standalone |
 | `template_campaign_mission.md` | Campaign-linked mission | `how/campaigns/campaign_*/missions/` | `plan` | Campaign missions have campaign-specific fields |
 | `template_campaign_claude.md` | Per-campaign CLAUDE.md | `how/campaigns/campaign_*/` | `governance` | Glob patterns not supported by Templater |
+| `template_home_claude.md` | Home-class node governance CLAUDE.md (`{{persona}}`/`{{node_hostname}}`/`{{operator}}`/`{{workspace_root}}`) | `Home.aDNA/` (fork-install) | `governance` | Home-class fork install, not a new-file trigger |
 | `template_data_record.md` | Generic data record | varies | varies | Generic — no single target directory |
 | `template_folder_note.md` | Folder index note | any directory | `folder_note` | Used everywhere, can't map to one folder |
 | `template_governance.md` | Governance document | `who/governance/` | `governance` | Governance dir has AGENTS.md + mixed policy docs |
 | `template_migration.md` | Version migration prompt | `how/migrations/` | `migration` | Migrations are created per-version, not on new-file trigger |
 | `template_registry.md` | Registry publication metadata | varies | `template` | Used for publishing, not regular file creation |
 | `template_strategic_compass.md` | Strategic compass | `who/governance/` | `governance` | Rare — governance dir already mapped for other use |
+
+### Fork-Skeleton Bundles (1)
+
+Multi-file fork skeletons (not single-file templates; not Templater-triggered). Rendered via the bundle's own `smoke_render.py --materialize DIR`, or installed by a fork skill:
+
+| Bundle | Target Type | Typical Location | Invoked By |
+|--------|------------|-----------------|------------|
+| `template_node_adna_exemplar/` | Polished node-vault home skeleton (HOME.md + §Gallery/§Topology Bases + persona CSS + canvas generators + Canvas.aDNA `canvasforge/` wrapper) | `<Node>.aDNA/` (fork overlay) | `skill_project_fork --exemplar-home` (P4 wiring); `smoke_render.py --materialize` (upstreamed Hearthstone P3, 2026-06-19) |
 
 ## Filled Examples
 

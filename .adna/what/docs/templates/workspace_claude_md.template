@@ -16,7 +16,7 @@ This is a **multi-project aDNA workspace**. The `{{adna_folder}}/` directory is 
 
 You are operating at the **workspace level** — one level above individual projects. Your role here is to help the user discover, create, and manage aDNA projects. When the user wants to work *inside* a project, they should open that project's directory directly (in Claude Code or Obsidian).
 
-**Workspace path**: This file lives at the root of the workspace folder (recommended: `~/lattice/`). The aDNA base template is at `{{adna_folder}}/`.
+**Workspace path**: This file lives at the root of the workspace folder (recommended: `~/aDNA/`). The aDNA base template is at `{{adna_folder}}/`.
 
 **Compute tier**: `{{compute_tier}}`
 - **L0** — Local only. Obsidian + Claude Code. No JupyterHub, no federation.

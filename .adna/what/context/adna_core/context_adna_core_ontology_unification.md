@@ -25,7 +25,7 @@ last_evaluated: 2026-02-20
 
 1. **Unification happens when instances integrate.** When a sub-lattice is imported into a parent instance, their ontologies must be unified — base entities aligned, extensions reconciled, conflicts resolved.
 
-2. **Base invariance is the anchor.** 14 base entity types are structurally invariant across all instances at the same major version. No renaming, removal, or triad reassignment. Extensions are additive.
+2. **Base invariance is the anchor.** 16 base entity types are structurally invariant across all instances at the same major version. No renaming, removal, or triad reassignment. Extensions are additive.
 
 3. **The merge algorithm is 4 steps.** Validate base → Collect extensions → Detect conflicts → Resolve and produce merged artifact. Given identical inputs and resolutions, the algorithm is deterministic.
 

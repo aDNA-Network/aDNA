@@ -29,7 +29,7 @@ Foundational knowledge for the aDNA paradigm — enough base context for an agen
 | 10 | Ontology Workshop | `context_adna_core_ontology_workshop.md` | ~1,500 | context_guide | Multi-entity domain design, entity discovery, relationship mapping, validation |
 | 11 | Type Vocabulary | `context_adna_core_type_vocabulary.md` | ~500 | context_guide | 19 canonical I/O types (4 tiers: primitives, structured, molecular, media) |
 | 12 | FAIR Mapping | `context_adna_core_fair_mapping.md` | ~500 | context_guide | Flat↔nested FAIR envelope interconversion, field correspondence |
-| 13 | Entity Definitions | `context_adna_core_entity_definitions.md` | ~1,600 | context_core | 14 base entity types (WHO 3, WHAT 4, HOW 7), triad classification, extension guidance |
+| 13 | Entity Definitions | `context_adna_core_entity_definitions.md` | ~1,600 | context_core | 16 base entity types (WHO 4, WHAT 5, HOW 7), triad classification, extension guidance |
 
 ## Total Token Budget
 
@@ -74,7 +74,7 @@ Foundational knowledge for the aDNA paradigm — enough base context for an agen
 - **ontology_workshop** depends on ontology_design (base/extension partitioning, question test)
 - **type_vocabulary** is self-contained — 19 type definitions for I/O annotations
 - **fair_mapping** references type_vocabulary (for `format` field values)
-- **entity_definitions** is self-contained — reference for 14 base entity types
+- **entity_definitions** is self-contained — reference for 16 base entity types
 
 ## Relationship to prompt_engineering Topic
 

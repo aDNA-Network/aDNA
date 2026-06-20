@@ -60,6 +60,24 @@ Check that `.adna/MANIFEST.md` exists and contains `role: template`. If not, war
 
 List all `*.aDNA/` directories in this folder. These are the user's projects.
 
+### Step 2.5: Node vault detection — offer to bootstrap `Home.aDNA/` (opt-in)
+
+Before routing, check for the per-node operational vault — `Home.aDNA/`, the hearth that tracks installed vaults, machine state, lattice memberships, and credentials for THIS node. This is **opt-in** and **no-nag**: offer once, respect a decline, do not re-ask unless a later session needs node-scope context.
+
+- **`Home.aDNA/` exists** → read `Home.aDNA/STATE.md` (the node's operational snapshot — vault inventory, open campaigns) and note its `MANIFEST.md` `hostname` + `operator`. Hold as cross-project context, then continue to Step 3.
+- **`Home.aDNA/` missing AND other `*.aDNA/` projects exist** → offer once:
+  > "I notice you have projects but no `Home.aDNA/` — the per-node operational vault that tracks installed vaults, machine state, and lattice memberships. It's opt-in. Want me to bootstrap one? It's a short interview (≈19 questions, ~4–7 min) for operator-specific fields; the rest is auto-detected."
+
+  If accepted, run the canonical bootstrap chain:
+  1. `.adna/how/skills/skill_project_fork.md` with `project_name = Home` — the Home-class fork installs the **Hestia** node-governance `CLAUDE.md` (from `template_home_claude.md`) instead of the generic base, and scaffolds `what/inventory/` + `who/identity/`.
+  2. `Home.aDNA/how/skills/skill_inventory_refresh.md` — populate `inventory_*.{md,yaml}` from current node state.
+  3. `.adna/how/skills/skill_node_bootstrap_interview.md` — the short interview (purpose / operator / stack / hardware / connections) that writes operator-specific fields and enriches the persona/pairings.
+  4. `Home.aDNA/how/skills/skill_node_health_check.md` — verify the new vault (exit 0 = healthy).
+  5. Initialize `Home.aDNA/STATE.md`, then `git -C Home.aDNA init && git add . && git commit -m "Home.aDNA bootstrap"` — local-only by default (`Home.aDNA/` is not pushed unless the operator configures a remote).
+
+  The Home-class fork defaults the node persona to **Hestia** (goddess of the hearth); a node may choose another hearth-keeper at the interview. If the operator declines, proceed to Step 3 and do not re-ask.
+- **Fresh install (no `*.aDNA/` projects yet)** → skip; project creation takes priority. The node vault can be bootstrapped later once the operator has at least one project.
+
 ### Step 3: Route based on state
 
 **Fresh install** (no `*.aDNA/` directories found):

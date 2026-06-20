@@ -1,0 +1,53 @@
+filters:
+  and:
+    - file.path.startsWith("who/curation/")
+    - type == "curation_card"
+formulas:
+  card_label: |
+    if(persona, display_name + " · " + persona, display_name)
+properties:
+  display_name:
+    displayName: Vault
+  persona:
+    displayName: Persona
+  archetype:
+    displayName: Type
+  current_status:
+    displayName: Status
+  description_one_line:
+    displayName: Pitch
+  image_path:
+    displayName: Image
+  icon_path:
+    displayName: Icon
+views:
+  - type: cards
+    name: Gallery
+    groupBy:
+      property: archetype
+      direction: ASC
+    order:
+      - card_label
+      - current_status
+      - description_one_line
+    sort:
+      - property: archetype
+        direction: ASC
+      - property: display_name
+        direction: ASC
+    image: icon_path
+    imageAspectRatio: 1
+    cardSize: 240
+  - type: table
+    name: All vaults
+    order:
+      - display_name
+      - archetype
+      - persona
+      - current_status
+      - description_one_line
+    sort:
+      - property: archetype
+        direction: ASC
+      - property: display_name
+        direction: ASC

@@ -25,12 +25,12 @@ last_evaluated: 2026-02-20
 
 ## Key Principles
 
-1. **14 base entity types are structurally invariant.** Every aDNA instance shares these types — no renaming, removal, or triad reassignment.
+1. **16 base entity types are structurally invariant.** Every aDNA instance shares these types — no renaming, removal, or triad reassignment.
 
 | Triad | Entity Types | Count |
 |-------|-------------|-------|
-| **WHO** | governance, team, coordination | 3 |
-| **WHAT** | context, decisions, modules, lattices | 4 |
+| **WHO** | governance, team, coordination, identity | 4 |
+| **WHAT** | context, decisions, modules, lattices, inventory | 5 |
 | **HOW** | campaigns, missions, sessions, templates, skills, pipelines, backlog | 7 |
 
 2. **Extensions are additive and namespaced.** Domain-specific entity types use `{domain}_{entity_type}` syntax (e.g., `crm_customer`, `bio_target`, `formation_role`). Extensions never modify base types.

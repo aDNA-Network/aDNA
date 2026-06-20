@@ -1,0 +1,45 @@
+# topology_relationships.yaml.template — SEED for a fresh node's topology canvas.
+#
+# Consumed by: what/code/build_topology_canvas.py (rename to topology_relationships.yaml at bootstrap).
+# Vault names must match inventory_vaults.yaml `name:` exactly (including the .aDNA suffix).
+#
+# WHAT LIVES HERE: edges whose endpoints the filesystem can't reveal — succession arcs,
+#   conceptual kinship, and any hard-gate sequence — plus per-node code-repo annotations.
+#   WHAT DOESN'T: federation/consumer edges are AUTO-PROBED by the generator from on-disk
+#   wrapper directories (iii/, siteforge/, canvasforge/, …), so they are NOT listed here.
+#
+# Maintenance: a new persona/succession/kinship tie = one line here. A new federation wrapper
+#   needs nothing here (the probe finds it). A new vault needs nothing here (inventory adds the node).
+#
+# The entries below are ILLUSTRATIVE — replace them with this node's real relationships (or empty
+# the lists for a node with none). Empty lists are valid: the canvas still renders all vault nodes +
+# auto-probed federation edges.
+
+schema_version: "0.1"
+
+# ── Succession: predecessor → successor (rendered green, directed) ───────────────
+succession:
+  # - { from: OldVault.aDNA, to: NewVault.aDNA, label: "rebuild successor" }
+  []
+
+# ── Kinship: conceptual sibling / umbrella-pillar ties (purple, undirected feel) ──
+kinship:
+  # - { from: BrandA.aDNA, to: BrandB.aDNA, label: "brand siblings" }
+  []
+
+# ── Sequencing: hard-gate chains (red, double-arrow) ──
+sequencing:
+  # - { from: Upstream.aDNA, to: Downstream.aDNA, label: "P6 gates → absorptions" }
+  []
+
+# ── Code-repo annotations (⛓ tag on the node; legend explains ⛓ = sibling repo / code-as-WHAT;
+#    keep values short — just the path — to avoid node-text wrap/clip in Obsidian) ──
+code_repo:
+  # SomeVault.aDNA: "what/somevault/"
+  {}
+
+# ── Federation: AUTO-PROBED by the generator from on-disk wrapper dirs (consumer → producer) ──
+# wrapper-dir -> producer vault, e.g.: iii/ -> III.aDNA · canvasforge/ -> Canvas.aDNA (CanvasForge
+#   merged into Canvas at pt09) · … (illustrative; some producer-vault names refresh at PT pt19)
+federation_extra: []      # manual consumer→producer edges the probe can't see (e.g. planned-not-wired)
+federation_exclude: []    # drop a false-positive probed edge: ["Consumer.aDNA->Producer.aDNA", ...]

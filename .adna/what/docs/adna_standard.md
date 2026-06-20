@@ -1,6 +1,6 @@
 ---
 type: context
-title: "aDNA Universal Standard v2.2"
+title: "aDNA Universal Standard v2.3"
 created: 2026-02-11
 updated: 2026-03-20
 status: approved
@@ -10,7 +10,7 @@ tags: [adna, standard, spec, normative]
 
 # aDNA Universal Standard
 
-<!-- v2.2 | 2026-03-20 -->
+<!-- v2.3 | 2026-06-19 | inventory+identity promoted to base (ADR-035) -->
 
 **Agentic DNA (aDNA)** — A knowledge architecture standard for AI-native projects.
 
@@ -1480,4 +1480,4 @@ This appendix maps every design decision to its location in the standard, ensuri
 
 ---
 
-*End of aDNA Universal Standard v2.2*
+*End of aDNA Universal Standard v2.3*

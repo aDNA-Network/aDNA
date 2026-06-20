@@ -3,11 +3,11 @@ type: context_core
 topic: adna_core
 subtopic: entity_definitions
 created: 2026-03-01
-updated: 2026-03-17
-sources: ["aDNA Standard v2.1 (§5, §7)", "Per-entity AGENTS.md protocol files"]
+updated: 2026-06-18
+sources: ["aDNA Standard v2.1 (§5, §7)", "Per-entity AGENTS.md protocol files", "ADR-035 (inventory + identity base-type promotion)"]
 context_version: "1.0"
 token_estimate: ~1600
-last_edited_by: agent_init
+last_edited_by: agent_rosetta
 tags: [context, adna_core, ontology, entity_types, definitions]
 quality_score: 3.8
 signal_density: 4
@@ -19,9 +19,9 @@ freshness_category: durable
 last_evaluated: 2026-03-17
 ---
 
-# aDNA Core: Entity Definitions — 14 Base Types
+# aDNA Core: Entity Definitions — 16 Base Types
 
-Complete definitions for the 14 base entity types in the aDNA ontology. Each entry covers: definition, purpose, location, key fields, and relationships. Use `ontology_design` to add domain-specific extensions (e.g., `lab_experiment`, `crm_customer`).
+Complete definitions for the 16 base entity types in the aDNA ontology. The original 14 are grouped by triad leg below; `inventory` (WHAT) and `identity` (WHO) were promoted from node-local extensions to base types by [ADR-035](../../decisions/adr_035_inventory_identity_base_entity_types.md) (aDNA standard v2.3) and follow in § Promoted Base Types. Each entry covers: definition, purpose, location, key fields, and relationships. Use `ontology_design` to add domain-specific extensions (e.g., `lab_experiment`, `crm_customer`).
 
 **Execution hierarchy**: Campaign → Mission → Session. Campaigns contain missions. Sessions execute mission objectives.
 
@@ -205,6 +205,36 @@ Complete definitions for the 14 base entity types in the aDNA ontology. Each ent
 
 ---
 
+## Promoted Base Types (ADR-035)
+
+`inventory` (WHAT) and `identity` (WHO) were promoted from node-local extensions to base entity types by [ADR-035](../../decisions/adr_035_inventory_identity_base_entity_types.md) (aDNA standard v2.3). They carry their canonical triad legs and base-ontology row numbers (15/16). Both are un-namespaced with `merge: invariant`.
+
+### 15. Inventory (WHAT leg)
+
+**Definition**: Point-in-time state of what is installed and configured for a node — installed `.aDNA` vaults, system/tool state, network memberships, and domain-specific component inventories.
+
+**Purpose**: Give agents a queryable, refreshable record of *what is actually present* — distinct from the knowledge-artifact WHAT types (`context`/`decisions`/`modules`/`lattices`), which capture what you know rather than what is installed.
+
+**Location**: `what/inventory/inventory_<subtype>.md` + paired `.yaml` companion
+
+**Key fields**: `type: inventory`, `subtype: vaults|system|memberships|<domain>`, paired `.yaml` companion (D9); `federation` block on network-facing records only (D7, default opt-out)
+
+**Relationships**: WHAT-leg complement to `identity`; rebuilt by an inventory-refresh skill; validated against disk by a node health check. Canonical reference: `Home.aDNA/what/inventory/`.
+
+### 16. Identity (WHO leg)
+
+**Definition**: Stable identity records that persist across sessions and validate against external reality — hostname, operator, machine class, persistent UUID, and network peer-id / signing-key references.
+
+**Purpose**: Tell a cross-vault session which host and network identity it operates under, and surface drift (rebuild, restore, takeover, key rotation) as a high-severity finding.
+
+**Location**: `who/identity/identity_<subtype>.md` + paired `.yaml` companion
+
+**Key fields**: `type: identity`, `subtype: node|<network>|<platform_deployment>|consumer`, paired `.yaml` (D9); identity-drift discipline (high severity); privacy (CPU serial / MAC / machine UUID / key values never persisted)
+
+**Relationships**: WHO-leg complement to `inventory`; drift surfaced by a node health check; network-facing records carry a `federation` block. Canonical reference: `Home.aDNA/who/identity/`.
+
+---
+
 ## Summary Table
 
 | # | Entity | Triad | Location |
@@ -223,6 +253,8 @@ Complete definitions for the 14 base entity types in the aDNA ontology. Each ent
 | 12 | skills | HOW | `how/skills/` |
 | 13 | pipelines | HOW | `how/pipelines/` |
 | 14 | backlog | HOW | `how/backlog/` |
+| 15 | inventory | WHAT | `what/inventory/` |
+| 16 | identity | WHO | `who/identity/` |
 
 Domain-specific extensions follow the `{namespace}_{type}` pattern (e.g., `crm_customer`, `lab_experiment`). See `ontology_design` for the extension procedure and `ontology_workshop` for multi-entity domain design.
 

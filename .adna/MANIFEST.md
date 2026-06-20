@@ -2,8 +2,8 @@
 type: manifest
 role: template
 created: 2026-02-17
-updated: 2026-04-03
-last_edited_by: agent_init
+updated: 2026-06-19
+last_edited_by: agent_rosetta
 tags: [manifest, governance]
 ---
 
@@ -40,7 +40,7 @@ Agentic-DNA/
 
 ### Base Ontology
 
-14 entity types across 3 triad legs: WHO (3: governance, team, coordination), WHAT (4: context, decisions, modules, lattices), HOW (7: campaigns, missions, sessions, templates, skills, pipelines, backlog). Extend by adding domain-specific entities under the appropriate leg (e.g., `what/experiments/`). Full table: see CLAUDE.md § Domain Knowledge.
+16 entity types across 3 triad legs: WHO (4: governance, team, coordination, identity), WHAT (5: context, decisions, modules, lattices, inventory), HOW (7: campaigns, missions, sessions, templates, skills, pipelines, backlog). Extend by adding domain-specific entities under the appropriate leg (e.g., `what/experiments/`). Full table: see CLAUDE.md § Domain Knowledge. (`inventory` + `identity` promoted to base in standard v2.3, per ADR-035.)
 
 ## Entry Points
 
@@ -115,7 +115,7 @@ how/pipelines/prd_rfc/
 
 | Component | Status | Description |
 |-----------|--------|-------------|
-| aDNA Standard v2.2 | Shipped | Core specification — triad, ontology (14 base + 8 extension), sessions, missions, campaigns |
+| aDNA Standard v2.3 | Shipped | Core specification — triad, ontology (16 base + 8 extension), sessions, missions, campaigns |
 | Context library | Shipped | 5 topics, 27 subtopics, ~75K tokens. Cross-topic recipe system with 6 recipes |
 | Lattice YAML tools | Shipped | Validate, convert (YAML↔canvas), JSON Schema, 15 example lattices + 3 canvas templates |
 | Mermaid-enhanced spec docs | Shipped | 19 diagrams across 3 aDNA specification documents |

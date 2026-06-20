@@ -1,0 +1,162 @@
+type: curation_schema
+schema_version: "0.1"
+created: 2026-05-28
+updated: 2026-05-28
+last_edited_by: agent_stanley
+mission: mission_lattice_comp_m22_per_vault_curation_cards
+campaign: campaign_lattice_compliance_upgrade
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Per-vault curation card schema (M22 — information-architecture track).
+#
+# Each live `.aDNA` vault gets a curation card at:
+#   who/curation/curation_<Vault>.aDNA.yaml   (structured — single editable source)
+#   who/curation/curation_<Vault>.aDNA.md     (human-readable — rendered from yaml)
+#
+# Source-of-truth discipline: every field below traces to exactly ONE upstream.
+# Nothing is invented. Where a value cannot be derived from an upstream, the
+# field is null/empty — narrative pitch lives only in `operator_note` (editorial).
+# ─────────────────────────────────────────────────────────────────────────────
+
+fields:
+
+  vault_name:
+    type: string
+    required: true
+    source: inventory_vaults.yaml::vaults[].name
+    note: "Canonical vault directory name, e.g. Canvas.aDNA"
+
+  display_name:
+    type: string
+    required: true
+    source: "the_<Vault>.md::display_name (fallback: inventory_vaults.yaml::display_name, else vault_name minus .aDNA)"
+
+  archetype:
+    type: enum
+    required: true
+    values: [Org-Vault, Org-Graph, Network, Platform, Forge, Framework, Coordination, Domain, Other]
+    source: "derived from inventory_vaults.yaml::class via class_to_archetype map below"
+
+  persona:
+    type: string
+    required: false
+    source: "inventory_vaults.yaml::persona (fallback: the_<Vault>.md::persona_archetype); null where no persona assigned"
+
+  description_one_line:
+    type: string
+    max_chars: 140
+    required: true
+    source: "seeded from inventory_vaults.yaml::note (first sentence, trimmed to <=140); pitch text"
+
+  description_paragraph:
+    type: string
+    max_chars: 800
+    required: true
+    source: "the_<Vault>.md body (Current Focus / first paragraph) + inventory note; docent-quality narrative. NO invented facts."
+
+  source:
+    type: dict
+    required: true
+    keys:
+      repo:        { source: "the_<Vault>.md::github_url (empty string => 'local-only')" }
+      license:     { source: "<Vault>/MANIFEST.md FAIR block::license (default: private)" }
+      creators:    { source: "<Vault>/MANIFEST.md FAIR block::creators (list)" }
+      origin_date: { source: "<Vault>/MANIFEST.md created OR the_<Vault>.md::created (YYYY-MM-DD)" }
+
+  federation:
+    type: dict
+    required: true
+    keys:
+      shareable:      { source: "<Vault>/MANIFEST.md FAIR/federation block::shareable (default: false)" }
+      discoverable:   { source: "<Vault>/MANIFEST.md FAIR/federation block::discoverable (default: false)" }
+      version_policy: { source: "<Vault>/MANIFEST.md federation block::version_policy (default: null)" }
+
+  current_status:
+    type: enum
+    required: true
+    values: [genesis, active, production, superseded, archived]
+    source: "derived from inventory_vaults.yaml::health (+ superseded_by presence) via health_to_status map below"
+
+  last_active_campaign:
+    type: string
+    required: false
+    source: "<Vault>/STATE.md frontmatter or body (most recent campaign slug + status); null where absent"
+
+  last_mission_closed:
+    type: string
+    required: false
+    source: "<Vault>/STATE.md::last_mission_closed (slug + date); null where absent"
+
+  key_links:
+    type: list
+    required: true
+    item: { label: string, target_path: string }
+    source: "the_<Vault>.md::{governance, manifest_path, state_path} + workspace CLAUDE.md row"
+
+  image_path:
+    type: string
+    required: false
+    source: "who/assets/vault_cards/<Vault>.aDNA.jpg if present on disk (M20), else null"
+
+  persona_portrait:
+    type: string
+    required: false
+    source: "who/assets/portraits/portrait_<persona>.jpg if present on disk (M21; 19 portraits), else null"
+
+  operator_note:
+    type: string
+    required: false
+    default: ""
+    source: "EDITORIAL — operator-curated narrative pitch. Opt-in; empty by default. The ONLY field where non-upstream text is permitted."
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Derivation maps
+# ─────────────────────────────────────────────────────────────────────────────
+
+class_to_archetype:
+  forge:               Forge
+  framework:           Framework
+  framework_candidate: Framework
+  platform:            Platform
+  org_vault:           Org-Vault
+  standard_dev:        Org-Vault
+  org_graph:           Org-Graph
+  network:             Network
+  coordination:        Coordination
+  node_operational:    Other        # node vault (LatticeHome.aDNA itself)
+  document:            Domain
+  knowledge_graph:     Domain
+  tooling:             Domain
+  workspace:           Domain
+
+health_to_status:
+  active:        active
+  genesis:       genesis
+  genesis_stub:  genesis
+  pending:       genesis            # not yet activated => treated as genesis-stage
+  production:    production
+  superseded:    superseded
+  archived:      archived
+  # Override: if a vault carries `superseded_by:` in inventory, current_status = superseded
+  #           regardless of health (e.g. RareHarnessOld.aDNA, health=active).
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Scope
+# ─────────────────────────────────────────────────────────────────────────────
+
+scope:
+  # Count-free by design: the card set = EVERY vault in inventory_vaults.yaml at build time, one
+  # card each. `python what/code/build_curation_cards.py` is the authority — never hand-count here.
+  basis: "every vault listed in inventory_vaults.yaml at build time (builder-derived, not hand-counted)"
+  exclusions: []   # a vault skipped on purpose gets a row here: - {vault: X.aDNA, reason: "…"}
+  inclusions_note: "a vault carrying superseded_by: in inventory renders with current_status=superseded regardless of health (the §status_map override above)"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Versioning
+# ─────────────────────────────────────────────────────────────────────────────
+
+versioning_note: >
+  v0.1 — editorial fields (especially operator_note) expected to evolve as the
+  operator uses the gallery. Bump to v0.2 when M23 reveals what is load-bearing
+  for the visual rendering layer. Dataview chosen over Bases for the v0.1 HOME
+  preview query (low-touch; final gallery engine decided in M23).

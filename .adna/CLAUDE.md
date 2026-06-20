@@ -1,13 +1,13 @@
 ---
 type: governance
-version: "7.2"
+version: "8.0"
 token_estimate: ~3000
 updated: 2026-06-11
 last_edited_by: agent_stanley
 ---
 
 # CLAUDE.md — aDNA
-<!-- v7.2 | 2026-06-11 -->
+<!-- v8.0 | 2026-06-19 | Operation Hearthstone (inventory+identity base; Home bootstrap) -->
 
 ## Identity & Personality
 
@@ -246,15 +246,15 @@ Reusable agent recipes and documented procedures in `how/skills/`. Skills have t
 
 ## Domain Knowledge
 
-### Base Ontology (14 Entity Types)
+### Base Ontology (16 Entity Types)
 
 | Triad Leg | Entities | Purpose |
 |-----------|----------|---------|
-| **WHO** (3) | `governance`, `team`, `coordination` | Who decides, who works, how they sync |
-| **WHAT** (4) | `context`, `decisions`, `modules`, `lattices` | What you know, what you've decided, what you build, how you compose |
+| **WHO** (4) | `governance`, `team`, `coordination`, `identity` | Who decides, who works, how they sync, who/where this node is |
+| **WHAT** (5) | `context`, `decisions`, `modules`, `lattices`, `inventory` | What you know, what you've decided, what you build, how you compose, what's installed |
 | **HOW** (7) | `campaigns`, `missions`, `sessions`, `templates`, `skills`, `pipelines`, `backlog` | Plan → decompose → execute → track → automate → ideate |
 
-Extend by adding domain-specific entities under the appropriate triad leg. The base gives operational infrastructure; extensions add domain knowledge.
+Extend by adding domain-specific entities under the appropriate triad leg. The base gives operational infrastructure; extensions add domain knowledge. *(`inventory` + `identity` were promoted from node-local extensions to base entity types in aDNA standard v2.3, per ADR-035.)*
 
 ### Lattice Types
 

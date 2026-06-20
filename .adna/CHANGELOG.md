@@ -28,6 +28,20 @@ Changelog entries are organized by **governance version** (primary heading). Sta
 
 ---
 
+## [v8.0] — 2026-06-19
+
+> **Governance 7.2 → 8.0** — operator-ratified milestone for **Operation Hearthstone**: the per-node operational vault (`Home.aDNA/`) gets a complete, polished base in the standard, and a fresh clone now offers to bootstrap it. The changes are **additive** (minor per the §Version Policy table / ADR-011), elevated to the **v8.0** milestone by campaign ratification. **Standard track: v2.2 → v2.3** — `inventory` + `identity` promoted from node-local extensions to **base entity types** (16 base total, per ADR-035; backward-compatible per standard §15.4). Released via `skill_template_release` at **SCOPE C** — Hearthstone + the one user-facing `/lattice→/aDNA` correctness fix; broader out-of-batch dev drift (AGENTS edits, doc streamlines, v7.0 publish-skill family, ADR-034 public-face docs) deferred to a later catch-up release.
+
+### Added
+- **Base ontology 14 → 16 entity types**: `inventory` (WHAT) + `identity` (WHO) are now base types — genericized `what/inventory/AGENTS.md` + `who/identity/AGENTS.md` scaffolds and paired `template_inventory_entry.md` + `template_identity_entry.md` (md + YAML companion, D7 federation). `what/ontology.md`, `CLAUDE.md` + `MANIFEST.md` ontology tables, and `what/context/adna_core/*` updated.
+- **Per-node Home bootstrap**: the workspace router (root `CLAUDE.md` + `how/templates/template_workspace_claude.md`) gains a Step-2.5 **"offer to bootstrap `Home.aDNA/`"** (opt-in, no-nag) wired to the canonical chain — `skill_project_fork` Home-class → `skill_inventory_refresh` → `skill_node_bootstrap_interview` → `skill_node_health_check`.
+- **`template_home_claude.md`**: the Hestia node-governance `CLAUDE.md` template (`{{persona}}`/`{{node_hostname}}`/`{{operator}}`/`{{workspace_root}}`), installed by the Home-class fork (`skill_project_fork` Step 3.5).
+- **`template_node_adna_exemplar/`**: the premium themed HOME bundle (banner + §Gallery/§Topology Bases + persona CSS + canvas generators), overlaid opt-in via `skill_project_fork --exemplar-home` (Step 4.5) or `skill_node_bootstrap_interview` Step 9 (Topic 6 theming).
+- `how/templates/AGENTS.md`: inventory/identity/home template rows + a Fork-Skeleton Bundles section.
+
+### Fixed
+- **`/lattice→/aDNA` correctness**: `what/docs/templates/workspace_claude_md.template` recommended workspace root `~/lattice/` → `~/aDNA/` (the post-Operation-Homecoming default). *(Intentional `~/lattice` references in historical records + the legacy-root migration tooling are preserved by design.)*
+
 ## [v7.2] — 2026-06-11
 
 > Minor **Governance** change (7.0 → 7.2; the v7.1 image release carried the [v7.1] block below without a frontmatter bump — both minors are formalized here so the governance version re-aligns with the image tag line). **Standard track: no change** (stays at v2.2).

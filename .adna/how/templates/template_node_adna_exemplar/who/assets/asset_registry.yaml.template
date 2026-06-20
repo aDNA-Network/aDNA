@@ -1,0 +1,22 @@
+type: asset_registry
+schema_version: "0.1"
+created: "{{interview_date}}"
+updated: "{{interview_date}}"
+last_edited_by: "agent_{{operator}}"
+
+# Tracks imagery state. status: live | superseded | skipped. Replace the example rows.
+banners:
+  - {file: banner_placeholder.png, status: skipped, note: "grey stand-in — replace with the real hero"}
+portraits: []
+vault_cards: []
+dividers: []
+
+# ── Canvas/gallery icon system (M2.4 backbone; see each dir's AGENTS.md recipe) ──
+# Icon chain used by build_curation_cards.py + build_topology_canvas.py:
+#   emblems (vault function) > sigils (persona) > crests (category) — graceful-skip at every step.
+# Example row shape: - {file: SiteForge.aDNA.png, status: live, note: "forge anvil motif"}
+sigils: []        # <persona>.png — persona avatar sigils
+emblems: []       # <Vault>.aDNA.png — per-vault topic/function logos
+crests: []        # <category_slug>.png — band-header category crests
+glyphs: []        # <edge_type>.png — RESERVE (no consumer yet; see glyphs/AGENTS.md)
+backplates: []    # <motif>.png — RESERVE (no consumer yet; see backplates/AGENTS.md)

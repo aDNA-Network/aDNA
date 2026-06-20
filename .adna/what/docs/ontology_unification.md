@@ -34,7 +34,7 @@ This document defines the formal protocol for merging ontologies when aDNA insta
 
 | Term | Definition |
 |------|-----------|
-| **Base ontology** | The 14 entity types universal to every aDNA instance (WHO: 3, WHAT: 4, HOW: 7) |
+| **Base ontology** | The 16 entity types universal to every aDNA instance (WHO: 4, WHAT: 5, HOW: 7) |
 | **Extension** | Domain-specific entity types added by an instance (e.g., CRM, Science, Formation) |
 | **Namespace** | A prefix that scopes extension entity types to avoid cross-instance collisions (e.g., `crm_`, `bio_`) |
 | **Unification** | The process of merging two ontologies into a single coherent schema |
@@ -59,12 +59,12 @@ This document defines the formal protocol for merging ontologies when aDNA insta
 
 ### 2.1 Base Entity Types
 
-The aDNA base ontology defines 14 entity types that are universal to every instance:
+The aDNA base ontology defines 16 entity types that are universal to every instance:
 
 | Triad Leg | Entity Types | Count | Purpose |
 |-----------|-------------|-------|---------|
-| **WHO** | `governance`, `team`, `coordination` | 3 | Who decides, who works, how they sync |
-| **WHAT** | `context`, `decisions`, `modules`, `lattices` | 4 | What you know, what you've decided, what you build, how you compose |
+| **WHO** | `governance`, `team`, `coordination`, `identity` | 4 | Who decides, who works, how they sync, who/where this node is |
+| **WHAT** | `context`, `decisions`, `modules`, `lattices`, `inventory` | 5 | What you know, what you've decided, what you build, how you compose, what's installed |
 | **HOW** | `campaigns`, `missions`, `sessions`, `templates`, `skills`, `pipelines`, `backlog` | 7 | Plan, decompose, execute, track, automate, ideate |
 
 ### 2.2 Invariance Specification
@@ -88,8 +88,8 @@ Two instances are **base-compatible** when they share the same major version of 
 
 ```
 Base version format: vX.Y
-  X = major (structural changes — entity additions/removals/renames)
-  Y = minor (field additions, discriminator value additions)
+  X = major (breaking changes — entity removals/renames/triad reassignment)
+  Y = minor (additive — new entity types, field additions, discriminator value additions)
 
 Compatibility rule:
   Source.X == Target.X → COMPATIBLE (proceed to merge)
@@ -97,7 +97,7 @@ Compatibility rule:
   Source.Y != Target.Y → COMPATIBLE (minor differences resolved during merge)
 ```
 
-**Current base version**: v3.0 (14 entities, consolidated from v2.0's 17 and v1.0's 20).
+**Current base version**: v3.1 (16 entities — `inventory` + `identity` added per ADR-035; consolidated lineage from v2.0's 17 and v1.0's 20).
 
 ### 2.4 What Instances MAY Do to Base Types
 
@@ -202,7 +202,7 @@ function validate_base_compatibility(source, target):
         log WARNING("Minor version difference: {source.base_version} vs {target.base_version}.
                       Additive fields from the newer version will be included in merge.")
 
-    # Verify all 14 base entity types are present in both
+    # Verify all 16 base entity types are present in both
     for entity in BASE_ENTITIES:
         assert entity in source.entities, f"Source missing base entity: {entity}"
         assert entity in target.entities, f"Target missing base entity: {entity}"

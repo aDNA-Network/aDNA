@@ -1,0 +1,75 @@
+/* ════════════════════════════════════════════════════════════════════════
+   EXEMPLAR CANVAS-CHROME SNIPPET (template) — materialized to
+   .obsidian/snippets/{{persona_lower}}_canvas.css at bootstrap, alongside the accent
+   snippet. REQUIRED for the topology canvas: build_topology_canvas.py (M2.3 chrome)
+   emits inline <span class="cf-pill">/<span class="cf-glyph"> accents that are
+   invisible without these rules — enable BOTH snippets in
+   .obsidian/appearance.json → enabledCssSnippets.
+   Substitutions (see ../../SUBSTITUTIONS.md):
+     {{accent_tertiary_hex}}     tertiary/emissive accent (Hestia exemplar: #7dcfff) — mono-box code color
+     {{canvas_text_strong_hex}}  card strong/title text (Hestia exemplar: #f2eefb)
+     {{canvas_text_em_hex}}      card persona/em text (Hestia exemplar: #c0a6e8)
+   LITERALS by convention (M3.4 rgba rule + semantic-state rule): translucent rgba()
+   stops; the status-pill state colors (green/amber/slate — semantic, not persona);
+   the #565f89 Tokyo-Night structural fallback for --canvas-color.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* {{persona_lower}}_canvas.css — M2.3 node-card chrome for the node topology canvas.
+   Scope: .canvas-node only (canvas surface). Premium small-multiple card system —
+   status pills, category accent stripe, corner type-glyph, typography grammar.
+   Enabled via .obsidian/appearance.json → enabledCssSnippets.
+   Cards stay markdown-primary; treatments ride inline <span> accents + globals. */
+
+/* ── Typography grammar ─────────────────────────────────────────────────────
+   bold = node name · italic = persona/codename · mono-box = filesystem path/repo. */
+.canvas-node code {
+  font-family: "JetBrains Mono", "Berkeley Mono", ui-monospace, monospace;
+  font-size: 0.80em;
+  color: {{accent_tertiary_hex}};
+  background: rgba(125, 207, 255, 0.10);  /* translucent pair of the tertiary — literal per the rgba convention */
+  padding: 0.04em 0.36em;
+  border-radius: 4px;
+}
+.canvas-node strong { color: {{canvas_text_strong_hex}}; font-weight: 700; letter-spacing: 0.01em; }
+.canvas-node em { color: {{canvas_text_em_hex}}; font-style: italic; opacity: 0.90; }
+
+/* ── Category accent stripe ──────────────────────────────────────────────────
+   A left rule in the node's OWN colour. Obsidian exposes the node colour as
+   --canvas-color on the node element, so this needs no per-node class hook. */
+.canvas-node .canvas-node-content {
+  border-left: 4px solid var(--canvas-color, #565f89);
+  padding-left: 9px;
+}
+
+/* ── Status pill ─────────────────────────────────────────────────────────────
+   active = green · genesis/mid = amber · superseded/dim = slate.
+   Semantic STATE colors — shared across personas, intentionally literal. */
+.canvas-node .cf-pill {
+  display: inline-block;
+  font-size: 0.62em;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.10em 0.62em;
+  border-radius: 999px;
+  vertical-align: 0.12em;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+.canvas-node .cf-pill.cf-active  { background: rgba(158, 206, 106, 0.18); color: #9ece6a; border-color: rgba(158, 206, 106, 0.45); }
+.canvas-node .cf-pill.cf-genesis { background: rgba(224, 175, 104, 0.16); color: #e0af68; border-color: rgba(224, 175, 104, 0.42); }
+.canvas-node .cf-pill.cf-dim     { background: rgba(120, 127, 156, 0.18); color: #9aa0bd; border-color: rgba(120, 127, 156, 0.42); }
+
+/* ── Corner category glyph ───────────────────────────────────────────────────
+   A faint type-icon pinned top-right — a second categorical channel beyond hue
+   (CVD-safe), distinct from the per-vault sigil avatar (vault identity). */
+.canvas-node .canvas-node-content { position: relative; }
+.canvas-node .cf-glyph {
+  position: absolute;
+  top: 5px;
+  right: 9px;
+  font-size: 1.0em;
+  line-height: 1;
+  opacity: 0.38;
+  pointer-events: none;
+}

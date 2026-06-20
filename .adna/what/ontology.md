@@ -1,15 +1,15 @@
 ---
 type: ontology
 created: 2026-02-20
-updated: 2026-03-01
+updated: 2026-06-18
 status: active
-last_edited_by: agent_init
+last_edited_by: agent_rosetta
 tags:
   - ontology
   - architecture
   - adna
-entity_count: 14
-base_version: "v3.0"
+entity_count: 26
+base_version: "v3.1"
 quality_score: 4.2
 signal_density: 5
 actionability: 4
@@ -24,9 +24,9 @@ icon: share-2
 
 # aDNA Base Ontology
 
-Entity relationship map for an aDNA instance. Defines the **14 base entity types** universal to every aDNA lattice, organized by the `who/what/how` triad.
+Entity relationship map for an aDNA instance. Defines the **16 base entity types** universal to every aDNA lattice, organized by the `who/what/how` triad.
 
-**Base ontology version**: v3.0 (14 entity types)
+**Base ontology version**: v3.1 (16 entity types) — `inventory` + `identity` promoted from node-local extensions per [[decisions/adr_035_inventory_identity_base_entity_types|ADR-035]] (aDNA standard v2.3; materialized to the public template at Hearthstone P5).
 
 ## Scope
 
@@ -34,7 +34,7 @@ The aDNA ontology has two layers:
 
 | Layer | Entity Types | Rule |
 |-------|-------------|------|
-| **Base** (this document) | 14 types | Structurally invariant — every aDNA instance shares these. No renaming, removal, or triad reassignment. |
+| **Base** (this document) | 16 types | Structurally invariant — every aDNA instance shares these. No renaming, removal, or triad reassignment. |
 | **Extensions** (per instance) | Additive | Namespaced, domain-specific. Extensions plug into base types but never modify them. See [Extension Patterns](#extension-patterns). |
 
 This artifact documents the base layer in full. Extensions are shown as illustrative examples only — each instance defines its own.
@@ -61,8 +61,36 @@ This artifact documents the base layer in full. Extensions are shown as illustra
 | 12 | skills | HOW | `how/skills/` | Reusable agent recipes + procedures | invariant |
 | 13 | pipelines | HOW | `how/pipelines/` | Folder-based content-as-code workflows | invariant |
 | 14 | backlog | HOW | `how/backlog/` | Ideas and improvement tracking | invariant |
+| 15 | inventory | WHAT | `what/inventory/` | Installed/configured state — vaults, system, memberships | invariant |
+| 16 | identity | WHO | `who/identity/` | Stable identity records — hostname, operator, peer-id, signing-key refs | invariant |
 
-**Merge behavior**: All 14 base types are `invariant` — during [ontology unification](docs/ontology_unification.md), base types are never renamed, removed, or reassigned. Only extension types use `extension/namespace` merge behavior.
+**Merge behavior**: All 16 base types are `invariant` — during [ontology unification](docs/ontology_unification.md), base types are never renamed, removed, or reassigned. Only extension types use `extension/namespace` merge behavior.
+
+### Rosetta Extensions (10 Entity Types)
+
+Domain-specific entity types added by the aDNA.aDNA project for documentation, education, and community architecture.
+
+| # | Entity | Triad | Directory | Purpose | Merge Behavior |
+|---|--------|-------|-----------|---------|----------------|
+| 17 | concept | WHAT | `what/concepts/` | Core aDNA concepts — dual-audience depth | extension/rosetta |
+| 18 | tutorial | WHAT | `what/tutorials/` | Step-by-step learning paths (beginner → advanced) | extension/rosetta |
+| 19 | pattern | WHAT | `what/patterns/` | Reusable aDNA architectural patterns | extension/rosetta |
+| 20 | glossary_entry | WHAT | `what/glossary/` | Canonical term definitions with spec refs | extension/rosetta |
+| 21 | use_case | WHAT | `what/use_cases/` | Narrative adoption stories by domain | extension/rosetta |
+| 22 | comparison | WHAT | `what/comparisons/` | aDNA vs. other knowledge architectures | extension/rosetta |
+| 23 | community | WHO | `who/community/` | Community roles, contribution paths | extension/rosetta |
+| 24 | adopter | WHO | `who/adopters/` | Adopter personas and deployment profiles | extension/rosetta |
+| 25 | workshop | HOW | `how/workshops/` | Workshop kits and facilitation guides | extension/rosetta |
+| 26 | publishing | HOW | `how/publishing/` | Vault-to-web content publishing pipeline | extension/rosetta |
+
+### Network.aDNA Extensions (2 Entity Types)
+
+Domain-specific entity types added by the `LatticeNetwork.aDNA` (Alpha Lattice) instance for the Network.aDNA pattern category (6th canonical pattern per LIP-0006; ratified at aDNA standard via [[decisions/adr_017_network_adna_pattern_category_and_namespace_ratification.md|ADR-017]] 2026-05-20 — single comprehensive ADR covering LIP-0006 countersign + `network_` namespace reservation + parallel-discharge of both entity-types per peer ADR-005 rule 6 + ADR-008 §f invariant). Namespace `network_` co-claim (peer ADR-005 rule 2(c)) — single namespace covers both rows. v8.0 P6 batch promotion to base ontology per ADR-017 §Decisions D5+D8. **Deferred at [[decisions/adr_035_inventory_identity_base_entity_types|ADR-035]] D3 (2026-06-18):** only `inventory` + `identity` were promoted to base (rows 15/16); `network_node_mirror` / `permission_edge` await a successor ADR at the same D9+D7 readiness bar.
+
+| # | Entity | Triad | Directory | Purpose | Merge Behavior |
+|---|--------|-------|-----------|---------|----------------|
+| 27 | network_node_mirror | WHAT | `what/network/nodes/<hostname>.aDNA/` | Per-node mirror directory (source: each node's own `node.aDNA`; SO-7 read-mostly invariant; aggregator-side; full sub-triad structurally distinct from base `context` per peer ADR-002 §a) | extension/network |
+| 28 | permission_edge | WHAT | `what/network/permissions/<edge_id>.yaml` | Directed authentication edge between nodes (10-field body per peer ADR-008 §g; lifecycle bound to LIP-0003 ledger events at peer arch_01 §6.4 call-site 3) | extension/network |
 
 ### Triad Structure (Diagram 1)
 
@@ -71,11 +99,13 @@ erDiagram
     WHO ||--o{ governance : contains
     WHO ||--o{ team : contains
     WHO ||--o{ coordination : contains
+    WHO ||--o{ identity : contains
 
     WHAT ||--o{ context : contains
     WHAT ||--o{ decisions : contains
     WHAT ||--o{ modules : contains
     WHAT ||--o{ lattices : contains
+    WHAT ||--o{ inventory : contains
 
     HOW ||--o{ campaigns : contains
     HOW ||--o{ missions : contains
@@ -176,7 +206,7 @@ At each execution level, irrelevant knowledge is pruned — the working set decr
 
 | Level | Entity Types in Scope | Reduction |
 |-------|----------------------|-----------|
-| Full ontology | 32 types (14 base + 18 extension) | — |
+| Full ontology | 36 types (16 base + 20 extension) | — |
 | Campaign: org_formation | 22 types (CRM + Science pruned) | 32 → 22 (31%) |
 | Mission: Role Architecture | 5 types (role, member, team, sessions, decisions) | 22 → 5 (77%) |
 | Objective: Draft role charters | 2 types (role, member) | 5 → 2 (60%) |
@@ -187,7 +217,7 @@ At each level, the AGENTS.md routing mechanism selects the relevant subspace —
 
 ## Base Entity Relationships (Diagram 3)
 
-Cross-entity relationships among the 14 base types:
+Cross-entity relationships among the 16 base types:
 
 ```mermaid
 erDiagram

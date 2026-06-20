@@ -53,7 +53,7 @@ aDNA is a directory convention — Markdown files with YAML frontmatter organize
 | `MANIFEST.md` + `STATE.md` | Plain Markdown. No change. |
 | Triad structure (`who/`/`what/`/`how/`) | Directory convention. Works in any filesystem. |
 | YAML frontmatter | Standard YAML. Parsed by agents, readable in any editor. |
-| 14 base entity types | Naming conventions + frontmatter schemas. No Obsidian dependency. |
+| 16 base entity types | Naming conventions + frontmatter schemas. No Obsidian dependency. |
 | Session tracking | Create files in `how/sessions/active/`, move to `history/` on close. |
 | Execution hierarchy | Campaign → Mission → Objective. Plain Markdown with status tracking. |
 | Context library | `what/context/` files loaded by agents on demand. |
