@@ -28,6 +28,17 @@ Changelog entries are organized by **governance version** (primary heading). Sta
 
 ---
 
+## [v8.1] — 2026-06-23
+
+> **Governance 8.0 → 8.1** — a combined **catch-up release** (operator-ratified, ADR-038): completes the v2.3 standard body the v8.0 image promised, and brings the base template's Obsidian payload + fork flow to batteries-included parity. The changes are **additive / corrective** (minor per the §Version Policy table / ADR-011). **Standard track: v2.3 (unchanged)** — v8.0 bumped the title to v2.3 but shipped a 14-type §5 body; v8.1 materializes the body it promised (no title bump). Combines two independently-staged deltas — the F1 §5 body-completion (ADR-035) and Operation Cornerstone Obsidian parity (`Obsidian.aDNA` M07) — into one push per ADR-038.
+
+### Added
+- **Standard §5 body-completion (v2.3)**: the `inventory/` (WHAT) and `identity/` (WHO) base entity-type rows + their two ER-diagram edges (`what ||--o{ inventory`, `who ||--o{ identity`), promoted to base by ADR-035. The v8.0 image carried the v2.3 title with a 14-type body; the published standard now matches the dev standard and the aDNA.network site (16 base types).
+
+### Fixed
+- **Obsidian batteries-included parity** (Operation Cornerstone, `Obsidian.aDNA` M07): base-template `.obsidian/` roster corrected **15 → 14** — drop `termy` + `settings-search` (the latter **load-broken on Obsidian ≥ 1.13.1**), add `terminal` (v3.25.0, binary materialized); homepage repointed to the wired root `HOME.md`; `notebook-navigator` 2.5.2 → 2.6.6; `core-plugins.json` sync-neutral; BRAT scrubbed of the retired `termy`. A fresh clone now opens batteries-included (`health_check.py` exit 0).
+- **Fork strip-then-reseed defect** (`how/skills/skill_project_fork.md`): dropped `rm -f setup.sh` — the fork stripped the installer it then told the user to run, leaving a non-functional Obsidian with no recovery path. `setup.sh`'s plugin roster is corrected to the canonical 14. A fresh fork now retains its installer and recovers the full plugin set.
+
 ## [v8.0] — 2026-06-19
 
 > **Governance 7.2 → 8.0** — operator-ratified milestone for **Operation Hearthstone**: the per-node operational vault (`Home.aDNA/`) gets a complete, polished base in the standard, and a fresh clone now offers to bootstrap it. The changes are **additive** (minor per the §Version Policy table / ADR-011), elevated to the **v8.0** milestone by campaign ratification. **Standard track: v2.2 → v2.3** — `inventory` + `identity` promoted from node-local extensions to **base entity types** (16 base total, per ADR-035; backward-compatible per standard §15.4). Released via `skill_template_release` at **SCOPE C** — Hearthstone + the one user-facing `/lattice→/aDNA` correctness fix; broader out-of-batch dev drift (AGENTS edits, doc streamlines, v7.0 publish-skill family, ADR-034 public-face docs) deferred to a later catch-up release.

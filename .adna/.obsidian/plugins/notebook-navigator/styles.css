@@ -101,8 +101,8 @@ body {
     --nn-file-title-line-height-mobile: 21px; /* Mobile title text height */
     --nn-file-single-text-line-height-mobile: 20px; /* Mobile single-line text height */
     --nn-file-multiline-text-line-height-mobile: 19px; /* Mobile preview text height */
-    --nn-feature-image-min-size: 42px; /* Minimum size for feature images */
-    --nn-feature-image-max-size: 64px; /* Maximum size for feature images */
+    --nn-file-thumbnail-min-size: 42px; /* Minimum size for file thumbnails */
+    --nn-file-thumbnail-max-size: 64px; /* Maximum size for file thumbnails */
 
     /* Font sizes - fixed pixel values to prevent scaling with Obsidian font size */
     --nn-file-name-size: 14px; /* Fixed 14px */
@@ -110,15 +110,10 @@ body {
     --nn-compact-font-size: 13px; /* Compact mode desktop font size */
     --nn-compact-font-size-mobile: 15px; /* Compact mode mobile font size */
 
-    /* Date header heights and padding */
-    --nn-date-header-height: 35px; /* First header */
-    --nn-date-header-height-subsequent: 50px; /* Headers with margin */
-    --nn-date-header-padding-top: 24px; /* Top padding for subsequent headers */
-    --nn-date-header-padding-bottom: 6px; /* Bottom padding for subsequent headers */
-    --nn-date-header-height-mobile: var(--nn-date-header-height);
-    --nn-date-header-height-subsequent-mobile: var(--nn-date-header-height-subsequent);
-    --nn-date-header-padding-top-mobile: var(--nn-date-header-padding-top);
-    --nn-date-header-padding-bottom-mobile: var(--nn-date-header-padding-bottom);
+    /* List group header heights and spacing */
+    --nn-list-group-header-height: 27px; /* Header row and sticky header */
+    --nn-list-group-header-spacer-before: 20px; /* Spacer before subsequent headers */
+    --nn-list-group-header-height-mobile: var(--nn-list-group-header-height);
 
     /* Navigation item heights - fixed pixel values to prevent fractional rendering */
     --nn-nav-line-height: 18px; /* Fixed line height for folder/tag names */
@@ -201,7 +196,8 @@ body {
     --nn-theme-calendar-feature-image-overlay-color: rgb(0 0 0 / 0.05);
     --nn-theme-calendar-day-today-color: var(--nn-theme-calendar-day-in-month-color);
     --nn-theme-calendar-day-today-bg: var(--text-selection);
-    --nn-theme-calendar-day-active-border-color: var(--nn-theme-foreground-faded);
+    --nn-theme-calendar-day-active-border-color: #f94040;
+    --nn-theme-calendar-day-active-border-width: 3px;
 
     /* -- Folder & Tag Items -- */
     --nn-theme-navitem-chevron-color: var(--nn-theme-foreground-muted);
@@ -466,7 +462,7 @@ body {
 
 .nn-update-banner {
     position: absolute;
-    top: calc(var(--nn-date-header-height-mobile, var(--nn-date-header-height)) + 8px);
+    top: calc(var(--nn-list-group-header-height-mobile, var(--nn-list-group-header-height)) + 8px);
     left: 50%;
     transform: translate(-50%, 0);
     z-index: 10;
@@ -673,10 +669,6 @@ body {
     --nn-theme-list-bg: var(--nn-theme-mobile-bg);
 }
 
-.notebook-navigator-mobile .nn-navigation-pane {
-    border-right: none;
-}
-
 .nn-split-container.nn-orientation-vertical {
     flex-direction: column;
 }
@@ -686,16 +678,13 @@ body {
     min-width: 0;
     min-height: var(--nn-navigation-pane-min-height);
     flex: 0 1 auto;
+    border-right: none;
 }
 
 .nn-split-container.nn-orientation-vertical .nn-list-pane {
     min-width: 0;
     width: 100%;
     min-height: var(--nn-list-pane-min-height);
-}
-
-.nn-split-container.nn-orientation-vertical .nn-navigation-pane {
-    border-right: none;
 }
 
 .nn-split-container.nn-orientation-vertical:not(.nn-single-pane) .nn-navigation-pane {
@@ -751,8 +740,8 @@ body {
 /* Single-pane panes - positioned in grid and animated with transforms */
 .nn-split-container.nn-single-pane .nn-navigation-pane,
 .nn-split-container.nn-single-pane .nn-list-pane {
-    width: 100% !important;
-    max-width: 100% !important;
+    width: 100%;
+    max-width: 100%;
     height: 100%;
     grid-column: 1;
     grid-row: 1;
@@ -798,15 +787,9 @@ body {
    Mobile Layout
    ======================================================================== */
 
-/* Make navigation pane flexible on mobile to handle resize gracefully */
-.notebook-navigator-mobile .nn-navigation-pane {
-    flex: 1;
-    background-color: var(--nn-theme-nav-bg) !important;
-}
-
 /* Hide resize handle on mobile */
 .notebook-navigator-mobile .nn-resize-handle {
-    display: none !important;
+    display: none;
 }
 
 /* Add touch-action to prevent browser gestures interfering */
@@ -821,7 +804,7 @@ body {
 
 /* Pane headers - consistent header styling for both panes */
 .nn-pane-header {
-    padding: 8px 8px;
+    padding: 8px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -952,13 +935,13 @@ body {
     flex: 0 1 auto;
 }
 
-.nn-pane-header-folder-note {
-    text-decoration: var(--nn-theme-navitem-folder-note-name-decoration) !important;
+.nn-pane-header .nn-pane-header-folder-note {
+    text-decoration: var(--nn-theme-navitem-folder-note-name-decoration);
 }
 
-.nn-pane-header-folder-note:hover {
+.nn-pane-header .nn-pane-header-folder-note:hover {
     cursor: pointer;
-    text-decoration: var(--nn-theme-navitem-folder-note-name-hover-decoration) !important;
+    text-decoration: var(--nn-theme-navitem-folder-note-name-hover-decoration);
 }
 
 /* ========================================================================
@@ -1046,7 +1029,7 @@ body {
 }
 
 /* Mobile back button */
-.notebook-navigator-mobile .nn-back-button {
+.notebook-navigator-mobile button.nn-back-button {
     position: absolute;
     left: 0;
     width: 44px;
@@ -1055,25 +1038,25 @@ body {
     min-height: 44px;
     padding: 10px;
     z-index: 1;
-    opacity: 1 !important;
+    opacity: 1;
 }
 
 /* Increase stroke width for back button arrow and apply link color */
-.notebook-navigator-mobile .nn-back-button svg {
-    stroke: var(--nn-theme-mobile-list-header-link-color) !important;
-    width: 20px !important; /* Default size for Android */
-    height: 20px !important;
+.notebook-navigator-mobile button.nn-back-button svg {
+    stroke: var(--nn-theme-mobile-list-header-link-color);
+    width: 20px; /* Default size for Android */
+    height: 20px;
 }
 
 /* iOS/iPadOS-specific back button adjustments */
-.notebook-navigator-mobile:not(.notebook-navigator-android) .nn-back-button {
-    padding: 4px !important; /* Reduce padding to allow larger icon (44px - 8px padding = 36px space) */
+.notebook-navigator-mobile:not(.notebook-navigator-android) button.nn-back-button {
+    padding: 4px; /* Reduce padding to allow larger icon (44px - 8px padding = 36px space) */
 }
 
 /* iOS/iPadOS-specific back button chevron styling (36px actual, ~32px visual due to Lucide padding) */
-.notebook-navigator-mobile:not(.notebook-navigator-android) .nn-back-button svg {
-    width: 36px !important;
-    height: 36px !important;
+.notebook-navigator-mobile:not(.notebook-navigator-android) button.nn-back-button svg {
+    width: 36px;
+    height: 36px;
 }
 
 /* Mobile header title */
@@ -1116,7 +1099,7 @@ body {
     display: flex;
     align-items: center;
     height: 44px;
-    padding: 0 10px 6px 10px;
+    padding: 0 10px 6px;
     background-color: var(--nn-theme-list-bg);
 }
 
@@ -1156,41 +1139,41 @@ body {
 }
 
 /* Search input field */
-.nn-search-input {
+input.nn-search-input {
     width: 100%;
     height: 32px;
-    padding: 4px 60px 4px 36px !important;
+    padding: 4px 60px 4px 36px;
     font-size: 13px;
-    color: var(--nn-theme-file-selected-name-color) !important;
-    background: var(--nn-theme-list-bg) !important;
-    border: 1px solid var(--nn-theme-list-search-border-color) !important;
-    border-radius: 999px !important;
+    color: var(--nn-theme-file-selected-name-color);
+    background: var(--nn-theme-list-bg);
+    border: 1px solid var(--nn-theme-list-search-border-color);
+    border-radius: 999px;
     outline: none;
     box-sizing: border-box;
 }
 
-.nn-search-input-container--has-shortcut .nn-search-input {
-    padding-right: 84px !important;
+.nn-search-input-container--has-shortcut input.nn-search-input {
+    padding-right: 84px;
 }
 
 /* Active search state - when there's a search query */
-.nn-search-input.nn-search-active {
-    background: var(--nn-theme-list-search-active-bg) !important;
+input.nn-search-input.nn-search-active {
+    background: var(--nn-theme-list-search-active-bg);
 }
 
 /* Maintain highlight background on hover when search is active */
-.nn-search-input.nn-search-active:hover {
-    background: var(--nn-theme-list-search-active-bg) !important;
+input.nn-search-input.nn-search-active:hover {
+    background: var(--nn-theme-list-search-active-bg);
 }
 
 /* Focus state */
-.nn-search-input:focus {
-    border-color: var(--nn-theme-list-search-border-color) !important;
-    box-shadow: 0 0 0 2px var(--nn-theme-list-search-border-color) !important;
+input.nn-search-input:focus {
+    border-color: var(--nn-theme-list-search-border-color);
+    box-shadow: 0 0 0 2px var(--nn-theme-list-search-border-color);
 }
 
-.nn-search-input::placeholder {
-    color: var(--nn-theme-list-header-breadcrumb-color) !important;
+input.nn-search-input::placeholder {
+    color: var(--nn-theme-list-header-breadcrumb-color);
 }
 
 /* Search tag suggestion popover */
@@ -1264,21 +1247,11 @@ body {
 }
 
 /* Mobile search input field */
-.notebook-navigator-mobile .nn-search-input {
+.notebook-navigator-mobile input.nn-search-input {
     height: 36px;
     font-size: 16px; /* Prevent zoom on iOS */
-    padding: 4px 60px 4px 36px !important;
-    border-radius: 999px !important;
-}
-
-/* Mobile search icon */
-.notebook-navigator-mobile .nn-search-input-icon {
-    top: 10px;
-}
-
-/* Mobile clear button */
-.notebook-navigator-mobile .nn-search-clear-button {
-    top: 0;
+    padding: 4px 60px 4px 36px;
+    border-radius: 999px;
 }
 
 .nn-search-clear-button,
@@ -1323,27 +1296,26 @@ body {
     color: var(--interactive-accent);
 }
 
-.notebook-navigator-mobile .nn-search-clear-button,
-.notebook-navigator-mobile .nn-search-star-button,
-.notebook-navigator-mobile .nn-search-help-button {
+.notebook-navigator-mobile .nn-search-clear-button {
     top: 0;
     height: 36px;
-}
-
-.notebook-navigator-mobile .nn-search-clear-button {
     right: 10px;
 }
 
 .notebook-navigator-mobile .nn-search-star-button {
+    top: 0;
+    height: 36px;
     right: 44px;
 }
 
 .notebook-navigator-mobile .nn-search-help-button {
+    top: 0;
+    height: 36px;
     right: 10px;
 }
 
-.notebook-navigator-mobile .nn-search-input-container--has-shortcut .nn-search-input {
-    padding-right: 94px !important;
+.notebook-navigator-mobile .nn-search-input-container--has-shortcut input.nn-search-input {
+    padding-right: 94px;
 }
 
 /* Clickable path segments in header */
@@ -1395,10 +1367,10 @@ body {
    ======================================================================== */
 
 /* Icon button base style - transparent buttons matching Obsidian's design */
-.nn-icon-button {
-    background: transparent !important;
-    background-color: transparent !important;
-    border: none !important;
+button.nn-icon-button {
+    background: transparent;
+    background-color: transparent;
+    border: none;
     border-radius: var(--radius-s);
     padding: 0 8px;
     color: var(--nn-theme-header-button-icon-color);
@@ -1406,8 +1378,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: none !important;
-    outline: none !important;
+    box-shadow: none;
+    outline: none;
 }
 
 /* Desktop pane header buttons - enforce Obsidian-muted icon color */
@@ -1439,8 +1411,8 @@ body {
 }
 
 /* Icon button hover state - subtle background on hover - desktop only */
-.nn-desktop .nn-icon-button:hover {
-    background-color: var(--nn-theme-header-button-hover-bg) !important;
+.nn-desktop button.nn-icon-button:hover {
+    background-color: var(--nn-theme-header-button-hover-bg);
     opacity: 1;
 }
 
@@ -1450,14 +1422,14 @@ body {
 }
 
 /* Icon button active state - for toggle buttons that are "ON" */
-.nn-icon-button-active {
-    background-color: var(--nn-theme-header-button-active-bg) !important;
-    color: var(--nn-theme-header-button-active-icon-color) !important;
+button.nn-icon-button.nn-icon-button-active {
+    background-color: var(--nn-theme-header-button-active-bg);
+    color: var(--nn-theme-header-button-active-icon-color);
 }
 
 /* Active button icon color */
-.nn-icon-button-active svg {
-    stroke: var(--nn-theme-header-button-active-icon-color) !important;
+button.nn-icon-button.nn-icon-button-active svg {
+    stroke: var(--nn-theme-header-button-active-icon-color);
 }
 
 /* Icon button disabled state - visual indicator for unavailable actions */
@@ -1802,6 +1774,7 @@ body {
 
 /* Navigation item - container for each folder/tag in the tree */
 .nn-navitem {
+    --nn-navitem-background-bottom-overdraw: 0px;
     -webkit-user-select: none;
     user-select: none;
     background: transparent;
@@ -1840,8 +1813,7 @@ body {
     top: 0px;
     inset-inline-start: 0;
     inset-inline-end: 0;
-    /* Extend slightly beyond bottom item bounds (height rounding issue) to prevent hairline gaps when zoomed */
-    bottom: -0.2px;
+    bottom: var(--nn-navitem-background-bottom-overdraw);
     background-color: var(--nn-navitem-custom-bg-color);
     border-top-left-radius: var(--nn-navitem-top-left-radius, min(14px, var(--nn-theme-navitem-border-radius)));
     border-top-right-radius: var(--nn-navitem-top-right-radius, min(14px, var(--nn-theme-navitem-border-radius)));
@@ -1857,31 +1829,16 @@ body {
     z-index: 2;
 }
 
-/* Zero shared corners when consecutive background overlays touch */
-.nn-navitem:is(.nn-has-custom-background, .nn-has-search-match) + .nn-navitem:is(.nn-has-custom-background, .nn-has-search-match) {
-    --nn-navitem-top-left-radius: 0;
-    --nn-navitem-top-right-radius: 0;
-}
-
-.nn-navitem:is(.nn-has-custom-background, .nn-has-search-match):has(+ .nn-navitem:is(.nn-has-custom-background, .nn-has-search-match)) {
+/* Overdraw and zero shared corners only between adjacent filled backgrounds */
+.nn-navitem.nn-navitem-has-filled-next {
+    --nn-navitem-background-bottom-overdraw: -0.5px;
     --nn-navitem-bottom-left-radius: 0;
     --nn-navitem-bottom-right-radius: 0;
 }
 
-/* Apply the same corner trimming within the virtualized row wrapper */
-.nn-virtual-nav-item:has(> .nn-navitem:is(.nn-has-custom-background, .nn-has-search-match))
-    + .nn-virtual-nav-item:has(> .nn-navitem:is(.nn-has-custom-background, .nn-has-search-match))
-    > .nn-navitem:is(.nn-has-custom-background, .nn-has-search-match) {
+.nn-navitem.nn-navitem-has-filled-previous {
     --nn-navitem-top-left-radius: 0;
     --nn-navitem-top-right-radius: 0;
-}
-
-.nn-virtual-nav-item:has(> .nn-navitem:is(.nn-has-custom-background, .nn-has-search-match)):has(
-        + .nn-virtual-nav-item > .nn-navitem:is(.nn-has-custom-background, .nn-has-search-match)
-    )
-    > .nn-navitem:is(.nn-has-custom-background, .nn-has-search-match) {
-    --nn-navitem-bottom-left-radius: 0;
-    --nn-navitem-bottom-right-radius: 0;
 }
 
 /* Folder content - contains folder UI elements */
@@ -1938,8 +1895,7 @@ body {
     content: '';
     position: absolute;
     top: 0px;
-    /* Extend slightly beyond bottom item bounds (height rounding issue) to prevent hairline gaps when zoomed */
-    bottom: -0.2px;
+    bottom: var(--nn-navitem-background-bottom-overdraw);
     inset-inline-end: 0;
     inset-inline-start: calc(var(--level, 0) * var(--nn-setting-nav-indent) * -1);
     border-top-left-radius: var(--nn-navitem-top-left-radius, min(14px, var(--nn-theme-navitem-border-radius)));
@@ -1968,12 +1924,15 @@ body {
 .nn-desktop .nn-navitem:not([data-search-match]):hover::after {
     content: '';
     position: absolute;
-    top: 0;
-    bottom: 0;
+    top: 0px;
+    bottom: var(--nn-navitem-background-bottom-overdraw);
     inset-inline-start: 0;
     inset-inline-end: 0;
     background-color: var(--nn-theme-navitem-hover-bg);
-    border-radius: min(14px, var(--nn-theme-navitem-border-radius));
+    border-top-left-radius: var(--nn-navitem-top-left-radius, min(14px, var(--nn-theme-navitem-border-radius)));
+    border-top-right-radius: var(--nn-navitem-top-right-radius, min(14px, var(--nn-theme-navitem-border-radius)));
+    border-bottom-left-radius: var(--nn-navitem-bottom-left-radius, min(14px, var(--nn-theme-navitem-border-radius)));
+    border-bottom-right-radius: var(--nn-navitem-bottom-right-radius, min(14px, var(--nn-theme-navitem-border-radius)));
     box-shadow: inset 0 0 0 var(--nn-theme-navitem-border-width) var(--nn-theme-navitem-hover-border-color);
     z-index: 1;
     pointer-events: none;
@@ -2050,7 +2009,7 @@ body {
 /* Folder name text - truncates with ellipsis on overflow */
 .nn-navitem-name {
     font-size: var(--nn-setting-nav-font-size);
-    font-weight: var(--nn-theme-navitem-name-font-weight) !important;
+    font-weight: var(--nn-theme-navitem-name-font-weight);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -2064,24 +2023,24 @@ body {
 
 /* Custom colored folder names */
 .nn-navitem-name.nn-has-custom-color {
-    font-weight: var(--nn-theme-navitem-custom-color-name-font-weight) !important;
+    font-weight: var(--nn-theme-navitem-custom-color-name-font-weight);
 }
 
 /* Folder with folder note */
 .nn-navitem-name.nn-has-folder-note {
-    font-weight: var(--nn-theme-navitem-folder-note-name-font-weight) !important;
-    text-decoration: var(--nn-theme-navitem-folder-note-name-decoration) !important;
+    font-weight: var(--nn-theme-navitem-folder-note-name-font-weight);
+    text-decoration: var(--nn-theme-navitem-folder-note-name-decoration);
 }
 
 /* Folder with folder note and custom color uses custom color weight */
 .nn-navitem-name.nn-has-folder-note.nn-has-custom-color {
-    font-weight: var(--nn-theme-navitem-custom-color-name-font-weight) !important;
+    font-weight: var(--nn-theme-navitem-custom-color-name-font-weight);
 }
 
 /* Folder with folder note - show pointer cursor on hover */
 .nn-navitem-name.nn-has-folder-note:hover {
     cursor: pointer;
-    text-decoration: var(--nn-theme-navitem-folder-note-name-hover-decoration) !important;
+    text-decoration: var(--nn-theme-navitem-folder-note-name-hover-decoration);
 }
 
 /* Spacer element to push count to the end */
@@ -2113,6 +2072,22 @@ body {
     box-shadow: inset 0 0 0 var(--nn-theme-navitem-count-border-width) var(--nn-theme-navitem-count-border-color);
 }
 
+.nn-navitem-operator-indicator {
+    padding-inline: 4px;
+}
+
+.nn-navitem-operator-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+}
+
+.nn-navitem-operator-icon svg {
+    width: 12px;
+    height: 12px;
+}
+
 /* Hover action button - replaces badge/count on hover */
 .nn-navitem-hover-action-slot {
     position: relative;
@@ -2125,7 +2100,7 @@ body {
     overflow: visible;
 }
 
-.nn-navitem-hover-action-button {
+button.nn-icon-button.nn-navitem-hover-action-button {
     position: absolute;
     top: 50%;
     inset-inline-end: 0;
@@ -2133,12 +2108,12 @@ body {
     visibility: hidden;
     pointer-events: none;
     cursor: pointer;
-    height: 18px !important;
-    width: 18px !important;
-    min-height: 0 !important;
-    min-width: 0 !important;
-    padding: 0 !important;
-    border-radius: 50% !important;
+    height: 18px;
+    width: 18px;
+    min-height: 0;
+    min-width: 0;
+    padding: 0;
+    border-radius: 50%;
     z-index: 1;
 }
 
@@ -2202,7 +2177,7 @@ body {
 }
 
 .nn-shortcut-item .nn-shortcut-label[data-has-color='true'] {
-    font-weight: var(--nn-theme-navitem-custom-color-file-name-font-weight) !important;
+    font-weight: var(--nn-theme-navitem-custom-color-file-name-font-weight);
 }
 
 .nn-shortcut-item--missing .nn-shortcut-label {
@@ -2211,19 +2186,19 @@ body {
 
 /* Styles for shortcut labels that have an associated folder note */
 .nn-shortcut-item .nn-navitem-name.nn-has-folder-note .nn-shortcut-label {
-    font-weight: var(--nn-theme-navitem-folder-note-name-font-weight) !important;
-    text-decoration: var(--nn-theme-navitem-folder-note-name-decoration) !important;
+    font-weight: var(--nn-theme-navitem-folder-note-name-font-weight);
+    text-decoration: var(--nn-theme-navitem-folder-note-name-decoration);
 }
 
 /* Folder note shortcuts with custom color use custom color weight */
 .nn-shortcut-item .nn-navitem-name.nn-has-folder-note.nn-has-custom-color .nn-shortcut-label {
-    font-weight: var(--nn-theme-navitem-custom-color-file-name-font-weight) !important;
+    font-weight: var(--nn-theme-navitem-custom-color-file-name-font-weight);
 }
 
 /* Pointer cursor on hover for clickable folder note shortcuts */
 .nn-shortcut-item .nn-navitem-name.nn-has-folder-note:hover .nn-shortcut-label {
     cursor: pointer;
-    text-decoration: var(--nn-theme-navitem-folder-note-name-hover-decoration) !important;
+    text-decoration: var(--nn-theme-navitem-folder-note-name-hover-decoration);
 }
 
 .nn-drag-item .nn-shortcut-description {
@@ -2339,7 +2314,7 @@ body {
 }
 
 .nn-root-reorder-item .nn-shortcut-label[data-has-color='true'] {
-    font-weight: var(--nn-theme-navitem-custom-color-name-font-weight) !important;
+    font-weight: var(--nn-theme-navitem-custom-color-name-font-weight);
 }
 
 .nn-root-reorder-item--missing .nn-shortcut-label {
@@ -2485,6 +2460,7 @@ body {
     --nn-calendar-note-indicator-color: var(--nn-theme-calendar-note-indicator-color);
     --nn-calendar-task-indicator-color: var(--nn-theme-calendar-unfinished-task-indicator-color);
     --nn-calendar-active-editor-border-color: var(--nn-theme-calendar-day-active-border-color);
+    --nn-calendar-active-editor-border-width: var(--nn-theme-calendar-day-active-border-width);
 }
 
 .notebook-navigator-mobile :is(.nn-navigation-pane, .nn-list-pane, .nn-single-pane-calendar) {
@@ -2598,30 +2574,33 @@ body {
     white-space: nowrap;
 }
 
-.nn-navigation-calendar-period-button,
-.nn-navigation-calendar-nav-button,
-.nn-navigation-calendar-today,
-.nn-navigation-calendar-year-month,
-.nn-navigation-calendar-weeknumber-button,
-.nn-navigation-calendar-day {
+button.nn-navigation-calendar-period-button,
+button.nn-navigation-calendar-nav-button,
+button.nn-navigation-calendar-today,
+button.nn-navigation-calendar-year-month,
+button.nn-navigation-calendar-weeknumber-button,
+button.nn-navigation-calendar-day {
     -webkit-appearance: none;
     appearance: none;
-    border: none !important;
+    border: none;
     border-radius: 6px;
     cursor: pointer;
-    box-shadow: none !important;
+    box-shadow: none;
     outline: none;
-    transition:
-        background-color 120ms ease,
-        filter 120ms ease,
-        box-shadow 120ms ease;
 }
 
-.nn-navigation-calendar-period-button {
-    background: var(--nn-calendar-header-chip-bg) !important;
+.nn-navigation-calendar-period-button,
+.nn-navigation-calendar-weeknumber {
+    position: relative;
+}
+
+button.nn-navigation-calendar-period-button {
+    background: var(--nn-calendar-header-chip-bg);
     color: var(--nn-theme-calendar-header-color);
     font: inherit;
-    padding: 2px 1px;
+    box-sizing: border-box;
+    height: var(--nn-calendar-today-height);
+    padding: 0 1px;
     line-height: 1;
     display: inline-flex;
     align-items: center;
@@ -2637,20 +2616,30 @@ body {
     line-height: 1;
 }
 
-.nn-navigation-calendar-period-button.has-period-note {
-    text-decoration-line: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 2px;
+.nn-navigation-calendar-period-button.has-period-note:not(.nn-navigation-calendar-quarter-button)::after {
+    content: '';
+    position: absolute;
+    left: 3px;
+    right: 3px;
+    bottom: 2px;
+    height: 1px;
+    background-color: currentColor;
+    pointer-events: none;
+    z-index: 1;
 }
 
 .nn-navigation-calendar-quarter-button.has-period-note {
-    text-decoration: none;
+    box-shadow: none;
 }
 
 .nn-navigation-calendar-quarter-button.has-period-note .nn-navigation-calendar-quarter-value {
-    text-decoration-line: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 2px;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 1px;
+}
+
+.nn-navigation-calendar-period-button.is-active-editor-file .nn-navigation-calendar-active-outline,
+.nn-navigation-calendar-weeknumber.is-active-editor-file .nn-navigation-calendar-active-outline {
+    display: block;
 }
 
 .nn-navigation-calendar button.nn-navigation-calendar-period-button {
@@ -2679,7 +2668,6 @@ body {
     color: var(--nn-theme-foreground-muted);
     z-index: 0;
     flex: 0 0 auto;
-    transition: opacity 120ms ease;
 }
 
 .nn-navigation-calendar-month-help {
@@ -2715,6 +2703,20 @@ body {
     overflow: visible;
 }
 
+.nn-navigation-calendar-month.has-inline-help:not(.has-inline-month-nav) .nn-navigation-calendar-inline-help {
+    position: static;
+    right: auto;
+    top: auto;
+    transform: none;
+    width: 0;
+    min-width: 0;
+    height: 20px;
+    margin-left: 0;
+    padding: 0;
+    overflow: hidden;
+    flex: 0 0 auto;
+}
+
 .nn-navigation-calendar-month.has-inline-month-nav .nn-navigation-calendar-inline-month-center .nn-navigation-calendar-period-month {
     padding-inline: 1px;
 }
@@ -2725,8 +2727,8 @@ body {
     right: auto;
     top: 50%;
     transform: translateY(-50%);
-    width: 20px !important;
-    height: 20px !important;
+    width: 20px;
+    height: 20px;
 }
 
 .nn-navigation-calendar-quarter-inline {
@@ -2750,30 +2752,30 @@ body {
     justify-self: end;
 }
 
-.nn-navigation-calendar-nav-prev {
-    width: 24px !important;
-    justify-content: flex-start !important;
+button.nn-navigation-calendar-nav-button.nn-navigation-calendar-nav-prev {
+    width: 24px;
+    justify-content: flex-start;
 }
 
-.nn-navigation-calendar-nav-next {
-    width: 24px !important;
-    justify-content: flex-end !important;
+button.nn-navigation-calendar-nav-button.nn-navigation-calendar-nav-next {
+    width: 24px;
+    justify-content: flex-end;
 }
 
-.nn-navigation-calendar-nav-button {
+button.nn-navigation-calendar-nav-button {
     width: var(--nn-calendar-nav-button-size);
     height: var(--nn-calendar-nav-button-size);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: transparent !important;
+    background: transparent;
     color: var(--nn-theme-foreground-muted);
     padding: 0;
     line-height: 0;
 }
 
-.nn-navigation-calendar-today {
-    background: transparent !important;
+button.nn-navigation-calendar-today {
+    background: transparent;
     color: var(--nn-theme-foreground-muted);
     font: inherit;
     font-size: var(--nn-calendar-today-font-size);
@@ -2848,9 +2850,9 @@ body {
     gap: 4px;
 }
 
-.nn-navigation-calendar-year-nav-button {
-    width: 24px !important;
-    height: var(--nn-calendar-nav-button-size) !important;
+button.nn-navigation-calendar-nav-button.nn-navigation-calendar-year-nav-button {
+    width: 24px;
+    height: var(--nn-calendar-nav-button-size);
 }
 
 .nn-navigation-calendar-year-label {
@@ -2879,9 +2881,9 @@ body {
     aspect-ratio: 16 / 9;
 }
 
-.nn-navigation-calendar-year-month {
+button.nn-navigation-calendar-year-month {
     position: relative;
-    background-color: transparent !important;
+    background-color: transparent;
     color: var(--nn-theme-calendar-day-in-month-color);
     font: inherit;
     font-size: var(--nn-calendar-day-font-size);
@@ -2919,6 +2921,17 @@ body {
         inset 0 -1px 0 rgba(255, 255, 255, 0.05);
     pointer-events: none;
     z-index: 0;
+}
+
+.nn-navigation-calendar-active-outline {
+    display: none;
+    position: absolute;
+    inset: 0;
+    box-sizing: border-box;
+    border: var(--nn-calendar-active-editor-border-width) solid var(--nn-calendar-active-editor-border-color);
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 2;
 }
 
 .nn-navigation-calendar-year-month-label {
@@ -2980,8 +2993,11 @@ body {
 }
 
 .nn-navigation-calendar-year-month.is-selected-month {
-    box-shadow: inset 0 0 0 2px var(--nn-calendar-active-editor-border-color) !important;
     color: var(--nn-theme-calendar-day-in-month-color);
+}
+
+.nn-navigation-calendar-year-month.is-selected-month .nn-navigation-calendar-active-outline {
+    display: block;
 }
 
 .nn-navigation-calendar-year-month.is-selected-month.has-feature-image {
@@ -2990,7 +3006,7 @@ body {
 
 .nn-navigation-calendar[data-highlight-today='true']
     .nn-navigation-calendar-year-month.is-current-month:not(.has-feature-image):not(.has-feature-image-key) {
-    background-color: var(--nn-theme-calendar-day-today-bg) !important;
+    background-color: var(--nn-theme-calendar-day-today-bg);
     color: var(--nn-theme-calendar-day-today-color);
 }
 
@@ -3042,7 +3058,7 @@ body {
     min-height: var(--nn-calendar-weekday-row-height);
     display: grid;
     align-items: center;
-    column-gap: 1px;
+    gap: 0 1px;
     grid-template-columns: repeat(7, minmax(0, 1fr));
     color: var(--nn-theme-calendar-weekday-color);
     font-size: var(--nn-calendar-weekday-font-size);
@@ -3072,7 +3088,7 @@ body {
 .nn-navigation-calendar-week {
     display: grid;
     grid-template-columns: repeat(7, minmax(0, 1fr));
-    column-gap: 1px;
+    gap: 0 1px;
     align-items: center;
 }
 
@@ -3125,7 +3141,7 @@ body {
 
 .nn-navigation-calendar-weeknumber-button {
     width: 100%;
-    background: transparent !important;
+    background: transparent;
 }
 
 .nn-navigation-calendar button.nn-navigation-calendar-weeknumber {
@@ -3229,18 +3245,18 @@ body {
     border-bottom-right-radius: var(--nn-calendar-weekend-corner-radius);
 }
 
-.nn-navigation-calendar-day {
+button.nn-navigation-calendar-day {
     position: relative;
     height: auto;
     aspect-ratio: 1 / 1;
     box-sizing: border-box;
     min-width: 0;
     width: 100%;
-    padding: 0 !important;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: transparent !important;
+    background-color: transparent;
     color: var(--nn-theme-calendar-day-in-month-color);
     background-size: cover;
     background-position: center;
@@ -3262,15 +3278,15 @@ body {
 /* Hover effects only apply on hover-capable devices (prevents "stuck hover" on touch). */
 @media (hover: hover) and (pointer: fine) {
     .nn-navigation-calendar-nav-button:hover {
-        background-color: var(--nn-theme-calendar-hover-bg) !important;
+        background-color: var(--nn-theme-calendar-hover-bg);
     }
 
     .nn-navigation-calendar-help:hover {
-        background-color: transparent !important;
+        background-color: transparent;
     }
 
     .nn-navigation-calendar-month-help:hover {
-        background-color: transparent !important;
+        background-color: transparent;
     }
 
     .nn-navigation-calendar-month.has-inline-help .nn-navigation-calendar-inline-help {
@@ -3284,6 +3300,13 @@ body {
         opacity: 1;
         visibility: visible;
         pointer-events: auto;
+    }
+
+    .nn-navigation-calendar-month.has-inline-help:not(.has-inline-month-nav):hover .nn-navigation-calendar-inline-help,
+    .nn-navigation-calendar-month.has-inline-help:not(.has-inline-month-nav):focus-within .nn-navigation-calendar-inline-help {
+        width: 20px;
+        min-width: 20px;
+        margin-left: 2px;
     }
 
     :is(.nn-navigation-pane, .nn-list-pane, .nn-single-pane-calendar) .nn-navigation-calendar-header .nn-navigation-calendar-help-inline {
@@ -3301,27 +3324,27 @@ body {
     }
 
     .nn-navigation-calendar[data-split-header='true'] .nn-navigation-calendar-header .nn-navigation-calendar-help-inline {
-        width: 0 !important;
-        min-width: 0 !important;
-        padding: 0 !important;
-        margin: 0 !important;
+        width: 0;
+        min-width: 0;
+        padding: 0;
+        margin: 0;
         overflow: hidden;
     }
 
     .nn-navigation-calendar[data-split-header='true'] .nn-navigation-calendar-header:hover .nn-navigation-calendar-help-inline,
     .nn-navigation-calendar[data-split-header='true'] .nn-navigation-calendar-header:focus-within .nn-navigation-calendar-help-inline {
-        width: var(--nn-calendar-nav-button-size) !important;
-        min-width: var(--nn-calendar-nav-button-size) !important;
+        width: var(--nn-calendar-nav-button-size);
+        min-width: var(--nn-calendar-nav-button-size);
     }
 
     .nn-navigation-calendar-today:hover {
-        background-color: var(--nn-theme-calendar-hover-bg) !important;
+        background-color: var(--nn-theme-calendar-hover-bg);
     }
 
     .nn-navigation-calendar-period-button:hover,
     .nn-navigation-calendar-weeknumber-button:hover {
         filter: brightness(1.05);
-        background-color: var(--nn-theme-calendar-hover-bg) !important;
+        background-color: var(--nn-theme-calendar-hover-bg);
     }
 
     .nn-navigation-calendar-day:hover {
@@ -3329,7 +3352,7 @@ body {
     }
 
     .nn-navigation-calendar-day:hover:not(.has-feature-image):not(.has-feature-image-key) {
-        background-color: var(--nn-theme-calendar-hover-bg) !important;
+        background-color: var(--nn-theme-calendar-hover-bg);
     }
 
     .nn-navigation-calendar-year-month:hover {
@@ -3337,7 +3360,7 @@ body {
     }
 
     .nn-navigation-calendar-year-month:hover:not(.is-selected-month):not(.has-feature-image):not(.has-feature-image-key) {
-        background-color: var(--nn-theme-calendar-hover-bg) !important;
+        background-color: var(--nn-theme-calendar-hover-bg);
     }
 }
 
@@ -3375,13 +3398,8 @@ body {
     pointer-events: none;
 }
 
-.nn-navigation-calendar-day.is-active-editor-file {
-    box-shadow: inset 0 0 0 2px var(--nn-calendar-active-editor-border-color) !important;
-}
-
-.nn-navigation-calendar[data-highlight-today='true']
-    .nn-navigation-calendar-day.is-today.is-active-editor-file:not(.has-feature-image):not(.has-feature-image-key)::before {
-    box-shadow: inset 0 0 0 2px var(--nn-calendar-active-editor-border-color);
+.nn-navigation-calendar-day.is-active-editor-file .nn-navigation-calendar-active-outline {
+    display: block;
 }
 
 /* Center the two-indicator group horizontally when both note and unfinished-task indicators are visible. */
@@ -3422,7 +3440,7 @@ body {
 .nn-navigation-calendar-day.is-today .nn-navigation-calendar-day-number,
 .nn-navigation-calendar-day.has-feature-image .nn-navigation-calendar-day-number,
 .nn-navigation-calendar-day.has-feature-image-key .nn-navigation-calendar-day-number {
-    font-weight: 600 !important;
+    font-weight: 600;
 }
 
 .nn-navigation-calendar-day.has-feature-image {
@@ -3501,6 +3519,8 @@ body {
 
 .nn-calendar-right-sidebar .nn-navigation-calendar {
     --nn-calendar-header-chip-bg: var(--nn-calendar-right-sidebar-bg);
+    --nn-calendar-header-font-size: 13px;
+    --nn-calendar-today-font-size: 13px;
 }
 
 .nn-calendar-right-sidebar .nn-navigation-calendar-year-grid {
@@ -3510,34 +3530,6 @@ body {
 .nn-calendar-right-sidebar .nn-navigation-calendar-year-month {
     width: 100%;
     height: 100%;
-}
-
-/* ========================================================================
-   Header mode: compact yearly (right sidebar)
-   ======================================================================== */
-
-.nn-calendar-right-sidebar .nn-navigation-calendar[data-compact-header='true'] .nn-navigation-calendar-header {
-    height: auto;
-    min-height: var(--nn-calendar-header-row-height);
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: center;
-    gap: 6px;
-}
-
-.nn-calendar-right-sidebar .nn-navigation-calendar[data-compact-header='true'] .nn-navigation-calendar-month {
-    width: 100%;
-    justify-content: center;
-    font-size: calc(var(--nn-calendar-header-font-size) + 2px);
-}
-
-.nn-calendar-right-sidebar
-    .nn-navigation-calendar[data-compact-header='true']
-    .nn-navigation-calendar-month
-    .nn-navigation-calendar-period-month {
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
 }
 
 .is-mobile .nn-calendar-right-sidebar {
@@ -3606,21 +3598,23 @@ body {
 }
 
 .nn-list-title-label--folder-note {
-    text-decoration: var(--nn-theme-navitem-folder-note-name-decoration) !important;
+    text-decoration: var(--nn-theme-navitem-folder-note-name-decoration);
 }
 
 .nn-list-title-label--folder-note:hover {
     cursor: pointer;
-    text-decoration: var(--nn-theme-navitem-folder-note-name-hover-decoration) !important;
+    text-decoration: var(--nn-theme-navitem-folder-note-name-hover-decoration);
 }
 
 /* File - container for each file in the list */
 .nn-file {
+    --nn-file-item-border-radius: min(16px, var(--nn-theme-file-border-radius));
     background: transparent;
     padding: 0;
     -webkit-user-select: none;
     user-select: none;
     position: relative;
+    height: 100%;
 
     /* CSS Custom Properties for file items - themes can override these */
     /* Isolate layout and style calculations per item while allowing ::before to extend beyond bounds */
@@ -3637,34 +3631,46 @@ body {
 .nn-file-content {
     padding: var(--nn-file-padding-vertical-mobile, var(--nn-file-padding-vertical)) var(--nn-file-item-padding-horizontal);
     margin: 0;
-    border-radius: min(16px, var(--nn-theme-file-border-radius));
+    border-radius: var(--nn-file-item-border-radius);
     background: transparent;
     position: relative; /* For absolute positioning of reveal overlay */
+    height: 100%;
+    box-sizing: border-box;
 }
 
-.nn-file.nn-has-custom-background .nn-file-content {
+.nn-file.nn-has-custom-background::before {
+    content: '';
+    position: absolute;
+    top: 0px;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    /* Extend slightly beyond bottom item bounds (height rounding issue) to prevent hairline gaps when zoomed */
+    bottom: -0.5px;
     background-color: var(--nn-file-custom-bg-color);
-    border-top-left-radius: var(--nn-file-top-left-radius, min(16px, var(--nn-theme-file-border-radius)));
-    border-top-right-radius: var(--nn-file-top-right-radius, min(16px, var(--nn-theme-file-border-radius)));
-    border-bottom-left-radius: var(--nn-file-bottom-left-radius, min(16px, var(--nn-theme-file-border-radius)));
-    border-bottom-right-radius: var(--nn-file-bottom-right-radius, min(16px, var(--nn-theme-file-border-radius)));
+    border-top-left-radius: var(--nn-file-top-left-radius, var(--nn-file-item-border-radius));
+    border-top-right-radius: var(--nn-file-top-right-radius, var(--nn-file-item-border-radius));
+    border-bottom-left-radius: var(--nn-file-bottom-left-radius, var(--nn-file-item-border-radius));
+    border-bottom-right-radius: var(--nn-file-bottom-right-radius, var(--nn-file-item-border-radius));
     box-shadow: inset 0 0 0 var(--nn-theme-file-border-width) transparent;
+    z-index: 0;
+    pointer-events: none;
 }
 
-.nn-virtual-file-item:has(> .nn-file.nn-has-custom-background)::after,
-.nn-virtual-file-item:has(+ .nn-virtual-file-item > .nn-file.nn-has-custom-background)::after {
+.nn-file.nn-has-custom-background > .nn-file-content {
+    z-index: 2;
+}
+
+.nn-virtual-file-item-has-custom-background::after,
+.nn-virtual-file-item-has-custom-background-next::after {
     display: none;
 }
 
-.nn-virtual-file-item:has(> .nn-file.nn-has-custom-background)
-    + .nn-virtual-file-item:has(> .nn-file.nn-has-custom-background)
-    > .nn-file.nn-has-custom-background {
+.nn-virtual-file-item-has-custom-background-previous > .nn-file.nn-has-custom-background {
     --nn-file-top-left-radius: 0;
     --nn-file-top-right-radius: 0;
 }
 
-.nn-virtual-file-item:has(> .nn-file.nn-has-custom-background):has(+ .nn-virtual-file-item > .nn-file.nn-has-custom-background)
-    > .nn-file.nn-has-custom-background {
+.nn-virtual-file-item-has-custom-background-next > .nn-file.nn-has-custom-background {
     --nn-file-bottom-left-radius: 0;
     --nn-file-bottom-right-radius: 0;
 }
@@ -3676,6 +3682,7 @@ body {
     gap: var(--nn-file-row-gap);
     align-items: flex-start;
     position: relative;
+    height: 100%;
 }
 
 .nn-file-icon-slot {
@@ -3747,9 +3754,9 @@ body {
     flex-direction: column;
     gap: 0;
     order: 1; /* Ensure it appears on the left */
-    min-height: var(--nn-feature-image-min-size); /* Minimum height to match minimum image size */
-    justify-content: flex-start; /* Top-align content */
-    /* No align-self - let it stretch naturally */
+    height: 100%;
+    min-height: 0;
+    justify-content: flex-start;
 }
 
 /* Compact mode file text content - same as above but without min-height */
@@ -3776,8 +3783,7 @@ body {
     -webkit-box-orient: vertical;
     line-height: var(--nn-file-title-line-height);
     word-break: break-word;
-    min-height: calc(var(--nn-file-title-line-height) * var(--filename-rows, 1));
-    height: calc(var(--nn-file-title-line-height) * var(--filename-rows, 1));
+    max-height: calc(var(--nn-file-title-line-height) * var(--filename-rows, 1));
 }
 
 .nn-file-name[data-title-rows='1'] {
@@ -3842,7 +3848,7 @@ body {
     top: 8px; /* Default: 8px for normal mode */
     inset-inline-end: 8px;
     height: 20px;
-    display: none;
+    display: flex;
     background: var(--nn-theme-quick-actions-bg);
     border: 1px solid var(--nn-theme-quick-actions-border);
     border-radius: min(12px, var(--nn-theme-quick-actions-border-radius));
@@ -3885,16 +3891,10 @@ body {
     top: max(0px, calc((var(--nn-file-title-line-height) + var(--nn-file-padding-vertical-compact) * 2 - 20px) / 2));
 }
 
-/* Compact mode with tags or 2 title rows: align with compact padding */
-.nn-quick-actions-panel.nn-compact-mode[data-title-rows='2'],
+/* Compact mode with tags or more than 1 title row: align with compact padding */
+.nn-quick-actions-panel.nn-compact-mode:not([data-title-rows='1']),
 .nn-quick-actions-panel.nn-compact-mode[data-has-tags='true'] {
     top: var(--nn-file-padding-vertical-compact);
-}
-
-/* Panel appears when hovering anywhere on file row */
-.nn-desktop .nn-file:hover .nn-quick-actions-panel,
-.nn-desktop.nn-single-pane .nn-file:hover .nn-quick-actions-panel {
-    display: flex;
 }
 
 /* Second line container - holds date and preview text */
@@ -3918,11 +3918,6 @@ body {
     line-height: var(--nn-file-single-text-line-height);
 }
 
-/* Date + preview (same line): match legacy spacing. */
-.nn-file-second-line > .nn-file-date + .nn-file-preview {
-    margin-inline-start: 8px;
-}
-
 /* Date + parent folder (same line): match legacy spacing when dot separator is disabled. */
 .nn-file-second-line > .nn-file-date + .nn-parent-folder[data-dot-separator='false'] {
     margin-inline-start: 8px;
@@ -3934,6 +3929,10 @@ body {
     flex-shrink: 0;
     margin-inline-end: 4px;
     font-size: 0.65em;
+}
+
+.nn-file-second-line .nn-parent-folder {
+    flex: 0 1 auto;
 }
 
 /* File preview text - secondary line showing file content */
@@ -3948,21 +3947,7 @@ body {
     -webkit-line-clamp: var(--preview-rows, 1);
     -webkit-box-orient: vertical;
     word-break: break-word;
-    flex: 1;
-}
-
-/* Multi-line preview - always take up configured number of lines */
-.nn-file-preview:not(.nn-file-second-line .nn-file-preview) {
-    min-height: calc(var(--nn-file-multiline-text-line-height) * var(--preview-rows, 1));
-    height: calc(var(--nn-file-multiline-text-line-height) * var(--preview-rows, 1));
-}
-
-/* Preview on same line as date - match date line-height for alignment */
-.nn-file-second-line .nn-file-preview {
-    line-height: var(--nn-file-single-text-line-height);
-    display: block;
-    white-space: nowrap;
-    word-break: normal;
+    max-height: calc(var(--nn-file-multiline-text-line-height) * var(--preview-rows, 1));
 }
 
 /* Parent folder indicator shown under file names */
@@ -3988,6 +3973,9 @@ body {
 }
 
 .nn-parent-folder-content[data-has-background='true'] {
+    box-sizing: border-box;
+    height: var(--nn-file-single-text-line-height);
+    line-height: calc(var(--nn-file-single-text-line-height) - 2px);
     border-radius: 4px;
     padding: 1px 4px;
 }
@@ -4066,7 +4054,8 @@ body {
     --nn-file-pill-border-color-resolved: var(--nn-theme-file-tag-border-color);
     display: inline-flex;
     align-items: center;
-    height: 20px;
+    box-sizing: border-box;
+    height: var(--nn-file-tag-row-height);
     line-height: 1;
     padding: 0 8px;
     background-color: var(--nn-theme-file-tag-bg);
@@ -4188,9 +4177,17 @@ body {
    ======================================================================== */
 
 /* Compact file item - more compact list appearance */
+.nn-file.nn-compact {
+    --nn-file-item-border-radius: min(14px, var(--nn-theme-navitem-border-radius));
+}
+
 .nn-file.nn-compact .nn-file-content {
     padding: var(--nn-file-padding-vertical-compact) var(--nn-file-item-padding-horizontal); /* Reduced vertical padding */
-    border-radius: min(14px, var(--nn-theme-navitem-border-radius));
+}
+
+/* Mobile compact file items use larger touch targets. */
+.notebook-navigator-mobile .nn-file.nn-compact .nn-file-content {
+    padding: var(--nn-file-padding-vertical-compact-mobile) var(--nn-file-item-padding-horizontal);
 }
 
 /* Compact file name - no bold, smaller font like folder items */
@@ -4199,6 +4196,11 @@ body {
     font-weight: var(--nn-theme-file-compact-name-font-weight);
     margin-bottom: 0;
     line-height: var(--nn-file-title-line-height);
+}
+
+/* Mobile compact mode file names use the mobile compact font variable. */
+.notebook-navigator-mobile .nn-file.nn-compact .nn-file-name {
+    font-size: var(--nn-compact-font-size-mobile, var(--nn-compact-font-size, 15px));
 }
 
 /* Apply standard font weight to colored file names in compact mode */
@@ -4231,14 +4233,14 @@ body {
 .nn-file.nn-compact.nn-selected .nn-file-name[data-has-color='true'] {
     color: var(--nn-file-name-custom-color);
 }
-/* Source: src/styles/sections/list-feature-images.css */
+/* Source: src/styles/sections/list-file-thumbnails.css */
 
 /* ========================================================================
-   Feature Image Styles
+   File Thumbnail Styles
    ======================================================================== */
 
-/* Feature image container - right-aligned image thumbnail */
-.nn-feature-image {
+/* File thumbnail container - right-aligned thumbnail slot */
+.nn-file-thumbnail {
     flex-shrink: 0;
     border-radius: min(32px, var(--nn-theme-file-feature-border-radius));
     overflow: hidden;
@@ -4248,59 +4250,77 @@ body {
     align-self: center;
 }
 
-.nn-feature-image--square {
-    width: var(--nn-feature-image-min-size);
-    height: var(--nn-feature-image-min-size);
+.nn-file-thumbnail--square {
+    width: var(--nn-file-thumbnail-min-size);
+    height: var(--nn-file-thumbnail-min-size);
 }
 
-.nn-feature-image--natural {
+.nn-file-thumbnail--natural {
     width: auto;
-    height: var(--nn-feature-image-min-size);
-    aspect-ratio: var(--nn-feature-image-aspect-ratio, 1);
+    height: var(--nn-file-thumbnail-min-size);
+    aspect-ratio: var(--nn-file-thumbnail-aspect-ratio, 1);
 }
 
-.nn-feature-image--hidden {
+.nn-file-thumbnail--hidden {
     display: none;
 }
 
 /* Dynamic sizing based on calculated item height */
-.nn-virtual-file-item .nn-feature-image {
-    /* Size based on item height minus total padding */
+.nn-virtual-file-item .nn-file-thumbnail {
+    /* Size based on the same padded content box as the text stack. */
     --image-size: clamp(
-        var(--nn-feature-image-min-size),
+        var(--nn-file-thumbnail-min-size),
         calc(var(--item-height) - var(--nn-file-padding-total-mobile, var(--nn-file-padding-total))),
-        var(--nn-feature-image-max-size)
+        var(--nn-file-thumbnail-max-size)
     );
 }
 
-.nn-virtual-file-item .nn-feature-image--square {
+.nn-virtual-file-item .nn-file-thumbnail--square {
     width: var(--image-size);
     height: var(--image-size);
 }
 
-.nn-virtual-file-item .nn-feature-image--natural {
+.nn-virtual-file-item .nn-file-thumbnail--extension-badge {
+    width: var(--nn-file-thumbnail-min-size);
+    height: var(--nn-file-thumbnail-min-size);
+}
+
+.nn-virtual-file-item .nn-file-thumbnail--natural {
     height: var(--image-size);
     max-height: var(--image-size);
 }
 
-/* Feature image element - covers container with proper aspect ratio */
-.nn-feature-image-img {
+/* Thumbnail image element - covers container with proper aspect ratio */
+.nn-file-thumbnail-img {
     width: 100%;
     height: 100%;
 }
 
-.nn-feature-image--square .nn-feature-image-img {
+.nn-file-thumbnail--inset-highlight::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.24),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.nn-file-thumbnail--square .nn-file-thumbnail-img {
     object-fit: cover;
     object-position: center top;
 }
 
-.nn-feature-image--natural .nn-feature-image-img {
+.nn-file-thumbnail--natural .nn-file-thumbnail-img {
     object-fit: contain;
     object-position: center;
 }
 
 /* Selected file image - slightly transparent when selected */
-.nn-file.nn-selected .nn-feature-image {
+.nn-file.nn-selected .nn-file-thumbnail {
     opacity: 0.9;
 }
 
@@ -4324,68 +4344,142 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.1px;
 }
-/* Source: src/styles/sections/list-date-headers.css */
+
+.nn-file-extension-icon {
+    width: min(24px, 42%);
+    height: min(24px, 42%);
+    color: var(--nn-theme-foreground-muted);
+}
+/* Source: src/styles/sections/list-group-headers.css */
 
 /* ========================================================================
-   Date Group Headers
+   List Group Headers
    ======================================================================== */
 
-/* Date group headers for grouped files */
-.nn-date-group-header {
-    height: var(--nn-date-header-height-subsequent-mobile, var(--nn-date-header-height-subsequent));
+/* List group headers for grouped files */
+.nn-list-group-header {
+    height: var(--nn-list-group-header-height-mobile, var(--nn-list-group-header-height));
     box-sizing: border-box;
-    padding: var(--nn-date-header-padding-top-mobile, var(--nn-date-header-padding-top)) var(--nn-file-item-padding-horizontal)
-        var(--nn-date-header-padding-bottom-mobile, var(--nn-date-header-padding-bottom)) var(--nn-file-item-padding-horizontal);
+    padding: 0 var(--nn-file-item-padding-horizontal);
     font-size: var(--nn-file-small-size-mobile, var(--nn-file-small-size));
     font-weight: var(--nn-theme-list-group-header-font-weight);
     color: var(--nn-theme-list-group-header-color);
-    background-color: transparent !important;
+    background-color: transparent;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 6px;
 }
 
-/* First date header - no top margin or extra padding for first group */
-.nn-date-group-header.nn-first-header {
-    height: var(--nn-date-header-height-mobile, var(--nn-date-header-height));
-    padding: 0 var(--nn-file-item-padding-horizontal);
-    align-items: center;
+.nn-list-group-header-spacer {
+    height: var(--item-height);
 }
 
-.nn-date-group-header-icon {
+.nn-list-sticky-header {
+    position: sticky;
+    top: 0;
+    /* Keep the sticky copy out of layout so it overlays the virtualized list rows. */
+    height: 0;
+    flex: 0 0 0;
+    overflow: visible;
+    z-index: 200;
+    pointer-events: none;
+}
+
+.nn-list-pane-scroller .nn-virtual-list-group-header:not(.nn-first-list-group-header)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    inset-inline-start: var(--nn-file-item-padding-horizontal);
+    inset-inline-end: var(--nn-file-item-padding-horizontal);
+    height: var(--nn-separator-height);
+    background-color: var(--nn-theme-list-separator-color);
+    z-index: 100;
+    pointer-events: none;
+}
+
+.nn-list-pane-scroller .nn-virtual-list-group-header.nn-hide-separator-selection::after {
+    display: none;
+}
+
+.nn-list-sticky-header .nn-list-group-header {
+    position: relative;
+    overflow: visible;
+    background-color: var(--nn-theme-list-bg);
+    pointer-events: auto;
+}
+
+.nn-list-sticky-header .nn-list-group-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    inset-inline-start: calc(-1 * var(--nn-scroller-padding));
+    inset-inline-end: calc(-1 * var(--nn-scroller-padding));
+    background-color: var(--nn-theme-list-bg);
+    z-index: -1;
+}
+
+.nn-list-sticky-header .nn-list-group-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    inset-inline-start: calc(-1 * var(--nn-scroller-padding));
+    inset-inline-end: calc(-1 * var(--nn-scroller-padding));
+    height: var(--nn-separator-height);
+    background-color: var(--nn-theme-list-separator-color);
+    z-index: 100;
+    pointer-events: none;
+}
+
+.nn-list-sticky-header.nn-first-list-group-header .nn-list-group-header::after {
+    display: none;
+}
+
+.nn-list-group-header-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: var(--nn-date-header-icon-size, var(--nn-file-icon-size-mobile, var(--nn-file-icon-size)));
-    height: var(--nn-date-header-icon-size, var(--nn-file-icon-size-mobile, var(--nn-file-icon-size)));
+    width: var(--nn-list-group-header-icon-size, var(--nn-file-icon-size-mobile, var(--nn-file-icon-size)));
+    height: var(--nn-list-group-header-icon-size, var(--nn-file-icon-size-mobile, var(--nn-file-icon-size)));
     color: var(--nn-theme-list-group-header-color);
     flex: 0 0 auto;
 }
 
-.nn-date-group-header-icon svg {
+.nn-list-group-header-icon svg {
     width: 100%;
     height: 100%;
 }
 
-.nn-date-group-header-text {
+.nn-list-group-header-text {
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.nn-date-group-header-text--folder-note {
-    text-decoration: var(--nn-theme-navitem-folder-note-name-decoration) !important;
+.nn-list-group-header-text--folder-note {
+    text-decoration: var(--nn-theme-navitem-folder-note-name-decoration);
 }
 
-.nn-date-group-header-text--folder-note:hover {
+.nn-list-group-header-text--folder-note:hover {
     cursor: pointer;
-    text-decoration: var(--nn-theme-navitem-folder-note-name-hover-decoration) !important;
+    text-decoration: var(--nn-theme-navitem-folder-note-name-hover-decoration);
 }
 
 .nn-pinned-section-header {
     align-items: center;
+    user-select: none;
+}
+
+.nn-pinned-section-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    min-width: 0;
+    cursor: pointer;
 }
 
 /* Virtual list item - absolute positioning for list pane items */
@@ -4502,16 +4596,12 @@ body {
     inset-inline-start: 0;
     inset-inline-end: 0;
     /* Extend slightly beyond bottom item bounds (height rounding issue) to prevent hairline gaps when zoomed */
-    bottom: -0.2px;
+    bottom: -0.5px;
     /* Pre-composited solid color prevents hairlines by blending alpha with pane background */
     background-color: var(--nn-selected-file-bg-color);
-    border-radius: min(16px, var(--nn-theme-file-border-radius));
+    border-radius: var(--nn-file-item-border-radius);
     box-shadow: inset 0 0 0 var(--nn-theme-file-border-width) var(--nn-selected-file-border-color);
     z-index: 0; /* Below separator lines */
-}
-
-.nn-file.nn-compact.nn-selected .nn-file-content::before {
-    border-radius: min(14px, var(--nn-theme-navitem-border-radius));
 }
 
 /* Adjust rounded corners for multiselection */
@@ -4536,8 +4626,7 @@ body {
     top: 0px;
     inset-inline-start: 0;
     inset-inline-end: 0;
-    /* Extend slightly beyond bottom item bounds (height rounding issue) to prevent hairline gaps when zoomed */
-    bottom: -0.2px;
+    bottom: var(--nn-navitem-background-bottom-overdraw);
     /* Pre-composited solid color prevents hairlines by blending alpha with pane background */
     background-color: var(--nn-selected-navitem-bg-color);
     border-top-left-radius: var(--nn-navitem-top-left-radius, min(14px, var(--nn-theme-navitem-border-radius)));
@@ -4622,15 +4711,6 @@ body.nn-resizing {
     outline-offset: -2px;
 }
 
-/* Disable drag and drop feedback on mobile */
-.notebook-navigator-mobile [draggable='true'] {
-    cursor: default !important;
-}
-
-.notebook-navigator-mobile .nn-drag-over {
-    background-color: transparent !important;
-}
-
 /* Special visual feedback for tag drop zones - uses pre-composited solid color */
 [data-drop-zone='tag'].nn-drag-over {
     background-color: var(--nn-computed-tag-positive-bg, var(--nn-theme-tag-positive-bg));
@@ -4646,6 +4726,20 @@ body.nn-resizing {
 [data-drop-zone='tag'][data-tag='__untagged__'].nn-drag-over {
     background-color: var(--nn-computed-tag-negative-bg, var(--nn-theme-tag-negative-bg));
     border-radius: min(14px, var(--nn-theme-navitem-border-radius));
+}
+
+/* Disable drag and drop feedback on mobile */
+.notebook-navigator-mobile [draggable='true'] {
+    cursor: default;
+}
+
+.notebook-navigator-mobile .nn-navitem.nn-drag-over,
+.notebook-navigator-mobile [data-drop-zone].nn-drag-over {
+    background-color: transparent;
+}
+
+.notebook-navigator-mobile .nn-list-pane-scroller.nn-drag-over {
+    outline: none;
 }
 
 /* Empty placeholder to hide browser's default drag preview */
@@ -5374,22 +5468,23 @@ body.nn-resizing {
 /* Version container */
 .nn-whats-new-version {
     margin-bottom: 16px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--background-modifier-border);
 }
 
-/* Version container - last child no border */
+/* Version container - last child no margin */
 .nn-whats-new-version:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
+    margin-bottom: 0;
 }
 
 /* Version header */
 .nn-whats-new-version h3 {
+    display: block;
     font-size: 14px;
     font-weight: 600;
     color: var(--nn-theme-foreground);
-    margin: 0 0 4px 0;
+    background: var(--background-secondary);
+    margin: 0 0 4px;
+    padding: 6px 10px;
+    border-radius: 6px;
 }
 
 /* Feature list */
@@ -5418,14 +5513,6 @@ body.nn-resizing {
     border-top: 1px solid var(--background-modifier-border);
     margin-top: 0;
     margin-bottom: 16px;
-}
-
-/* Version date */
-.nn-whats-new-date {
-    color: var(--nn-theme-foreground-muted);
-    font-size: 12px;
-    display: block;
-    margin-bottom: 8px;
 }
 
 /* Release banner image */
@@ -5608,13 +5695,9 @@ body.nn-resizing {
         font-size: 16px;
     }
 
-    /* Version header and date sizes on mobile */
+    /* Version header size on mobile */
     .nn-whats-new-version h3 {
         font-size: 15px;
-    }
-
-    .nn-whats-new-date {
-        font-size: 14px;
     }
 }
 
@@ -5637,11 +5720,6 @@ body.nn-resizing {
     .nn-whats-new-version h3 {
         font-size: 15px;
     }
-
-    /* Date line */
-    .nn-whats-new-date {
-        font-size: 14px;
-    }
 }
 /* Source: src/styles/sections/modal-icon-picker.css */
 
@@ -5653,23 +5731,16 @@ body.nn-resizing {
 .modal.nn-icon-picker-modal {
     width: 480px;
     max-width: calc(100vw - 40px);
+    height: auto;
 }
 
 /* Icon picker content layout */
 .modal.nn-icon-picker-modal .modal-content {
     padding: 0;
     height: 100%;
+    min-height: 380px;
     display: flex;
     flex-direction: column;
-}
-
-/* Icon picker modal height control */
-.modal.nn-icon-picker-modal {
-    height: auto;
-}
-
-/* Prevent icon picker content overflow */
-.modal.nn-icon-picker-modal .modal-content {
     overflow: hidden;
 }
 
@@ -5720,11 +5791,16 @@ body.nn-resizing {
 
 /* Icon category headers */
 .nn-icon-section-header {
-    font-size: 13px;
-    font-weight: 400;
+    font-size: var(--font-ui-small);
+    font-weight: 600;
     color: var(--nn-theme-foreground-muted);
     letter-spacing: 0.5px;
-    margin-bottom: 12px;
+    margin-top: 12px;
+    margin-bottom: 4px;
+}
+
+.nn-icon-section-header:first-child {
+    margin-top: 0;
 }
 
 /* Icon grid layout - 5 columns */
@@ -5740,7 +5816,7 @@ body.nn-resizing {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 8px 8px;
+    padding: 8px;
     border-radius: var(--radius-s);
 }
 
@@ -5899,21 +5975,21 @@ body.nn-resizing {
     position: relative;
 }
 
-.modal.nn-property-keys-modal .nn-property-keys-search {
+.modal.nn-property-keys-modal input.nn-property-keys-search {
     margin: 0;
     height: 32px;
-    padding: 4px 36px 4px 12px !important;
-    border-radius: 999px !important;
-    border: 1px solid var(--nn-theme-list-search-border-color) !important;
+    padding: 4px 36px 4px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--nn-theme-list-search-border-color);
 }
 
-.modal.nn-property-keys-modal .nn-property-keys-search.is-active {
-    background: var(--nn-theme-list-search-active-bg) !important;
+.modal.nn-property-keys-modal input.nn-property-keys-search.is-active {
+    background: var(--nn-theme-list-search-active-bg);
 }
 
-.modal.nn-property-keys-modal .nn-property-keys-search:focus {
-    border-color: var(--nn-theme-list-search-border-color) !important;
-    box-shadow: 0 0 0 2px var(--nn-theme-list-search-border-color) !important;
+.modal.nn-property-keys-modal input.nn-property-keys-search:focus {
+    border-color: var(--nn-theme-list-search-border-color);
+    box-shadow: 0 0 0 2px var(--nn-theme-list-search-border-color);
 }
 
 .modal.nn-property-keys-modal .nn-property-keys-search-clear {
@@ -6095,6 +6171,42 @@ body.nn-resizing {
 .is-mobile .modal.nn-property-keys-modal .nn-property-keys-footer {
     padding-top: var(--size-2-3);
 }
+/* Source: src/styles/sections/modal-settings-transfer.css */
+
+/* ========================================================================
+   Settings transfer modal
+   ======================================================================== */
+
+.modal.nn-settings-transfer-modal {
+    width: min(720px, calc(100vw - 80px));
+    max-width: min(720px, calc(100vw - 80px));
+}
+
+.modal.nn-settings-transfer-modal .modal-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.nn-settings-transfer-editor-setting {
+    margin-bottom: 0;
+}
+
+.nn-settings-transfer-editor {
+    min-height: 280px;
+    margin-top: 8px;
+    margin-bottom: 0;
+    resize: vertical;
+    font-family: var(--font-monospace);
+    line-height: 1.5;
+}
+
+.is-mobile .modal.nn-settings-transfer-modal {
+    max-width: calc(100vw - 24px);
+}
+
+.is-mobile .modal.nn-settings-transfer-modal .nn-settings-transfer-editor {
+    min-height: 220px;
+}
 /* Source: src/styles/sections/layout-virtual-list.css */
 
 /* ========================================================================
@@ -6134,6 +6246,7 @@ body.nn-resizing {
 /* Virtual file item wrapper - position relative for separator positioning */
 .nn-virtual-file-item {
     position: relative;
+    height: var(--item-height);
     /* Isolate layout and style calculations per item while allowing overlays to extend beyond bounds */
     contain: layout style;
 }
@@ -6343,6 +6456,20 @@ body.nn-resizing {
     text-align: center;
 }
 
+.nn-setting-info-container.nn-setting-info-list .setting-item-info,
+.nn-setting-info-container.nn-setting-info-list .setting-item-description {
+    text-align: left;
+}
+
+.nn-setting-info-list ol {
+    margin: 6px 0 0 1.5em;
+    padding: 0;
+}
+
+.nn-setting-info-list li + li {
+    margin-top: 4px;
+}
+
 .nn-sub-settings > .setting-item.nn-setting-property-keys-info:last-child {
     padding-bottom: 0;
 }
@@ -6467,18 +6594,31 @@ body.nn-resizing {
     margin-inline-start: auto;
 }
 
-.nn-toolbar-visibility-toggle {
+button.nn-toolbar-visibility-toggle.nn-mobile-toolbar-button {
     position: relative;
     padding: 0;
-    /* Override mobile toolbar button dimensions for settings */
-    width: 32px !important;
-    height: 32px !important;
-    min-width: 32px !important;
-    min-height: 32px !important;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
 }
 
-.nn-toolbar-visibility-toggle:not(.nn-mobile-toolbar-button-active) {
+button.nn-toolbar-visibility-toggle.nn-mobile-toolbar-button:not(.nn-mobile-toolbar-button-active) {
     opacity: 0.6;
+}
+
+button.nn-toolbar-visibility-toggle.nn-mobile-toolbar-button.nn-mobile-toolbar-button-active {
+    color: var(--nn-theme-mobile-toolbar-button-active-icon-color);
+    background-color: var(--nn-theme-mobile-toolbar-button-active-bg);
+}
+
+button.nn-toolbar-visibility-toggle.nn-mobile-toolbar-button.nn-mobile-toolbar-button-active .nn-toolbar-visibility-icon {
+    color: var(--nn-theme-mobile-toolbar-button-active-icon-color);
+}
+
+button.nn-toolbar-visibility-toggle.nn-mobile-toolbar-button.nn-mobile-toolbar-button-active svg {
+    stroke: var(--nn-theme-mobile-toolbar-button-active-icon-color);
+    stroke-width: 2;
 }
 
 .nn-toolbar-visibility-icon {
@@ -6522,28 +6662,28 @@ body.nn-resizing {
 }
 
 /* YouTube-style play button used in settings */
-.nn-youtube-button {
-    background-color: #ff0000 !important;
-    border: none !important;
-    color: #ffffff !important;
+button.nn-youtube-button {
+    background-color: #ff0000;
+    border: none;
+    color: #ffffff;
     min-width: 54px;
 }
 
-.nn-youtube-button:hover {
-    background-color: #cc0000 !important;
+button.nn-youtube-button:hover {
+    background-color: #cc0000;
 }
 
-.nn-youtube-button svg {
-    color: #ffffff !important;
-    fill: #ffffff !important;
-    stroke: none !important;
+button.nn-youtube-button svg {
+    color: #ffffff;
+    fill: #ffffff;
+    stroke: none;
 }
 
-.is-mobile .nn-toolbar-visibility-toggle {
-    width: 44px !important;
-    height: 44px !important;
-    min-width: 44px !important;
-    min-height: 44px !important;
+.is-mobile button.nn-toolbar-visibility-toggle.nn-mobile-toolbar-button {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
 }
 
 .is-mobile .nn-toolbar-visibility-icon {
@@ -6557,11 +6697,11 @@ body.nn-resizing {
 }
 
 /* Android-specific adjustments for smaller buttons */
-.notebook-navigator-android .nn-toolbar-visibility-toggle {
-    width: 40px !important;
-    height: 40px !important;
-    min-width: 40px !important;
-    min-height: 40px !important;
+.notebook-navigator-android button.nn-toolbar-visibility-toggle.nn-mobile-toolbar-button {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
 }
 
 .notebook-navigator-android .nn-toolbar-visibility-icon {
@@ -6634,14 +6774,10 @@ body.nn-resizing {
     line-height: 1.5;
 }
 
-/* Remove duplicate borders when statistics are displayed */
-.nn-stats-section {
-    border: none !important;
-    padding: 0 !important;
-}
-
-/* Ensure proper spacing from previous sections */
+/* Remove default setting item chrome when statistics are displayed */
 .nn-stats-section.setting-item {
+    border: none;
+    padding: 0;
     margin-top: 0;
 }
 
@@ -6777,21 +6913,21 @@ body.nn-resizing {
 .nn-checkerboard,
 .nn-preview-color.nn-no-color {
     background-image:
-        linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc),
-        linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc);
+        linear-gradient(45deg, #cccccc 25%, transparent 25%, transparent 75%, #cccccc 75%, #cccccc),
+        linear-gradient(45deg, #cccccc 25%, transparent 25%, transparent 75%, #cccccc 75%, #cccccc);
     background-size: 10px 10px;
     background-position:
         0 0,
         5px 5px;
-    background-color: #fff;
+    background-color: #ffffff;
 }
 
 .theme-dark .nn-checkerboard,
 .theme-dark .nn-preview-color.nn-no-color {
     background-image:
-        linear-gradient(45deg, #444 25%, transparent 25%, transparent 75%, #444 75%, #444),
-        linear-gradient(45deg, #444 25%, transparent 25%, transparent 75%, #444 75%, #444);
-    background-color: #222;
+        linear-gradient(45deg, #444444 25%, transparent 25%, transparent 75%, #444444 75%, #444444),
+        linear-gradient(45deg, #444444 25%, transparent 25%, transparent 75%, #444444 75%, #444444);
+    background-color: #222222;
 }
 
 .nn-preview-arrow {
@@ -7208,10 +7344,7 @@ body.nn-resizing {
     --nn-file-title-line-height: var(--nn-file-title-line-height-mobile);
     --nn-file-single-text-line-height: var(--nn-file-single-text-line-height-mobile);
     --nn-file-multiline-text-line-height: var(--nn-file-multiline-text-line-height-mobile);
-    --nn-date-header-height-mobile: calc(var(--nn-date-header-height) + 8px);
-    --nn-date-header-height-subsequent-mobile: calc(var(--nn-date-header-height-subsequent) + 8px);
-    --nn-date-header-padding-top-mobile: calc(var(--nn-date-header-padding-top) + 4px);
-    --nn-date-header-padding-bottom-mobile: calc(var(--nn-date-header-padding-bottom) + 2px);
+    --nn-list-group-header-height-mobile: calc(var(--nn-list-group-header-height) + 8px);
 }
 
 /* Folder text size on mobile */
@@ -7239,6 +7372,48 @@ body.nn-resizing {
 .notebook-navigator-mobile .nn-root-reorder-remove {
     font-size: var(--nn-setting-nav-font-size-mobile);
 }
+/* Source: src/styles/sections/mobile-panes.css */
+
+/* ========================================================================
+   Mobile Pane Layout
+   ======================================================================== */
+
+/* Make panes flex containers on mobile to accommodate mobile toolbars. */
+.notebook-navigator-mobile .nn-navigation-pane {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
+    border-right: none;
+    background-color: var(--nn-theme-nav-bg);
+}
+
+.notebook-navigator-mobile .nn-list-pane {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Ensure scrollers take remaining space. */
+.notebook-navigator-mobile .nn-navigation-pane-scroller {
+    flex: 1;
+    min-height: 0; /* Important for proper scrolling */
+    -webkit-overflow-scrolling: touch;
+    /* Keep horizontal pane bounce/chaining disabled while allowing native vertical edge feedback. */
+    overscroll-behavior-x: none;
+    overscroll-behavior-y: contain;
+}
+
+/* Mobile list pane scroller uses the mobile list surface. */
+.notebook-navigator-mobile .nn-list-pane-scroller {
+    flex: 1;
+    min-height: 0; /* Important for proper scrolling */
+    -webkit-overflow-scrolling: touch;
+    /* Keep horizontal pane bounce/chaining disabled while allowing native vertical edge feedback. */
+    overscroll-behavior-x: none;
+    overscroll-behavior-y: contain;
+    background-color: var(--nn-theme-list-bg); /* Opaque background on scroller for GPU scroll layer (see .nn-list-pane-scroller) */
+}
 /* Source: src/styles/sections/mobile-tab-bars.css */
 
 /* ========================================================================
@@ -7262,20 +7437,13 @@ body.nn-resizing {
     min-height: calc(49px + var(--nn-mobile-safe-area-bottom));
 }
 
-/* Mobile toolbars: distribute buttons evenly; Obsidian 1.11+ iOS overrides this via platform stylesheet. */
+/* Mobile toolbars: distribute buttons evenly; iOS floating toolbars override this via platform stylesheet. */
 .notebook-navigator-mobile .nn-mobile-toolbar {
     justify-content: space-evenly;
 }
 
 .nn-pane-bottom-toolbar {
     flex-shrink: 0;
-}
-
-.notebook-navigator-mobile .nn-mobile-toolbar-left,
-.notebook-navigator-mobile .nn-mobile-toolbar-right,
-.notebook-navigator-mobile .nn-mobile-toolbar-pill,
-.notebook-navigator-mobile .nn-mobile-toolbar-circle {
-    display: contents;
 }
 
 /* Mobile toolbar grouping containers */
@@ -7305,7 +7473,7 @@ body.nn-resizing {
 }
 
 /* Mobile toolbar buttons */
-.nn-mobile-toolbar-button {
+button.nn-mobile-toolbar-button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -7313,8 +7481,7 @@ body.nn-resizing {
     height: 44px;
     min-width: 44px;
     min-height: 44px;
-    background: transparent !important;
-    background-color: transparent !important;
+    background: transparent;
     border: none;
     border-radius: var(--radius-m);
     color: var(--nn-theme-mobile-toolbar-button-icon-color);
@@ -7323,7 +7490,7 @@ body.nn-resizing {
         color 0.15s ease;
     cursor: pointer;
     padding: 0;
-    box-shadow: none !important;
+    box-shadow: none;
 }
 
 .nn-mobile-toolbar-button-circle {
@@ -7344,13 +7511,13 @@ body.nn-resizing {
 }
 
 /* Active mobile toolbar button state - toggled on */
-.nn-mobile-toolbar-button-active {
-    color: var(--nn-theme-mobile-toolbar-button-active-icon-color) !important;
-    background-color: var(--nn-theme-mobile-toolbar-button-active-bg) !important;
+.notebook-navigator-mobile button.nn-mobile-toolbar-button.nn-mobile-toolbar-button-active {
+    color: var(--nn-theme-mobile-toolbar-button-active-icon-color);
+    background-color: var(--nn-theme-mobile-toolbar-button-active-bg);
 }
 
-.nn-mobile-toolbar-button-active svg {
-    stroke: var(--nn-theme-mobile-toolbar-button-active-icon-color) !important;
+.notebook-navigator-mobile button.nn-mobile-toolbar-button.nn-mobile-toolbar-button-active svg {
+    stroke: var(--nn-theme-mobile-toolbar-button-active-icon-color);
     stroke-width: 2;
 }
 
@@ -7359,63 +7526,44 @@ body.nn-resizing {
     opacity: 0.4;
     cursor: not-allowed;
 }
-/* Source: src/styles/sections/platform-ios-obsidian-1-11.css */
+/* Source: src/styles/sections/platform-ios.css */
 
 /* ========================================================================
-   iOS + Obsidian 1.11+ iOS Platform Overrides
+   iOS Platform Overrides
    ======================================================================== */
 
-/* Platform-specific safe area definitions */
 .notebook-navigator-ios {
-    /* iOS uses env() for dynamic safe areas (notch, home indicator) */
-    --nn-mobile-safe-area-bottom: env(safe-area-inset-bottom, 8px);
-}
-
-.notebook-navigator-obsidian-1-11-plus-ios {
-    /* Obsidian 1.11+ already accounts for iOS safe areas in the view chrome. */
+    /* Obsidian accounts for iOS safe areas in the view chrome. */
     --nn-mobile-safe-area-bottom: 0px;
 }
 
-.notebook-navigator-ios:not(.notebook-navigator-obsidian-1-11-plus-ios)
-    .nn-navigation-pane[data-calendar='true']
-    .nn-pane-bottom-toolbar
-    .nn-mobile-toolbar,
-.notebook-navigator-ios:not(.notebook-navigator-obsidian-1-11-plus-ios)
-    .nn-list-pane[data-calendar='true']
-    .nn-pane-bottom-toolbar
-    .nn-mobile-toolbar {
-    padding-bottom: 0;
-    height: 49px;
-    min-height: 49px;
-}
-
-/* Obsidian 1.11+ iOS: view container background */
+/* iOS: view container background */
 /* Targets Obsidian's `.view-content` wrapper to ensure the area behind the navigator matches the mobile pane background. */
-.view-content.notebook-navigator.notebook-navigator-obsidian-1-11-plus-ios {
+.view-content.notebook-navigator.notebook-navigator-ios {
     background-color: var(--nn-theme-mobile-bg);
 }
 
-/* Obsidian 1.11+ iOS: bottom padding inside the navigator viewport */
+/* iOS: bottom padding inside the navigator viewport */
 /* Applied to the internal split container so the bottom edge doesn't touch the view chrome and the toolbar shadow can render into the padding (8px matches the top spacer). */
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-split-container {
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-split-container {
     padding-bottom: 8px;
     box-sizing: border-box;
 }
 
-/* iOS (Obsidian 1.11+): allow the glass toolbar shadow to render into the split container padding */
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-navigation-pane,
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-list-pane {
+/* iOS: allow the glass toolbar shadow to render into the split container padding */
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-navigation-pane,
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-list-pane {
     overflow: visible;
 }
 
-/* iOS (Obsidian 1.11+): anchor floating toolbar to the panel (above the calendar). */
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-navigation-pane-panel,
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-list-pane-panel {
+/* iOS: anchor floating toolbar to the panel (above the calendar). */
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-navigation-pane-panel,
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-list-pane-panel {
     position: relative;
 }
 
-/* iOS (Obsidian 1.11+): bottom overlays are positioned above the scroller. */
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-pane-bottom-toolbar {
+/* iOS: bottom overlays are positioned above the scroller. */
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-pane-bottom-toolbar {
     position: absolute;
     left: 0;
     right: 0;
@@ -7423,21 +7571,21 @@ body.nn-resizing {
     z-index: 5;
 }
 
-/* iOS (Obsidian 1.11+): reserve scroll space for the floating toolbar so rows can scroll under it. */
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-navigation-pane-scroller,
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-list-pane-scroller {
+/* iOS: reserve scroll space for the floating toolbar so rows can scroll under it. */
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-navigation-pane-scroller,
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-list-pane-scroller {
     padding-bottom: var(--nn-ios-pane-bottom-overlay-height);
 }
 
-/* Navigation pane calendar safe area for Obsidian 1.11+ iOS */
-.notebook-navigator-obsidian-1-11-plus-ios .nn-navigation-pane,
-.notebook-navigator-obsidian-1-11-plus-ios .nn-list-pane {
-    /* Obsidian 1.11+ already accounts for iOS safe areas in the view chrome. */
+/* iOS: navigation pane calendar safe area */
+.notebook-navigator-ios .nn-navigation-pane,
+.notebook-navigator-ios .nn-list-pane {
+    /* Obsidian accounts for iOS safe areas in the view chrome. */
     --nn-calendar-safe-area: 0px;
 }
 
-/* Obsidian 1.11+ iOS glass toolbar */
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar {
+/* iOS glass toolbar */
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar {
     pointer-events: none;
     justify-content: space-between;
     align-items: flex-start;
@@ -7446,7 +7594,7 @@ body.nn-resizing {
     /* 2px for border effect + 2px to match Obsidian view selector dropdown */
     padding-left: calc(var(--nn-scroller-padding) + 4px); /* 4px horizontal spacer for glass pill */
     padding-right: calc(var(--nn-scroller-padding) + 4px); /* 4px horizontal spacer for glass pill */
-    padding-bottom: 0; /* No extra bottom padding in iOS 1.11+ */
+    padding-bottom: 0; /* No extra bottom padding in iOS */
     /* The glass outline is painted via box-shadow and extends outside the pill/circle box. Add a small top spacer so
        auto-revealed rows are not positioned behind the outline. */
     padding-top: var(--nn-ios-toolbar-glass-visual-overlap-top);
@@ -7459,19 +7607,14 @@ body.nn-resizing {
     ); /* Match toolbar box height */
 }
 
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-left,
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-right {
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-left,
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-right {
     display: flex;
     pointer-events: auto;
     flex: 0 0 auto;
 }
 
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-pill,
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-circle {
-    display: flex;
-}
-
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars {
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars {
     --nn-theme-mobile-toolbar-button-icon-color: var(--nn-theme-foreground);
     --nn-ios-toolbar-glass-bg: color-mix(in srgb, var(--nn-theme-mobile-toolbar-glass-bg) 45%, transparent);
     --nn-ios-toolbar-glass-outline: rgba(255, 255, 255, 0.6);
@@ -7490,13 +7633,14 @@ body.nn-resizing {
     );
 }
 
-.theme-dark .notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars {
+.theme-dark .notebook-navigator-ios.notebook-navigator-ios-floating-toolbars {
     --nn-ios-toolbar-glass-outline: rgba(255, 255, 255, 0.1);
     --nn-ios-toolbar-glass-shadow: 0 0 0 2px var(--nn-ios-toolbar-glass-outline), 0 16px 32px rgba(0, 0, 0, 0.3);
 }
 
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-pill,
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-circle {
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-pill,
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-circle {
+    display: flex;
     position: relative;
     z-index: 0;
     border-radius: 999px;
@@ -7519,24 +7663,24 @@ body.nn-resizing {
      */
 }
 
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-pill > .nn-mobile-toolbar-button,
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-circle > .nn-mobile-toolbar-button {
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-pill > .nn-mobile-toolbar-button,
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-circle > .nn-mobile-toolbar-button {
     position: relative;
     z-index: 1;
 }
 
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-pill {
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-pill {
     width: auto;
     justify-content: flex-start;
     gap: 6px; /* Spacing between buttons inside the pill */
     padding: 1px 10px; /* 1px vertical + 10px horizontal pill inset */
 }
 
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-circle {
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-circle {
     padding: 1px; /* 1px inset around the circular button */
 }
 
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-button {
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-button {
     width: 38px; /* Button diameter inside the glass pill */
     height: 38px; /* Button diameter inside the glass pill */
     min-width: 38px; /* Prevent button shrink */
@@ -7544,18 +7688,18 @@ body.nn-resizing {
     border-radius: 999px;
 }
 
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-button svg {
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-mobile-toolbar-button svg {
     stroke-width: 2;
 }
 
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-navigation-pane-content,
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-list-pane-content {
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-navigation-pane-content,
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-list-pane-content {
     position: relative;
     z-index: 1;
 }
 
-/* Obsidian 1.11+ iOS: bottom fade layer */
-.notebook-navigator-obsidian-1-11-plus-ios.notebook-navigator-ios-floating-toolbars .nn-pane-bottom-toolbar::before {
+/* iOS: bottom fade layer */
+.notebook-navigator-ios.notebook-navigator-ios-floating-toolbars .nn-pane-bottom-toolbar::before {
     content: '';
     position: absolute;
     left: 0;
@@ -7573,7 +7717,7 @@ body.nn-resizing {
 }
 
 /*
- * iOS + Obsidian 1.11+: WebKit paint workaround for virtualized lists.
+ * iOS: WebKit paint workaround for virtualized lists.
  *
  * Symptom:
  * - The list can render blank (rows not visible) after preview text / feature image updates when the list is short
@@ -7585,23 +7729,23 @@ body.nn-resizing {
  * - Force each rendered virtual row wrapper onto its own composited layer. This makes WebKit repaint the rows
  *   reliably when the virtualizer remeasures and updates absolute positioning.
  */
-.notebook-navigator-obsidian-1-11-plus-ios .nn-list-pane .nn-virtual-item {
+.notebook-navigator-ios .nn-list-pane .nn-virtual-item {
     transform: translateZ(0);
 }
-/* Source: src/styles/sections/platform-android-obsidian-1-11.css */
+/* Source: src/styles/sections/platform-android.css */
 
 /* ========================================================================
-   Android + Obsidian 1.11+ Platform Overrides
+   Android Platform Overrides
    ======================================================================== */
 
-/* Obsidian 1.11+ Android: match the view container background to mobile pane surfaces */
-.view-content.notebook-navigator.notebook-navigator-obsidian-1-11-plus-android {
+/* Android: match the view container background to mobile pane surfaces */
+.view-content.notebook-navigator.notebook-navigator-android {
     background-color: var(--nn-theme-mobile-bg);
 }
 
-/* Obsidian 1.11+ Android: bottom padding inside the navigator viewport */
+/* Android: bottom padding inside the navigator viewport */
 /* Applied to the internal split container so the bottom edge doesn't touch the view chrome (8px matches the top spacer). */
-.notebook-navigator-obsidian-1-11-plus-android .nn-split-container {
+.notebook-navigator-android .nn-split-container {
     background-color: var(--nn-theme-mobile-bg);
     padding-bottom: 8px;
     box-sizing: border-box;
@@ -7631,39 +7775,6 @@ body.nn-resizing {
     min-width: 40px;
     min-height: 40px;
 }
-
-/* Make panes flex containers on mobile to accommodate tab bars */
-.notebook-navigator-mobile .nn-navigation-pane,
-.notebook-navigator-mobile .nn-list-pane {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-/* Ensure scrollers take remaining space */
-.notebook-navigator-mobile .nn-navigation-pane-scroller,
-.notebook-navigator-mobile .nn-list-pane-scroller {
-    flex: 1;
-    min-height: 0; /* Important for proper scrolling */
-    -webkit-overflow-scrolling: touch;
-    /* Prevent the rubber-band/glow overscroll effect on mobile. */
-    overscroll-behavior: none;
-}
-
-/* Mobile list pane scroller - use mobile background */
-.notebook-navigator-mobile .nn-list-pane-scroller {
-    background-color: var(--nn-theme-list-bg); /* Opaque background on scroller for GPU scroll layer (see .nn-list-pane-scroller) */
-}
-
-/* Mobile compact file items - larger touch targets */
-.notebook-navigator-mobile .nn-file.nn-compact .nn-file-content {
-    padding: var(--nn-file-padding-vertical-compact-mobile) var(--nn-file-item-padding-horizontal);
-}
-
-/* Mobile compact mode file names - use dedicated font variable */
-.notebook-navigator-mobile .nn-file.nn-compact .nn-file-name {
-    font-size: var(--nn-compact-font-size-mobile, var(--nn-compact-font-size, 15px));
-}
 /* Source: src/styles/sections/android-textzoom.css */
 
 /* ========================================================================
@@ -7692,39 +7803,34 @@ body.nn-resizing {
        which Android doesn't scale. Only compensate font-size on emoji elements directly. */
 }
 
-/* Note counts in navigation pane - !important needed to override other rules */
-.notebook-navigator-android .nn-navitem-count {
+/* Note counts in navigation pane */
+.notebook-navigator-android .nn-mobile .nn-navitem-count {
     font-size: calc(
         var(--nn-navitem-count-font-size-mobile, var(--nn-navitem-count-font-size)) * var(--nn-android-font-scale-reciprocal, 1)
-    ) !important;
+    );
 }
 
 /* Root reorder panel text */
-.notebook-navigator-android .nn-root-reorder-hint {
+.notebook-navigator-android .nn-mobile .nn-root-reorder-hint {
     font-size: calc(
         var(--nn-root-reorder-hint-font-size-mobile, var(--nn-root-reorder-hint-font-size)) * var(--nn-android-font-scale-reciprocal, 1)
-    ) !important;
+    );
 }
 
 /* Emoji and webfont icons - Android scales font-size but not SVG dimensions.
    Only apply to .nn-emoji-icon and .nn-iconfont to avoid breaking Lucide SVG icons. */
-.notebook-navigator-android .nn-emoji-icon,
-.notebook-navigator-android .nn-iconfont {
-    font-size: calc(var(--nn-file-icon-size-mobile, var(--nn-file-icon-size)) * var(--nn-android-font-scale-reciprocal, 1)) !important;
+.notebook-navigator-android .nn-mobile .nn-emoji-icon,
+.notebook-navigator-android .nn-mobile .nn-iconfont {
+    font-size: calc(var(--nn-file-icon-size-mobile, var(--nn-file-icon-size)) * var(--nn-android-font-scale-reciprocal, 1));
 }
 
-/* Height compensation - Android doesn't scale height/min-height, but we need them
-   to match the (now compensated) line-height after Android applies textZoom.
-   Since line-height var is pre-divided by scale, multiplying by scale here gives
-   the original value (21px, 20px, 19px) which matches the scaled line-height. */
+/* Clamp height compensation - Android doesn't scale max-height, so match the compensated line-height after textZoom applies. */
 .notebook-navigator-android .nn-file-name {
-    min-height: calc(var(--nn-file-title-line-height) * var(--filename-rows, 1) * var(--nn-android-font-scale, 1));
-    height: calc(var(--nn-file-title-line-height) * var(--filename-rows, 1) * var(--nn-android-font-scale, 1));
+    max-height: calc(var(--nn-file-title-line-height) * var(--filename-rows, 1) * var(--nn-android-font-scale, 1));
 }
 
-.notebook-navigator-android .nn-file-preview:not(.nn-file-second-line .nn-file-preview) {
-    min-height: calc(var(--nn-file-multiline-text-line-height) * var(--preview-rows, 1) * var(--nn-android-font-scale, 1));
-    height: calc(var(--nn-file-multiline-text-line-height) * var(--preview-rows, 1) * var(--nn-android-font-scale, 1));
+.notebook-navigator-android .nn-file-preview {
+    max-height: calc(var(--nn-file-multiline-text-line-height) * var(--preview-rows, 1) * var(--nn-android-font-scale, 1));
 }
 
 /* Icon vertical centering - line-height is pre-compensated, icon size is not */
@@ -7766,7 +7872,7 @@ body.nn-resizing {
 .nn-file-preview,
 .nn-file-date,
 .nn-parent-folder,
-.nn-date-group-header {
+.nn-list-group-header {
     unicode-bidi: plaintext;
 }
 
@@ -7788,12 +7894,15 @@ body.nn-resizing {
 /* Emoji icon styles */
 .nn-emoji-icon {
     font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+    font-style: normal;
+    font-weight: normal;
     line-height: 1;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
     text-align: center;
+    text-decoration: none;
 
     /* Prevent text selection of emoji icons */
     user-select: none;
@@ -7810,13 +7919,6 @@ body.nn-resizing {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-/* Prevent emoji icons from being affected by text styles */
-.nn-emoji-icon {
-    font-style: normal;
-    font-weight: normal;
-    text-decoration: none;
 }
 
 /* Ensure proper sizing when used in buttons */
@@ -7847,11 +7949,6 @@ body.nn-resizing {
 .nn-mobile-toolbar-button > span > svg,
 .nn-navigation-calendar-nav-button > span > svg {
     display: block;
-}
-
-/* Icon Picker Modal Styles */
-.modal.nn-icon-picker-modal .modal-content {
-    min-height: 380px;
 }
 
 /* Icon font styles */
@@ -7923,7 +8020,7 @@ body.nn-resizing {
 }
 
 .nn-icon-provider-link-row {
-    padding: 8px 12px 0 12px;
+    padding: 8px 12px 0;
     text-align: center;
 }
 
@@ -7964,19 +8061,6 @@ body.nn-resizing {
 .nn-icon-item-preview.nn-emoji-preview {
     font-size: 24px;
 }
-
-/* Icon section headers for categories */
-.nn-icon-section-header {
-    font-size: var(--font-ui-small);
-    font-weight: 600;
-    color: var(--nn-theme-foreground-muted);
-    margin-top: 12px;
-    margin-bottom: 4px;
-}
-
-.nn-icon-section-header:first-child {
-    margin-top: 0;
-}
 /* Source: src/styles/sections/settings-metadata-info.css */
 
 /* ========================================================================
@@ -8005,14 +8089,6 @@ body.nn-resizing {
 /* Export button - stays on the right */
 .nn-metadata-export-button {
     flex-shrink: 0;
-}
-
-/* Make delete menu items red (items with trash icon) */
-.menu-item:has(.menu-item-icon svg.lucide-trash) {
-    color: var(--text-error);
-}
-.menu-item:has(.menu-item-icon svg.lucide-trash) .menu-item-icon {
-    color: var(--text-error);
 }
 /* Source: src/styles/sections/settings-style-settings.css */
 
@@ -8422,6 +8498,16 @@ settings:
         format: rgb
         default-light: '#'
         default-dark: '#'
+    -
+        id: nn-theme-calendar-day-active-border-width
+        title: Active day outline thickness
+        description: Border width for the outline shown on the active day in the calendar.
+        type: variable-number-slider
+        default: 3
+        format: px
+        min: 1
+        max: 4
+        step: 1
     -
         id: nn-nav-pane-heading
         title: Navigation pane (folders, tags, shortcuts)
@@ -9307,7 +9393,7 @@ settings:
     -
         id: nn-theme-mobile-toolbar-glass-bg
         title: iOS glass toolbar background
-        description: Background color of the Obsidian 1.11+ iOS glass toolbar (used for border and background, supports transparency).
+        description: Background color of the iOS glass toolbar (used for border and background, supports transparency).
         type: variable-themed-color
         opacity: true
         format: rgb

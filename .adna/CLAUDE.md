@@ -1,13 +1,13 @@
 ---
 type: governance
-version: "8.0"
+version: "8.1"
 token_estimate: ~3000
 updated: 2026-06-11
 last_edited_by: agent_stanley
 ---
 
 # CLAUDE.md — aDNA
-<!-- v8.0 | 2026-06-19 | Operation Hearthstone (inventory+identity base; Home bootstrap) -->
+<!-- v8.1 | 2026-06-23 | combined catch-up: v2.3 §5 body-completion + Obsidian batteries-included parity (ADR-038) -->
 
 ## Identity & Personality
 

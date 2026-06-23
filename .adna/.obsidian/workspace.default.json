@@ -1,4 +1,5 @@
 {
+  "_comment": "Obsidian.aDNA canonical workspace.default.json candidate — p1_01 deliverable 2. Layout-only, vault-file-agnostic reset baseline for fork/reseed reuse. Strip rules applied: lastOpenFiles reduced to HOME.md; per-leaf state.file references removed; optional 'terminal-view' (Termy/BRAT) leaf dropped; stable human-readable ids. Spec: what/context/obsidian_config_baseline.md. Reseed must back up existing workspace.json before overwrite and treat it as per-device (ADR-001 Item 1).",
   "main": {
     "id": "main-split",
     "type": "split",
@@ -120,6 +121,48 @@
               "icon": "links-coming-in",
               "title": "Backlinks"
             }
+          },
+          {
+            "id": "outgoing-link-leaf",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "tag-leaf",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "all-properties-leaf",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
           }
         ]
       }
@@ -139,18 +182,14 @@
       "workspaces:Manage workspace layouts": true,
       "note-composer:Merge current file with another file...": true,
       "note-composer:Extract current selection...": true,
-      "obsidian42-brat:BRAT": true,
-      "templater-obsidian:Templater": true,
-      "table-editor-obsidian:Advanced Tables Toolbar": true,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false,
+      "templater-obsidian:Templater": false,
+      "homepage:Open homepage": false,
+      "notebook-navigator:Notebook Navigator": false,
       "obsidian-advanced-canvas:Advanced Canvas": true,
       "obsidian-style-settings:Style Settings": true,
-      "obsidian-meta-bind-plugin:Meta Bind": true,
-      "obsidian-tasks-plugin:Tasks": true,
-      "pretty-properties:Pretty Properties": true,
-      "fold-properties-by-default:Fold Properties": true,
-      "notebook-navigator:Notebook Navigator": false,
-      "homepage:Open homepage": false,
-      "termy:Open Termy terminal": false
+      "obsidian-meta-bind-plugin:Meta Bind": true
     }
   },
   "active": "home-leaf",

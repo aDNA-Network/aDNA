@@ -12,18 +12,18 @@
  * ========================================================================== */
 
 :root {
-  --accent-h: 270;
-  --accent-s: 50%;
-  --accent-l: 40%;
+  --accent-h: 263;
+  --accent-s: 72%;
+  --accent-l: 42%;
   --interactive-accent: #663399;
-  --interactive-accent-hover: #7744aa;
+  --interactive-accent-hover: #7a45b5;
   --interactive-accent-rgb: 102, 51, 153;
 
   --text-accent: #663399;
-  --text-accent-hover: #7744aa;
+  --text-accent-hover: #7a45b5;
 
   --link-color: #663399;
-  --link-color-hover: #7744aa;
+  --link-color-hover: #7a45b5;
   --link-external-color: #8855bb;
   --link-external-color-hover: #9966cc;
 
@@ -32,12 +32,20 @@
 }
 
 .theme-dark {
-  --interactive-accent: #7744aa;
-  --interactive-accent-hover: #8855bb;
-  --text-accent: #9966cc;
-  --text-accent-hover: #aa77dd;
-  --link-color: #9966cc;
-  --link-color-hover: #aa77dd;
+  --accent-h: 258;
+  --accent-s: 89%;
+  --accent-l: 66%;
+  --interactive-accent: #8b5cf6;        /* vivid violet — buttons / active / CTA */
+  --interactive-accent-hover: #a78bfa;
+  --interactive-accent-rgb: 139, 92, 246;
+  --text-accent: #b48aff;               /* bright + legible (~6.5:1 on #1a1b26) */
+  --text-accent-hover: #c9b1ff;
+  --link-color: #b48aff;
+  --link-color-hover: #c9b1ff;
+  --link-external-color: #c4a5ff;
+  --link-external-color-hover: #d6c4ff;
+  --text-selection: rgba(139, 92, 246, 0.28);
+  --text-highlight-bg: rgba(139, 92, 246, 0.30);
 }
 
 /* Buttons */
@@ -93,7 +101,7 @@ input[type="checkbox"]:checked {
 
 /* Internal links */
 .internal-link { color: #663399; }
-.theme-dark .internal-link { color: #9966cc; }
+.theme-dark .internal-link { color: var(--text-accent); }
 .internal-link:hover { color: #7744aa; }
 
 /* Callouts */
@@ -118,15 +126,15 @@ input[type="range"]::-webkit-slider-thumb { background-color: #663399; }
 .nav-folder-title.is-active { color: #663399; }
 
 .theme-dark .nav-file-title.is-active,
-.theme-dark .nav-folder-title.is-active { color: #9966cc; }
+.theme-dark .nav-folder-title.is-active { color: var(--text-accent); }
 
 /* Sidebar tab active */
 .workspace-tab-header.is-active { color: #663399; }
-.theme-dark .workspace-tab-header.is-active { color: #9966cc; }
+.theme-dark .workspace-tab-header.is-active { color: var(--text-accent); }
 
 /* Frontmatter property keys */
 .metadata-property-key { color: #663399; }
-.theme-dark .metadata-property-key { color: #9966cc; }
+.theme-dark .metadata-property-key { color: var(--text-accent); }
 
 
 /* =============================================================================
@@ -186,11 +194,11 @@ body {
 }
 
 .theme-dark .heading-h2-border .markdown-rendered h2 {
-  border-left-color: var(--accent-color-hover, #7744aa);
+  border-left-color: var(--text-accent);
 }
 
 .theme-dark .heading-h2-border .cm-s-obsidian .HyperMD-header-2 {
-  border-left-color: var(--accent-color-hover, #7744aa);
+  border-left-color: var(--text-accent);
 }
 
 /* H3+ — Accent text color */
@@ -208,11 +216,8 @@ body {
   color: var(--text-accent, #9966cc);
 }
 
-/* Heading scale */
-.markdown-rendered h1 { font-size: calc(2em * var(--heading-scale)); }
-.markdown-rendered h2 { font-size: calc(1.5em * var(--heading-scale)); }
-.markdown-rendered h3 { font-size: calc(1.25em * var(--heading-scale)); }
-.markdown-rendered h4 { font-size: calc(1.1em * var(--heading-scale)); }
+/* Heading sizes/weights/tracking are consolidated in Section 7 (Typography & Rhythm).
+ * The --heading-scale knob (this section's @settings) still scales them. */
 
 
 /* =============================================================================
@@ -359,6 +364,45 @@ body {
 .theme-dark .code-inline-tint .cm-s-obsidian .cm-inline-code:not(.cm-formatting) {
   background-color: rgba(153, 102, 204, 0.15);
 }
+
+/* Language badge — fenced-block language label, top-right (Reading View; Prism language-* class) */
+.markdown-rendered pre[class*="language-"] { position: relative; }
+.markdown-rendered pre[class*="language-"]::before {
+  position: absolute;
+  top: 0;
+  right: 2.6em;
+  font-size: 0.68em;
+  font-family: var(--font-interface);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--code-border-color);
+  background-color: rgba(102, 51, 153, 0.12);
+  padding: 0.12em 0.6em;
+  border-radius: 0 0 4px 4px;
+  pointer-events: none;
+}
+.theme-dark .markdown-rendered pre[class*="language-"]::before {
+  color: #b48aff;
+  background-color: rgba(153, 102, 204, 0.18);
+}
+/* per-language labels (only these render a badge; unlisted languages stay unlabelled) */
+.markdown-rendered pre.language-python::before { content: "Python"; }
+.markdown-rendered pre.language-bash::before,
+.markdown-rendered pre.language-sh::before,
+.markdown-rendered pre.language-shell::before { content: "Bash"; }
+.markdown-rendered pre.language-json::before { content: "JSON"; }
+.markdown-rendered pre.language-javascript::before,
+.markdown-rendered pre.language-js::before { content: "JavaScript"; }
+.markdown-rendered pre.language-typescript::before,
+.markdown-rendered pre.language-ts::before { content: "TypeScript"; }
+.markdown-rendered pre.language-yaml::before,
+.markdown-rendered pre.language-yml::before { content: "YAML"; }
+.markdown-rendered pre.language-css::before { content: "CSS"; }
+.markdown-rendered pre.language-html::before { content: "HTML"; }
+.markdown-rendered pre.language-markdown::before,
+.markdown-rendered pre.language-md::before { content: "Markdown"; }
+.markdown-rendered pre.language-sql::before { content: "SQL"; }
 
 
 /* =============================================================================
@@ -513,4 +557,228 @@ body {
 
 .theme-dark .suggestion-item.is-selected {
   background-color: rgba(153, 102, 204, 0.2);
+}
+
+
+/* =============================================================================
+ * 7. TYPOGRAPHY & RHYTHM — bold aDNA signature (Cycle 2, M2.5)
+ * Distinctive heading hierarchy (weight + tracking) + comfortable reading rhythm.
+ * Heading sizes respect the --heading-scale knob (section 2).
+ * ========================================================================== */
+
+/* @settings
+name: Typography & Rhythm
+id: typography-rhythm
+settings:
+  -
+    id: body-line-height
+    title: Body line height
+    type: variable-number-slider
+    default: 1.6
+    min: 1.4
+    max: 1.9
+    step: 0.05
+    format: ""
+  -
+    id: heading-accent-rule
+    title: H1 accent underline rule
+    type: class-toggle
+    default: true
+*/
+
+body { --body-line-height: 1.6; }
+
+/* Reading rhythm */
+.markdown-rendered { line-height: var(--body-line-height); }
+.markdown-rendered p,
+.markdown-rendered li { line-height: var(--body-line-height); }
+.markdown-rendered p { margin-block: 0.9em; }
+
+/* Signature heading hierarchy — weights + tracking */
+.markdown-rendered h1,
+.cm-s-obsidian .HyperMD-header-1 {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-size: calc(2.3em * var(--heading-scale));
+  line-height: 1.15;
+}
+.markdown-rendered h2,
+.cm-s-obsidian .HyperMD-header-2 {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  font-size: calc(1.6em * var(--heading-scale));
+  margin-top: 1.7em;
+}
+.markdown-rendered h3,
+.cm-s-obsidian .HyperMD-header-3 {
+  font-weight: 700;
+  font-size: calc(1.28em * var(--heading-scale));
+  margin-top: 1.35em;
+}
+.markdown-rendered h4 { font-weight: 600; font-size: calc(1.1em * var(--heading-scale)); }
+.markdown-rendered h5,
+.markdown-rendered h6 {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-size: calc(0.95em * var(--heading-scale));
+  color: var(--text-muted);
+}
+
+/* Signature H1 accent rule (toggle) — short accent bar under H1 */
+.heading-accent-rule .markdown-rendered h1::after {
+  content: "";
+  display: block;
+  width: 2.5em;
+  height: 3px;
+  margin: 0.4em auto 0;
+  border-radius: 2px;
+  background: var(--interactive-accent);
+  opacity: 0.9;
+}
+
+/* =============================================================================
+ * 8. HOME DASHBOARD STRUCTURE — Operation Atrium (Phase C, 2026-06-11)
+ * Structural layer for generated HOME.md pages (cssclasses: [dashboard, homepage]).
+ * Palette-NEUTRAL: keyed to the theme/accent vars + the .dashboard custom props
+ * below. Per-vault persona accents (ADR-008 override layer) override the props
+ * and style banner-<vault_slug> / <persona>-greeting — never this seed.
+ * Spec: Obsidian.aDNA spec_homepage_structure §3 (structural vs accent split).
+ * ========================================================================== */
+
+.dashboard {
+  --home-accent: var(--interactive-accent);
+  --home-accent-bright: var(--interactive-accent-hover);
+  --home-card-bg: var(--background-secondary);
+  --home-card-border: var(--background-modifier-border);
+  --home-glow: rgba(var(--interactive-accent-rgb), 0.30);
+}
+
+/* ── Masthead scaffold (image + text-fallback variants) ─────────────────── */
+.dashboard .home-masthead {
+  position: relative;
+  width: 100%;
+  margin: 0.2em 0 1.4em;
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(120deg, var(--background-primary) 0%, var(--background-secondary) 60%, var(--background-secondary-alt) 100%);
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--home-card-border);
+}
+.dashboard .home-masthead img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 21 / 9;
+  object-fit: cover;
+  display: block;
+}
+.dashboard .home-masthead .banner-text {
+  position: absolute;
+  left: 1.1em;
+  bottom: 0.7em;
+  right: 1.1em;
+  font-size: 1.85em;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  line-height: 1.18;
+  color: var(--text-normal);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55), 0 0 18px var(--home-glow);
+}
+/* text-only variant (no <img>, or img hidden by onerror): flow-sized gradient band
+   (a fixed aspect clipped long display+tagline text — PercySleep, Phase-C capture) */
+.dashboard .home-masthead.banner-fallback { min-height: 5.2em; display: flex; align-items: flex-end; }
+.dashboard .home-masthead.banner-fallback .banner-text { position: static; padding: 0.9em 1.15em; font-size: 1.55em; }
+
+/* ── Timeline HUD ─────────────────────────────────────────────────────────── */
+.dashboard .timeline-hud {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35em;
+  margin: 0.4em 0 1.2em;
+  font-size: 0.86em;
+}
+.dashboard .timeline-hud .hud-tick {
+  padding: 0.2em 0.7em;
+  border-radius: 6px;
+  background: var(--home-card-bg);
+  border: 1px solid var(--home-card-border);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.dashboard .timeline-hud .hud-tick.done {
+  background: rgba(var(--interactive-accent-rgb), 0.16);
+  color: var(--text-normal);
+  border-color: rgba(var(--interactive-accent-rgb), 0.35);
+}
+.dashboard .timeline-hud .hud-tick.current {
+  background: var(--home-accent);
+  color: var(--text-on-accent);
+  border-color: var(--home-accent-bright);
+  box-shadow: 0 0 12px var(--home-glow);
+}
+.dashboard .timeline-hud .hud-sep { color: var(--text-faint); opacity: 0.6; }
+
+/* ── Key-systems cards ────────────────────────────────────────────────────── */
+.dashboard .hq-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 0.8em;
+  margin: 0.6em 0 0.4em;
+}
+.dashboard .hq-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  padding: 0.85em 1em;
+  border-radius: 10px;
+  background: var(--home-card-bg);
+  border: 1px solid var(--home-card-border);
+  text-decoration: none !important;
+  transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease;
+}
+.dashboard .hq-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--home-accent-bright);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), 0 0 14px var(--home-glow);
+}
+.dashboard .hq-card .hq-card-title {
+  font-weight: 700;
+  color: var(--text-accent);
+  font-size: 1.02em;
+}
+.dashboard .hq-card .hq-card-sub {
+  color: var(--text-muted);
+  font-size: 0.85em;
+  line-height: 1.35;
+}
+
+/* ── Triad nav (vault-grid) — markdown block; links render as pills ───────── */
+.dashboard .vault-grid {
+  margin: 0.3em 0 1.1em;
+  padding: 0.7em 1em 0.55em;
+  border-radius: 10px;
+  background: var(--home-card-bg);
+  border: 1px solid var(--home-card-border);
+}
+.dashboard .vault-grid p { margin: 0.45em 0; }
+.dashboard .vault-grid a {
+  display: inline-block;
+  padding: 0.12em 0.66em;
+  margin: 0.1em 0;
+  border-radius: 999px;
+  background: rgba(var(--interactive-accent-rgb), 0.10);
+  border: 1px solid var(--home-card-border);
+  font-size: 0.9em;
+  text-decoration: none !important;
+  white-space: nowrap;
+}
+.dashboard .vault-grid a:hover {
+  background: rgba(var(--interactive-accent-rgb), 0.26);
+  border-color: var(--home-accent-bright);
+}
+
+/* Responsive: tighten masthead caption + stack cards on narrow panes */
+@media (max-width: 600px) {
+  .dashboard .home-masthead .banner-text { font-size: 1.35em; }
+  .dashboard .hq-cards { grid-template-columns: 1fr; }
 }

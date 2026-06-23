@@ -20,9 +20,24 @@
   background-color: var(--background-modifier-hover);
 }
 
-/* Header border */
-.markdown-preview-view .dataview-result-table thead tr {
-  border-bottom: 2px solid var(--background-modifier-border);
+/* Header treatment — weighted, tinted, accent underline; unified across standard + Dataview */
+.markdown-preview-view table thead th {
+  font-weight: 700;
+  text-align: left;
+  background-color: rgba(102, 51, 153, 0.06);
+  border-bottom: 2px solid var(--text-accent);
+  padding: 0.5em 0.75em;
+}
+.theme-dark .markdown-preview-view table thead th {
+  background-color: rgba(153, 102, 204, 0.10);
+}
+
+/* Consistent cell padding + rounded frame (standard + Dataview) */
+.markdown-preview-view table td { padding: 0.4em 0.75em; }
+.markdown-preview-view table {
+  border-collapse: collapse;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 /* Standard markdown tables */
@@ -118,69 +133,45 @@ settings:
     default: '#9ece6a'
 */
 
-/* Status pills */
-.nn-property-pill[data-value="active"] { background-color: #9ece6a20; color: #9ece6a; }
-.nn-property-pill[data-value="completed"] { background-color: #7dcfff20; color: #7dcfff; }
-.nn-property-pill[data-value="draft"] { background-color: #bb9af720; color: #bb9af7; }
-.nn-property-pill[data-value="pending"] { background-color: #bb9af720; color: #bb9af7; }
-.nn-property-pill[data-value="in_progress"] { background-color: #ff9e6420; color: #ff9e64; }
-.nn-property-pill[data-value="deprecated"] { background-color: #f7768e20; color: #f7768e; }
-
-/* Triad folder colors */
-.nn-folder-item[data-path^="org"] .nn-folder-icon { color: var(--nn-org-color, #9d7cd8); }
-.nn-folder-item[data-path^="obs"] .nn-folder-icon { color: var(--nn-obs-color, #7dcfff); }
-.nn-folder-item[data-path^="ops"] .nn-folder-icon { color: var(--nn-ops-color, #9ece6a); }
-
-/* aDNA triad (who/what/how) */
-.nn-folder-item[data-path^="who"] .nn-folder-icon { color: var(--nn-org-color, #9d7cd8); }
-.nn-folder-item[data-path^="what"] .nn-folder-icon { color: var(--nn-obs-color, #7dcfff); }
-.nn-folder-item[data-path^="how"] .nn-folder-icon { color: var(--nn-ops-color, #9ece6a); }
+/* Status pills + folder triad colors are applied via Notebook Navigator's NATIVE
+ * config (plugins/notebook-navigator/data.json), NOT CSS — NN 2.6.6 renders both
+ * through data-driven hooks a snippet cannot trigger:
+ *   • Folder triad colors → data.json `folderColors` (who/what/how → palette).
+ *   • Status pills        → data.json `propertyColors` (status value → hex), shown via
+ *                           `propertyFields:"status"` + `useFrontmatterMetadata:true`.
+ * The former `.nn-folder-item`/`.nn-folder-icon` (folders) and
+ * `.nn-property-pill[data-value=…]` (status) selectors went stale across NN versions
+ * (NN now uses `.nn-navitem` / `.nn-file-property`, no `data-value`) and were dead — the
+ * 6 dead status-pill rules were removed in Cycle 4·0 (2026-06-04). Graph view matches
+ * via graph.json colorGroups (seed: graph-colorgroups.json).
+ * Palette source of truth: what/context/obsidian_color_palette.md. */
 
 
 /* =============================================================================
- * 5. CALLOUT TYPES (aDNA-specific)
- * Custom callout types for operational vault patterns
+ * 5. CALLOUTS — unified system + aDNA types
+ * One consistent icon+color language: every callout reads as one tinted block
+ * (left accent + faint body + title row) driven by --callout-color. The 4 aDNA
+ * operational types are always-on (semantic; no Style-Settings dependency).
  * ========================================================================== */
 
-/* @settings
-name: Custom Callouts
-id: custom-callouts
-settings:
-  -
-    id: callout-decision
-    title: Decision callout styling
-    type: class-toggle
-    default: true
-  -
-    id: callout-status
-    title: Status callout styling
-    type: class-toggle
-    default: true
-*/
-
-/* Decision callout */
-.callout-decision .callout[data-callout="decision"] {
-  --callout-color: 255, 158, 100;
-  --callout-icon: lucide-gavel;
+/* Consistent treatment for every callout (standard + aDNA) */
+.callout {
+  border-radius: 6px;
+  border-left: 3px solid rgb(var(--callout-color));
+  background-color: rgba(var(--callout-color), 0.06);
+  margin-block: 0.8em;
+  overflow: hidden;
+}
+.callout > .callout-title {
+  background-color: rgba(var(--callout-color), 0.13);
+  padding-block: 0.4em;
 }
 
-/* Status callout */
-.callout-status .callout[data-callout="status"] {
-  --callout-color: 158, 206, 106;
-  --callout-icon: lucide-activity;
-}
-
-/* Gate callout */
-.callout[data-callout="gate"] {
-  --callout-color: 187, 154, 247;
-  --callout-icon: lucide-shield-check;
-}
-
-/* Context callout */
-.callout[data-callout="context"] {
-  --callout-color: 125, 207, 255;
-  --callout-icon: lucide-book-open;
-}
+/* aDNA operational callout types — always-on (semantic; no toggle dependency) */
+.callout[data-callout="decision"] { --callout-color: 255, 158, 100; --callout-icon: lucide-gavel; }
+.callout[data-callout="status"]   { --callout-color: 158, 206, 106; --callout-icon: lucide-activity; }
+.callout[data-callout="gate"]     { --callout-color: 187, 154, 247; --callout-icon: lucide-shield-check; }
+.callout[data-callout="context"]  { --callout-color: 125, 207, 255; --callout-icon: lucide-book-open; }
 
 
 /* =============================================================================

@@ -23,7 +23,7 @@
   "workspaces": true,
   "webviewer": true,
   "bases": true,
-  "sync": true,
+  "sync": false,
   "footnotes": false,
   "slash-command": false,
   "zk-prefixer": false,

@@ -2,15 +2,15 @@
 type: context
 title: "aDNA Universal Standard v2.3"
 created: 2026-02-11
-updated: 2026-03-20
+updated: 2026-06-22
 status: approved
-last_edited_by: agent_init
+last_edited_by: agent_rosetta
 tags: [adna, standard, spec, normative]
 ---
 
 # aDNA Universal Standard
 
-<!-- v2.3 | 2026-06-19 | inventory+identity promoted to base (ADR-035) -->
+<!-- v2.3 | 2026-06-22 | inventory+identity promoted to base (ADR-035) -->
 
 **Agentic DNA (aDNA)** — A knowledge architecture standard for AI-native projects.
 
@@ -363,6 +363,7 @@ what/ contains everything the project KNOWS.
 | Directory | Purpose |
 |-----------|---------|
 | `reference/` | Bounded exception for code-adjacent reference material (see §19.5) |
+| `inventory/` | Installed/configured state — vaults, system, memberships. Base WHAT type since v2.3 (ADR-035); markdown + paired `.yaml` companion. |
 | `{domain}/` | Project-specific knowledge: `models/`, `hardware/`, `datasets/`, `specs/`, etc. |
 
 **Registry pattern**: what/ serves as a registry layer. Entries in what/ subfolders describe and link to objects — they do not duplicate source material. Example registry entry:
@@ -384,6 +385,7 @@ Brief description, capabilities, constraints. Links to source — does not dupli
 erDiagram
     what ||--o{ context : contains
     what ||--o{ decisions : contains
+    what ||--o{ inventory : contains
     what ||--o{ domain_entities : contains
     how ||--o{ missions : contains
     how ||--o{ sessions : contains
@@ -393,6 +395,7 @@ erDiagram
     how ||--o{ backlog : contains
     who ||--o{ coordination : contains
     who ||--o{ governance : contains
+    who ||--o{ identity : contains
     who ||--o{ people : contains
     missions ||--o{ sessions : "tracked by"
     sessions ||--o{ coordination : "may produce"
@@ -418,6 +421,7 @@ who/ contains everything about WHO is involved and WHY.
 
 | Directory | Purpose |
 |-----------|---------|
+| `identity/` | Stable identity records validated against external reality — node / network / deployment (hostname, operator, persistent UUID, peer-id). Base WHO type since v2.3 (ADR-035); markdown + paired `.yaml` companion. |
 | `{domain}/` | Project-specific organization: `customers/`, `partners/`, `contacts/`, `communications/`, `roadmap/` |
 
 ### 5.3 how/ — Operations Layer

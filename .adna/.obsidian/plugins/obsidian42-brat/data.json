@@ -1,8 +1,6 @@
 {
-  "pluginList": ["zyphrzero/termy"],
-  "pluginSubListFrozenVersion": [
-    { "repo": "zyphrzero/termy", "version": "latest" }
-  ],
+  "pluginList": [],
+  "pluginSubListFrozenVersion": [],
   "themesList": [],
   "updateAtStartup": true,
   "updateThemesAtStartup": false,

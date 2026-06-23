@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # setup.sh — Bootstrap Obsidian plugins and theme for adna
-# Downloads 15 community plugins + Tokyo Night theme.
+# Downloads 14 community plugins + Tokyo Night theme.
 # Requires: curl (ships with macOS/Linux)
 # Usage: ./setup.sh [--force]
 
@@ -33,8 +33,7 @@ PLUGIN_IDS=(
     obsidian-advanced-canvas
     pretty-properties
     fold-properties-by-default
-    termy
-    settings-search
+    terminal
 )
 PLUGIN_REPOS=(
     blacksmithgu/obsidian-dataview
@@ -50,8 +49,7 @@ PLUGIN_REPOS=(
     Developer-Mike/obsidian-advanced-canvas
     anareaty/pretty-properties
     tbergeron/obsidian-fold-properties-by-default
-    ZyphrZero/Termy
-    javalent/settings-search
+    polyipseity/obsidian-terminal
 )
 
 THEME_REPO="tcmmichaelb139/obsidian-tokyonight"

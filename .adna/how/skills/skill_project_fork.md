@@ -98,7 +98,6 @@ rm -rf .git              # R1: discard template git history (skill_project_fork 
 rm -rf .github           # R2: no CI configs leaked into forked project
 rm -f README.md          # R3: no template README at fork root (project authors own)
 rm -f LICENSE            # R4: no template LICENSE (project picks own license)
-rm -f setup.sh           # R5: setup.sh is template-only Obsidian bootstrap; project doesn't need
 # R6 prepare_for_onboarding.sh is no-op at fork root (moved to how/skills/l1_upgrade/ in v7.0 M03 B2)
 # R7 deploy_manifest.yaml is no-op at fork root (moved to .github/ in v7.0 M03 B3 — covered by rm -rf .github above)
 
