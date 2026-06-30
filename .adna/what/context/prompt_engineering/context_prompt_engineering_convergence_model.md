@@ -170,4 +170,4 @@ The model should *clarify*, not obfuscate. If "selective loading via AGENTS.md" 
 
 - Original articulation — synthesized from operational experience with a production aDNA vault (126+ agent sessions, 6 campaigns, 40+ missions). The convergence pattern was observed empirically before being formalized mathematically.
 - [Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) — Anthropic (2025). "Find the smallest set of high-signal tokens that maximize the likelihood of some desired outcome." The convergence model is the ontological expression of this principle.
-- [aDNA Universal Standard v2.1](https://github.com/LatticeProtocol/adna) — §8.7 (75% Rule as norm bound), §10 (Context Library as topic-based subspace decomposition), §3.1 (question test as classification primitive).
+- [aDNA Universal Standard v2.1](https://github.com/aDNA-Network/aDNA) — §8.7 (75% Rule as norm bound), §10 (Context Library as topic-based subspace decomposition), §3.1 (question test as classification primitive).

@@ -9,7 +9,7 @@ updated: 2026-04-03
 last_edited_by: agent_init
 ---
 
-# Agentic-DNA
+# aDNA
 
 *A standalone knowledge architecture for building personal lattices and knowledge graphs with AI agents.*
 
@@ -137,6 +137,6 @@ SORT created DESC
 
 <div class="homepage-footer">
 
-Agentic-DNA — a standalone knowledge architecture built on the [aDNA paradigm](https://github.com/LatticeProtocol/adna) | foundational building block of the [Lattice Protocol](https://github.com/LatticeProtocol/lattice-protocol)
+aDNA — a standalone knowledge architecture built on the [aDNA paradigm](https://github.com/aDNA-Network/aDNA) | foundational building block of the [Lattice Protocol](https://github.com/LatticeProtocol/lattice-protocol)
 
 </div>

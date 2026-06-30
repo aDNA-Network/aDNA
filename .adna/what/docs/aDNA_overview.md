@@ -1,6 +1,6 @@
 ---
 type: docs
-title: "Agentic-DNA Overview"
+title: "aDNA Overview"
 status: active
 created: 2026-04-05
 updated: 2026-05-11
@@ -11,7 +11,7 @@ moved_by: M03_S2_B0
 tags: [docs, overview, aDNA, introduction]
 ---
 
-# Agentic-DNA Overview
+# aDNA Overview
 
 > **Provenance**: This file was the inner template `README.md` (aDNA specification +
 > tutorial hybrid; ~47K of canonical aDNA documentation) pre-aDNA-v7.0. The v7.0 repo
@@ -228,7 +228,7 @@ This keeps the directory structure flat while preserving semantic precision. The
 ## What's Inside
 
 ```
-Agentic-DNA/
+aDNA/
 ├── CLAUDE.md                           # Agent master context
 ├── MANIFEST.md                         # Project identity (customize this)
 ├── STATE.md                            # Operational state (customize this)
@@ -292,14 +292,14 @@ Agentic-DNA/
 ```bash
 mkdir -p ~/aDNA
 cd ~/aDNA
-git clone https://github.com/LatticeProtocol/aDNA.git adna
+git clone https://github.com/aDNA-Network/aDNA.git adna
 cd adna
 ```
 
 This creates the canonical workspace layout. The `adna/` directory is the base template — you'll fork it into project directories, keeping the template clean for updates.
 
 **Option B — Use as GitHub template**
-Click **[Use this template](https://github.com/LatticeProtocol/aDNA/generate)** on GitHub to create your own copy with clean history. Clone the result into `~/aDNA/`.
+Click **[Use this template](https://github.com/aDNA-Network/aDNA/generate)** on GitHub to create your own copy with clean history. Clone the result into `~/aDNA/`.
 
 ### 2. Run setup (recommended)
 
@@ -385,12 +385,12 @@ Then write your governance files using the starter templates in the full guide. 
 
 ## Multi-Project Workspaces
 
-The `~/aDNA/` workspace naturally supports multiple projects. Each project is a fork of the Agentic-DNA template with its own governance, git history, and domain customization. Forked projects use the `.aDNA` suffix to indicate they follow the aDNA standard (see Standard §3.5).
+The `~/aDNA/` workspace naturally supports multiple projects. Each project is a fork of the aDNA template with its own governance, git history, and domain customization. Forked projects use the `.aDNA` suffix to indicate they follow the aDNA standard (see Standard §3.5).
 
 ```
 ~/aDNA/
 ├── CLAUDE.md              # Workspace governance (auto-created on first run)
-├── Agentic-DNA/           # Base template (never modified — role: template, no .aDNA suffix)
+├── .adna/                 # Base template (never modified — role: template; hidden, source not an instance)
 ├── my_research_lab.aDNA/  # Project A (forked, customized)
 ├── client_acme.aDNA/      # Project B (forked)
 ├── latlab/                # (appears after L0→L1 upgrade)

@@ -7,14 +7,14 @@ last_edited_by: agent_rosetta
 tags: [manifest, governance]
 ---
 
-# Agentic-DNA — Project Manifest
+# aDNA — Project Manifest
 
 ## Project Identity
 
 <!-- CUSTOMIZE THIS: Replace the description below with your project's name and purpose. -->
 <!-- Example: "**my-project** — AI-powered market research platform for B2B SaaS companies." -->
 
-**Agentic-DNA** — A standalone knowledge architecture for building personal lattices and knowledge graphs. Designed for both humans (via Obsidian) and AI agents (via Claude Code). aDNA is the foundational building block of the Lattice federated computing protocol.
+**aDNA** — A standalone knowledge architecture for building personal lattices and knowledge graphs. Designed for both humans (via Obsidian) and AI agents (via Claude Code). aDNA is the foundational building block of the Lattice federated computing protocol.
 
 This repo is a self-contained aDNA deployment that anyone can clone and immediately start using. It includes templates, tools, example lattices, and the operational infrastructure (sessions, missions, campaigns) needed to run an AI-native project from day one.
 
@@ -23,7 +23,7 @@ This repo is a self-contained aDNA deployment that anyone can clone and immediat
 This project uses the **aDNA (Agentic DNA)** knowledge architecture — a bare triad deployment.
 
 ```
-Agentic-DNA/
+aDNA/
 ├── what/        # WHAT — Knowledge objects, context library, lattice tools
 ├── how/         # HOW — Plans, sessions, templates, pipelines
 ├── who/         # WHO — People, teams, coordination, governance

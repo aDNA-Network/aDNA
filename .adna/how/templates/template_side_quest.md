@@ -52,7 +52,7 @@ notes: "any observations"
 
 ## Submission Instructions
 
-1. Fork the [Agentic-DNA repo](https://github.com/LatticeProtocol/adna) (or use your existing fork)
+1. Fork the [aDNA repo](https://github.com/aDNA-Network/aDNA) (or use your existing fork)
 2. Create a result file: `how/quests/results/result_<quest_id>_<YYYYMMDD>_<your_name>.md`
 3. Use the [quest result template](../how/templates/template_quest_result.md) for the file format
 4. Fill in all required sections — especially the Raw Data YAML block

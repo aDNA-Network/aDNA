@@ -4,7 +4,7 @@
 
 ## Structure
 
-This project uses the [aDNA](https://github.com/LatticeProtocol/Agentic-DNA) knowledge architecture:
+This project uses the [aDNA](https://github.com/aDNA-Network/aDNA) knowledge architecture:
 
 - **`who/`** — People, teams, coordination
 - **`what/`** — Knowledge, context, domain objects

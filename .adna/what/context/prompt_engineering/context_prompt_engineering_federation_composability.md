@@ -166,7 +166,7 @@ SHACL (W3C Shapes Constraint Language) provides formal shape definitions for RDF
 
 ## Sources
 
-- [aDNA Bridge Patterns](https://github.com/LatticeProtocol/adna) — Companion to aDNA Standard v2.0. Composition patterns (nesting, sibling, monorepo), discovery protocol, scope boundaries, cross-referencing conventions.
+- [aDNA Bridge Patterns](https://github.com/aDNA-Network/aDNA) — Companion to aDNA Standard v2.0. Composition patterns (nesting, sibling, monorepo), discovery protocol, scope boundaries, cross-referencing conventions.
 - [SPARQL 1.1 Federation Extensions](https://www.w3.org/TR/sparql11-federated-query/) — W3C (2013). SERVICE keyword for cross-endpoint queries.
 - [Toward a Systematic Conflict Resolution Framework for Ontologies](https://pmc.ncbi.nlm.nih.gov/articles/PMC8352153/) — Keet (2021). 10 conflict types in 4 groups with fixed resolution strategies.
 - [Modular Ontology Modeling (MOMo)](https://journals.sagepub.com/doi/10.3233/SW-222886) — Shimizu et al. Pattern-based modules, OPLa annotations, shared border concepts.

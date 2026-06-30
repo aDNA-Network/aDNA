@@ -4,7 +4,7 @@ A step-by-step walkthrough of creating, validating, publishing, pulling, and com
 
 ## Prerequisites
 
-- An aDNA vault (cloned from [LatticeProtocol/Agentic-DNA](https://github.com/LatticeProtocol/adna))
+- An aDNA vault (cloned from [aDNA-Network/aDNA](https://github.com/aDNA-Network/aDNA))
 - `lattice-protocol` repo available at `~/aDNA/lattice-protocol/`
 - Python 3.10+ with `pyyaml` installed
 - `latlab` CLI installed (`pip install lattice-protocol`)

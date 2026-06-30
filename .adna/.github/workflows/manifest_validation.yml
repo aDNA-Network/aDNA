@@ -4,7 +4,7 @@
 # Caller usage (in <repo>/.github/workflows/ci.yaml):
 #
 #   manifest-validation:
-#     uses: LatticeProtocol/aDNA/.github/workflows/manifest_validation.yml@main
+#     uses: aDNA-Network/aDNA/.github/workflows/manifest_validation.yml@main
 #     with:
 #       manifest_path: deploy_manifest.yaml  # default
 #

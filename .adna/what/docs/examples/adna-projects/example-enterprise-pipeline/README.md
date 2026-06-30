@@ -4,7 +4,7 @@ A data integration platform connecting CRM, analytics, and ML pipelines for mid-
 
 ## Structure
 
-This project uses the [aDNA](https://github.com/LatticeProtocol/adna) knowledge architecture:
+This project uses the [aDNA](https://github.com/aDNA-Network/aDNA) knowledge architecture:
 
 - **`who/`** — Customers, partners, contacts, projects, coordination
 - **`what/`** — Knowledge, context, services, APIs

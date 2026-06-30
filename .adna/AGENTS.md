@@ -6,11 +6,11 @@ last_edited_by: agent_init
 tags: [directory_index, root]
 ---
 
-# Agentic-DNA — Agent Guide
+# aDNA — Agent Guide
 
 ## Purpose
 
-This is the root agent reference for the Agentic-DNA project. It routes agents to the appropriate triad leg (what/how/who) based on their current task. This file is always loaded — it does not have a Load/Skip section because agents need it for orientation on every session.
+This is the root agent reference for the aDNA project. It routes agents to the appropriate triad leg (what/how/who) based on their current task. This file is always loaded — it does not have a Load/Skip section because agents need it for orientation on every session.
 
 ## Quick Orientation
 

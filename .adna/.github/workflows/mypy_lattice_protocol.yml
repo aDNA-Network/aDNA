@@ -7,7 +7,7 @@
 # Caller usage (in <repo>/.github/workflows/ci.yaml):
 #
 #   mypy-touched:
-#     uses: LatticeProtocol/aDNA/.github/workflows/mypy_lattice_protocol.yml@main
+#     uses: aDNA-Network/aDNA/.github/workflows/mypy_lattice_protocol.yml@main
 #
 # Behavior:
 #   - On pull_request events, mypy --strict runs against .py files changed in the PR diff.

@@ -28,6 +28,18 @@ Changelog entries are organized by **governance version** (primary heading). Sta
 
 ---
 
+## [v8.3] — 2026-06-29
+
+> **Governance 8.2 → 8.3 · Standard track: v2.4 (unchanged)** — operator-ratified **template org-name currency sweep**: the base template's live-routing references are brought current; historical provenance preserved. Released via `skill_template_release`. Changes are **corrective** (minor per the §Version Policy table / ADR-011).
+
+### Changed
+- **Org/repo URL currency** — live-routing references to the standard repo updated `github.com/LatticeProtocol/{aDNA,adna,Agentic-DNA}` → **`github.com/aDNA-Network/aDNA`** (the public face, ADR-034) across `CONTRIBUTING.md`, `README.md`, `adna.md`, the reusable-workflow caller-usage comments, current docs/quests/skills/templates, and the example project READMEs.
+- **Display-name currency** — the project's current display name `Agentic-DNA` → **`aDNA`** in `AGENTS.md`, `MANIFEST.md`, `adna.md`, `how/Home.md`, the overview, and `deploy_manifest.yaml` (per the v8.2 §3.5 errata / ADR-006); the base-template tree depiction reconciled to `.adna/`.
+
+### Kept (deliberate — not currency defects)
+- All **historical / provenance** references retain their original names: `CHANGELOG.md`, the v6→v7 + v5.2→v6.0 upgrade/migration guides, `STATE.md` snapshots, and the ADR-framed §3.5 errata (archive-don't-delete, §15).
+- References to **other repos** preserved: `LatticeProtocol/lattice-protocol` + `LatticeProtocol/latlab` (private code/SDK), `LatticeProtocol/III.aDNA` (vault remote) — not part of the public-standard org migration.
+
 ## [v8.2] — 2026-06-29
 
 > **Governance 8.1 → 8.2 · Standard track: v2.3 → v2.4** — operator-ratified propagation of Operation Drydock M03 fork-template hygiene (ADR-042) plus the standard-track currency deltas staged since v8.1. Changes are **additive / corrective** (minor per the §Version Policy table / ADR-011). Released via `skill_template_release`.

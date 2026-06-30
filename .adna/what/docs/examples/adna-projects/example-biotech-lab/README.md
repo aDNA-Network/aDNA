@@ -4,7 +4,7 @@ A rare disease genomics research lab tracking experiments, compound libraries, a
 
 ## Structure
 
-This project uses the [aDNA](https://github.com/LatticeProtocol/adna) knowledge architecture:
+This project uses the [aDNA](https://github.com/aDNA-Network/aDNA) knowledge architecture:
 
 - **`who/`** — People, teams, coordination
 - **`what/`** — Knowledge, context, experiments, compounds, protocols, targets

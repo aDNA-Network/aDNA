@@ -108,7 +108,7 @@ directory IS the git clone of the template repo (no longer a symlink to a nested
 
 ```bash
 cd <workspace_root>           # typically ~/aDNA
-git clone https://github.com/LatticeProtocol/aDNA.git .adna
+git clone https://github.com/aDNA-Network/aDNA.git .adna
 ```
 
 If a workspace router (`<workspace_root>/CLAUDE.md`) doesn't yet exist, install it from
@@ -139,7 +139,7 @@ The canonical aDNA naming convention is `<name>.aDNA/` directory ↔ `<name>.aDN
 1. **Hyphen-flat GitHub repos** (4 vaults: `science-stanley-adna`, `wga-adna`, `context-commons-adna`, `LAStartupLattice`) — pre-`.aDNA/` convention vaults; renaming is operator-discretionary and tracked under v3 successor `campaign_adna_v3_ecosystem_compliance` M04-EC
 2. **No-remote vaults** (7 vaults: `Spacemacs.aDNA`, `VideoForge.aDNA`, `III.aDNA`, etc.) — adopt the convention if/when a GitHub remote is configured via `skill_git_remote_setup.md` (M05; new)
 3. **Path-style local remote** (1 vault: `LPWhitepaper.aDNA`) — permitted under ADR-009 §1's "Path-style remotes" clause for whitepaper-vault tooling pattern
-4. **Template-repo exception** (`LatticeProtocol/aDNA.git` — this template; mixed-case canonical per ADR-006 amendment 2026-05-18) — bare short name; recursive `.aDNA.aDNA` form avoided
+4. **Template-repo exception** (`aDNA-Network/aDNA.git` — this template; mixed-case canonical per ADR-006 amendment 2026-05-18) — bare short name; recursive `.aDNA.aDNA` form avoided
 
 **Naming decisions for existing projects:**
 - Do NOT rename existing projects to add `.aDNA` suffix unless you've assessed the blast radius (per ADR-009 §5 application scope: existing vaults are operator-discretionary)
@@ -186,7 +186,7 @@ Report results.
 | No `.adna/` directory | Template not cloned | Run `git clone <adna-repo> adna/` first |
 | CLAUDE.md not writable | Permissions | Check filesystem permissions |
 | Project has no CLAUDE.md | Ungoverned project | Flag for user — may need manual CLAUDE.md creation |
-| `.adna/` missing post-clone | Clone failed or wrong path | Re-clone: `cd ~/aDNA && rm -rf .adna && git clone https://github.com/LatticeProtocol/aDNA.git .adna` |
+| `.adna/` missing post-clone | Clone failed or wrong path | Re-clone: `cd ~/aDNA && rm -rf .adna && git clone https://github.com/aDNA-Network/aDNA.git .adna` |
 | Workspace router missing | Pre-bootstrap state | Install from template: `cp .adna/how/templates/template_workspace_claude.md ~/aDNA/CLAUDE.md` |
 
 ## Rollback

@@ -35,7 +35,7 @@ Most knowledge systems weren't designed with AI agents in mind. aDNA is.
 ```bash
 # Create the workspace + clone the template into .adna/ (hidden by convention)
 mkdir -p ~/aDNA && cd ~/aDNA
-git clone https://github.com/LatticeProtocol/aDNA.git .adna
+git clone https://github.com/aDNA-Network/aDNA.git .adna
 
 # Bootstrap the workspace router from the template
 cp .adna/how/templates/template_workspace_claude.md CLAUDE.md
@@ -155,4 +155,4 @@ The full technical documentation lives inside `.adna/`:
 
 [MIT](LICENSE) — use it for anything.
 
-*Built by [Lattice Protocol](https://github.com/LatticeProtocol). aDNA is domain-neutral — any project benefits.*
+*Built by [Lattice Protocol](https://github.com/aDNA-Network). aDNA is domain-neutral — any project benefits.*

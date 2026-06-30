@@ -59,7 +59,7 @@ updated: YYYY-MM-DD
 status: idea
 last_edited_by: agent_{username}
 tags: [backlog, upstream-suggestion]
-upstream_target: LatticeProtocol/adna
+upstream_target: aDNA-Network/aDNA
 ---
 ```
 
@@ -74,7 +74,7 @@ Body should include:
 If the `gh` CLI is configured and the user approves:
 
 ```bash
-gh issue create --repo LatticeProtocol/adna \
+gh issue create --repo aDNA-Network/aDNA \
   --title "Suggestion: <short description>" \
   --body "<observation + context from the backlog file>"
 ```

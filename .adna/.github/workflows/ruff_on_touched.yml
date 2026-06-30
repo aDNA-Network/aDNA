@@ -6,7 +6,7 @@
 # Caller usage (in <repo>/.github/workflows/ci.yaml):
 #
 #   ruff-touched:
-#     uses: LatticeProtocol/aDNA/.github/workflows/ruff_on_touched.yml@main
+#     uses: aDNA-Network/aDNA/.github/workflows/ruff_on_touched.yml@main
 #
 # Behavior:
 #   - On pull_request events, ruff runs against files changed in the PR diff.

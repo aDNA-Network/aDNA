@@ -1,4 +1,4 @@
-# deploy_manifest.yaml — adna template (display name: Agentic-DNA; URL slug: adna per ADR-006)
+# deploy_manifest.yaml — aDNA template (display name: aDNA; URL slug: adna per ADR-006)
 #
 # Authoritative spec: M-B4.5 repo_hygiene_charter §3 (Federation-Beta Planning).
 # Schema: github.com/LatticeProtocol/lattice-protocol/protocol/schemas/deploy_manifest.schema.json.

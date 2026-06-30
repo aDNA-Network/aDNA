@@ -1,12 +1,13 @@
 ---
 type: governance
-version: "8.2"
+version: "8.3"
 token_estimate: ~3000
 updated: 2026-06-29
 last_edited_by: agent_stanley
 ---
 
 # CLAUDE.md — aDNA
+<!-- v8.3 | 2026-06-29 | template org-name currency: live-routing refs LatticeProtocol→aDNA-Network/aDNA + display name Agentic-DNA→aDNA; historical + private-repo refs (lattice-protocol/latlab/III.aDNA) KEPT -->
 <!-- v8.2 | 2026-06-29 | standard v2.4 (§6.5 Rename Protocol + §13.2 harness-injection safeguard, ADR-042) + Class-1 fork-template hygiene: persona parameterized ({{persona}}), stale campaign dropped -->
 
 ## Identity & Personality
