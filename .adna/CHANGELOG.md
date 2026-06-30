@@ -28,6 +28,22 @@ Changelog entries are organized by **governance version** (primary heading). Sta
 
 ---
 
+## [v8.2] — 2026-06-29
+
+> **Governance 8.1 → 8.2 · Standard track: v2.3 → v2.4** — operator-ratified propagation of Operation Drydock M03 fork-template hygiene (ADR-042) plus the standard-track currency deltas staged since v8.1. Changes are **additive / corrective** (minor per the §Version Policy table / ADR-011). Released via `skill_template_release`.
+
+### Added
+- **Standard §6.5 Rename Protocol** (v2.4, ADR-042): a rename of a vault/project/persona MUST sweep its own live-routing governance files (`CLAUDE.md`/`STATE.md`/`AGENTS.md`) of self-references to the **old** name at rename-time, with a keep/strip classifier that preserves legitimate historical cross-refs. Recipe: new **`how/skills/skill_project_rename.md`**.
+- **Standard §13.2 Tier-1 "no harness-injected context" safeguard** (v2.4, ADR-042): governance files MUST NOT commit harness context boundaries (`# userEmail` / `# currentDate`). Enforced by a new **`adna_validate.py --governance`** check (`check_harness_injection`).
+
+### Changed
+- **Fork-template persona parameterized (Class-1, ADR-042)**: the base `.adna/CLAUDE.md` Identity section now carries a `{{persona}}` placeholder instead of a hard-coded `Berthier` — a non-Home fork no longer inherits the workspace persona. `skill_project_fork.md` (Step 4) and `skill_onboarding.md` (Step 8) resolve the token at fork/onboarding time (mirrors the Home-class `{{persona}}` flow). The root workspace-router (`template_workspace_claude.md` → `~/aDNA/CLAUDE.md`) legitimately remains **Berthier**.
+- **Tooling currency v2.2 → v2.3**: `adna_validate.py` + `compliance_checker.py` standard-version bump; `frontmatter_schema.json` `$id` `adna.dev` → `adna.network`.
+- **Standard §3.5 errata** (ADR-006 + ADR-008): the base template is the `aDNA` repository embedded at `.adna/`, not a visible `Agentic-DNA/` directory (no normative change).
+
+### Removed
+- **Stale `campaign_adna_workspace_upgrade`** dropped from the shipped template (`.adna/how/campaigns/`): a `completed` `~/lattice`→v6.0 migration foreign to any fresh fork (its reusable procedure already graduated to `skill_workspace_upgrade.md`). A fork's `how/campaigns/` now starts clean. (Class-1, ADR-042.)
+
 ## [v8.1] — 2026-06-23
 
 > **Governance 8.0 → 8.1** — a combined **catch-up release** (operator-ratified, ADR-038): completes the v2.3 standard body the v8.0 image promised, and brings the base template's Obsidian payload + fork flow to batteries-included parity. The changes are **additive / corrective** (minor per the §Version Policy table / ADR-011). **Standard track: v2.3 (unchanged)** — v8.0 bumped the title to v2.3 but shipped a 14-type §5 body; v8.1 materializes the body it promised (no title bump). Combines two independently-staged deltas — the F1 §5 body-completion (ADR-035) and Operation Cornerstone Obsidian parity (`Obsidian.aDNA` M07) — into one push per ADR-038.

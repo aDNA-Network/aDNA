@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://adna.dev/schemas/frontmatter/v2.2",
+  "$id": "https://adna.network/schemas/frontmatter/v2.3",
   "title": "aDNA Frontmatter Schema",
-  "description": "JSON Schema for validating aDNA content file frontmatter per §7 of the aDNA Universal Standard v2.2",
+  "description": "JSON Schema for validating aDNA content file frontmatter per §7 of the aDNA Universal Standard v2.3",
   "type": "object",
   "required": ["type", "created", "updated", "status", "last_edited_by", "tags"],
   "properties": {

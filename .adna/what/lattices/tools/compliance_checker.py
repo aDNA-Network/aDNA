@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """aDNA Compliance Checker — scores vault objects across 10 compliance dimensions.
 
-Validates objects against the aDNA Universal Standard v2.2 and produces
+Validates objects against the aDNA Universal Standard v2.3 and produces
 YAML scorecards and Markdown reports.
 
 Usage:
@@ -866,7 +866,7 @@ def format_scorecard_yaml(
         "meta": {
             "generated": datetime.now(timezone.utc).isoformat(),
             "vault": vault_path.name,
-            "standard_version": "2.2",
+            "standard_version": "2.3",
             "schema_version": "1.0",
             "object_count": summary["object_count"],
         },

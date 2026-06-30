@@ -2,7 +2,7 @@
 type: manifest
 role: template
 created: 2026-02-17
-updated: 2026-06-19
+updated: 2026-06-29
 last_edited_by: agent_rosetta
 tags: [manifest, governance]
 ---
@@ -35,7 +35,7 @@ Agentic-DNA/
 | Layer | Question | Contains |
 |-------|----------|----------|
 | **what/** | WHAT does this project know? | Context library (5 topics, 27 subtopics), decisions, aDNA docs, lattice YAML tools + schema + examples |
-| **how/** | HOW does this project work? | Missions, sessions, 22 templates, 13 skills, backlog, campaigns, PRD/RFC pipeline |
+| **how/** | HOW does this project work? | Missions, sessions, 26 templates, 14 skills, backlog, campaigns, PRD/RFC pipeline |
 | **who/** | WHO is involved? | People, teams, coordination, governance |
 
 ### Base Ontology
@@ -84,7 +84,7 @@ how/pipelines/prd_rfc/
 └── 04_review/        → Final approval (human gate)
 ```
 
-### Templates (22)
+### Templates (26)
 
 | Template | Auto-triggers in |
 |----------|-----------------|
@@ -110,17 +110,21 @@ how/pipelines/prd_rfc/
 | `template_migration.md` | `how/migrations/` |
 | `template_side_quest.md` | `how/quests/` |
 | `template_quest_result.md` | `how/quests/results/` |
+| `template_workspace_claude.md` | workspace root (`~/aDNA/CLAUDE.md`) |
+| `template_home_claude.md` | `Home.aDNA/` (Home-class fork) |
+| `template_inventory_entry.md` | `what/inventory/` |
+| `template_identity_entry.md` | `who/identity/` |
 
 ## Active Builds
 
 | Component | Status | Description |
 |-----------|--------|-------------|
-| aDNA Standard v2.3 | Shipped | Core specification — triad, ontology (16 base + 8 extension), sessions, missions, campaigns |
+| aDNA Standard v2.4 | Shipped | Core specification — triad, ontology (16 base + 8 extension), sessions, missions, campaigns |
 | Context library | Shipped | 5 topics, 27 subtopics, ~75K tokens. Cross-topic recipe system with 6 recipes |
 | Lattice YAML tools | Shipped | Validate, convert (YAML↔canvas), JSON Schema, 15 example lattices + 3 canvas templates |
 | Mermaid-enhanced spec docs | Shipped | 19 diagrams across 3 aDNA specification documents |
 | PRD/RFC pipeline | Shipped | 4-stage planning pipeline (research → requirements → design → review) |
-| 22 templates | Shipped | Session, mission, campaign, campaign mission, context, ADR, backlog, coordination, PRD, RFC, skill, AAR, lightweight AAR, strategic compass, campaign CLAUDE.md, registry, data record, folder note, governance, migration, side quest, quest result |
+| 26 templates | Shipped | Session, mission, campaign, campaign mission, context, ADR, backlog, coordination, PRD, RFC, skill, AAR, lightweight AAR, strategic compass, campaign CLAUDE.md, registry, data record, folder note, governance, migration, side quest, quest result, workspace CLAUDE.md, home CLAUDE.md, inventory entry, identity entry |
 | Execution hierarchy v2 | Shipped | OODA cascade (3-level evaluation loops), AAR protocol, mission classes, escalation cascade |
 | Quality framework | Shipped | 10-dimension compliance rubric, quality audit skill, context graduation pipeline |
 

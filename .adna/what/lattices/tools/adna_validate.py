@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""aDNA Instance Validator — checks conformance per §5.5 of the aDNA Universal Standard v2.2.
+"""aDNA Instance Validator — checks conformance per §5.5 of the aDNA Universal Standard v2.4.
 
 Usage:
     python adna_validate.py <path>                     # Validate instance at path
     python adna_validate.py <path> --level standard    # Check specific level
-    python adna_validate.py <path> --governance        # Run governance sync checks
+    python adna_validate.py <path> --governance        # Governance sync + harness-injection hygiene (§13.2)
     python adna_validate.py <path> --verbose           # Detailed output
     python adna_validate.py <path> --json              # Machine-readable JSON output
 """
@@ -42,6 +42,11 @@ STANDARD_RECOMMENDED_DIRS = [
 
 REQUIRED_FRONTMATTER = ["type", "created", "updated", "status", "last_edited_by", "tags"]
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+# Governance files that MUST NOT carry committed harness-injected context boundaries (§13.2)
+GOVERNANCE_FILES_FOR_HYGIENE = ("CLAUDE.md", "STATE.md", "AGENTS.md")
+# Harness boundaries the agent runtime injects: `# userEmail`, `# currentDate (Today's date is ...)`
+HARNESS_INJECTION_RE = re.compile(r"^#\s+(userEmail|currentDate)\b")
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -235,6 +240,36 @@ def determine_level(root, prefix):
 # Governance sync checks (--governance flag)
 # ---------------------------------------------------------------------------
 
+def check_harness_injection(root, result):
+    """Flag harness-injected context boundaries committed into governance files (§13.2, ADR-042).
+
+    The agent harness injects `# userEmail` / `# currentDate (Today's date is ...)` lines into a
+    running session as context boundaries. A session that commits a governance file can capture that
+    injected tail. Such lines are session context, not governance, and are stale once committed — a
+    MUST violation per §13.2 Tier-1.
+    """
+    for dirpath, dirnames, filenames in os.walk(root):
+        # never descend into VCS metadata
+        if ".git" in dirnames:
+            dirnames.remove(".git")
+        for fn in filenames:
+            if fn not in GOVERNANCE_FILES_FOR_HYGIENE:
+                continue
+            fp = os.path.join(dirpath, fn)
+            try:
+                with open(fp, "r", encoding="utf-8") as f:
+                    lines = f.readlines()
+            except (OSError, UnicodeDecodeError):
+                continue
+            for i, line in enumerate(lines, 1):
+                if HARNESS_INJECTION_RE.match(line):
+                    rel = os.path.relpath(fp, root)
+                    result.errors.append(
+                        f"Harness-injection: '{rel}:{i}' commits a harness context boundary "
+                        f"('{line.strip()}') — strip before commit (§13.2, ADR-042)"
+                    )
+
+
 def check_governance_sync(root, result):
     """Check governance file consistency: template counts, version strings."""
     # Template count
@@ -289,6 +324,9 @@ def check_governance_sync(root, result):
             details = ", ".join(f"{k}={v}" for k, v in gov_versions.items())
             result.warnings.append(f"Version note: governance versions differ across files ({details})")
         result.info.append(f"Versions found: {versions_found}")
+
+    # Harness-injection hygiene (§13.2, ADR-042)
+    check_harness_injection(root, result)
 
 
 # ---------------------------------------------------------------------------

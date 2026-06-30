@@ -154,6 +154,7 @@ Edit the forked project's governance files to set up first-run detection:
 **CLAUDE.md:**
 - Set `last_edited_by: agent_init` in frontmatter
 - Set `updated: <today's date>` in frontmatter
+- **Persona token** (ADR-042 Class-1): the inherited `CLAUDE.md` carries a `{{persona}}` placeholder in its Identity & Personality section, not a hard-coded name. For a non-Home fork, leave `{{persona}}` as the placeholder for onboarding Step 8 to resolve — or substitute it now from `carry_forward_answers` if a persona name was supplied. (Mirrors the Home-class `{{persona}}` → `Hestia` substitution at Step 3.5; ensures a fresh fork never inherits the base `Berthier` name.)
 
 These markers ensure the project's CLAUDE.md first-run detection will trigger `skill_onboarding.md` on next open.
 

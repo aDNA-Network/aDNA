@@ -184,7 +184,7 @@ Update the three governance files with the user's project identity. Use the `{us
 
 **CLAUDE.md:**
 - If the user shared a project description in Step 5, update the project description in the Identity & Personality section (first paragraph after the personality block)
-- Keep Berthier personality unless they choose otherwise in Step 8
+- Resolve the `{{persona}}` placeholder in Step 8 — keep the default chief-of-staff voice (`Berthier`) or set a custom persona
 - Set `last_edited_by: agent_{username}` and `updated: <today>` in frontmatter
 
 ### Step 8: Personality Customization Offer
@@ -195,11 +195,11 @@ Conversational offer — don't make it a big deal:
 
 **If user wants custom:**
 1. Ask for: name, archetype/inspiration, 3-4 operating style principles, greeting style
-2. Edit the Identity & Personality section of CLAUDE.md (between `## Identity & Personality` header and the first `---` separator)
+2. Edit the Identity & Personality section of CLAUDE.md (between `## Identity & Personality` header and the first `---` separator) — replace the `{{persona}}` placeholder with their chosen name
 3. Show them the result before saving
 
-**If user keeps Berthier:**
-- Confirm and move on. No changes needed.
+**If user keeps the default:**
+- Substitute the `{{persona}}` placeholder → `Berthier` (the default chief-of-staff) throughout `CLAUDE.md`, then confirm and move on.
 
 ### Step 9: Marketplace Teaser
 
