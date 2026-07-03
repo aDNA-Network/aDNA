@@ -118,6 +118,17 @@ This gives the new project:
 - Portable Obsidian config (app settings, appearance, CSS snippets, hotkeys, plugin list)
 - Run `./setup.sh` to download plugins and theme (~15MB, requires network)
 
+**Orphan-id lint (fork/authoring-time):** the preserved `.obsidian/community-plugins.json` declares the plugin roster `setup.sh` will install. Verify **every declared id has a matching `.obsidian/plugins/<id>/` folder in the source `.adna/` payload** (or is explicitly marked install-pending) — a declared-but-unbacked id (e.g. an `advanced-canvas` duplicate of `obsidian-advanced-canvas`) ships a "missing plugin" error to every fork. This is the born-at-authoring version of the post-hoc roster check; run it whenever the shipped `.obsidian/` payload changes.
+
+```bash
+python3 - <<'PY'
+import json, os
+decl = json.load(open('.obsidian/community-plugins.json'))
+missing = [p for p in decl if not os.path.isdir(f'.obsidian/plugins/{p}')]
+print('ORPHAN plugin ids (declared, no plugins/<id>/):', missing or 'none')
+PY
+```
+
 ### Step 3.5: Home-class governance install (only when `project_name = Home`)
 
 A Home fork is the per-node operational vault, and the generic base `.adna/CLAUDE.md` (the **Berthier** workspace-router persona) is the wrong governance file for it. For a Home-class fork only, replace the inherited `CLAUDE.md` with the **Hestia** node-operational template:

@@ -136,6 +136,8 @@ For each vault in `inventory_vaults.yaml` `vaults:` list, verify the path exists
 
 Drift is logged in the report; exit code 9 ONLY if a vault is listed-and-missing (the inventory is incorrect about ground truth). Disk-extras-not-in-inventory are warnings (exit 0) because they may be in-progress new vaults.
 
+**Census discipline — allowlist, not pattern (a census flags the unrecognized; it does not bless the recognized):** enumerate the workspace root with `ls -A` (catches dot/underscore-prefixed names a bare `ls` and a `*.aDNA`-only glob both miss) and classify **every** entry against an allowlist = {registered `*.aDNA` graphs · registered shims (shim ledger) · grandfathered infra (`.adna`, and any operator-documented root repos) · the `Archive.aDNA/` holder · documented exceptions}. **Anything not on the allowlist → CLEAN-ROOT DRIFT warning.** A pattern-based census (match `*.aDNA`, ignore the rest) certifies "everything I recognize is fine" while silently ignoring everything it does not — exactly backwards for a drift detector (aborted-fork `.git` stores, stray tarballs, unhomed sites all evade it).
+
 ### Step 10: Last-Update Freshness
 
 For each `inventory_*.md` file, check the `updated` frontmatter field. If older than 7 days, log a warning (exit 0 still).

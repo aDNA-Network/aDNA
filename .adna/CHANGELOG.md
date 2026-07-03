@@ -28,6 +28,23 @@ Changelog entries are organized by **governance version** (primary heading). Sta
 
 ---
 
+## [v8.4] — 2026-07-03
+
+**Standard v2.5** (coincides — ADR-046, ratified at Champollion G2; folded to the image at G6).
+
+### Added
+- **§7.7 Decision-Record Ratification Discipline** in the standard (agents author, operators ratify; 4-field ratification block) + its instrument `how/templates/template_ratification_record.md`.
+- **Lattice Home splash** promoted to the standard: `what/patterns/pattern_lattice_home.md` + `how/templates/template_lattice_home_render.md` + `how/skills/skill_lattice_home_install.md` (HOME.md companion pointer).
+- Workspace-router Standing Rules 5–7 (router-row discipline · Archive-holder concept · shim-window discipline w/ ledger row-schema) in `template_workspace_claude.md` + the pre-instantiated root router.
+- Credential-broker routing snippet; AskUserQuestion operator-decision-surfacing discipline; single-writer-lease rule (CLAUDE.md + AGENTS.md + `skill_inventory_refresh`); recon-beats-the-charter clause (campaigns); Heavy-File Read Convention (AGENTS.md); health-check allowlist-census rule; fork-time orphan-plugin-id lint; mission-template `executor_tier` + token-budget fields.
+
+### Changed
+- `what/docs/adna_standard.md` → **v2.5** (§7.2 per-class frontmatter profile · §5.5 conformance-walk scope · §5.3 optional `federation/` row · §15.4 version-cut checklist).
+- Validators: `compliance_checker.py` (v2.5, context type-set, skill EXEMPT-AS-POLICY NA_MAP, self-describing lattice companions) · `adna_validate.py` (generalized nested-instance detection — auto-excludes subtrees carrying their own `.git` + governance) · `lattice_validate.py` (federation-block vs publish-readiness gates disambiguated).
+- Currency & first-contact: README badges → v8.4/v2.5 + top-of-doc ToC + adna.network learning-path pointers (root + embedded); router counts re-censused (28 templates · 27 skills); onboarding persona line recast to `{{persona}}` default-when-unresolved; Obsidian payload docs reconciled to the shipped 14-plugin roster; PRD/RFC template placeholder tags no longer leak into the tag index.
+
+*Release ratified at Champollion G6 (2026-07-03; operator: "Ratify all six as recommended"). Dev-graph record: `aDNA.aDNA/how/campaigns/campaign_champollion/artifacts/release_candidate_v8_4.md`.*
+
 ## [v8.3] — 2026-06-29
 
 > **Governance 8.2 → 8.3 · Standard track: v2.4 (unchanged)** — operator-ratified **template org-name currency sweep**: the base template's live-routing references are brought current; historical provenance preserved. Released via `skill_template_release`. Changes are **corrective** (minor per the §Version Policy table / ADR-011).

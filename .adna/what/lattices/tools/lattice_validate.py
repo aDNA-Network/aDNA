@@ -348,15 +348,23 @@ def _validate_federation(
 
 def check_federation_readiness(data: dict[str, Any]) -> LatticeValidationResult:
     """
-    Check if a lattice is ready for federation (sharing/export).
+    Check if a lattice's FEDERATION BLOCK is ready for sharing/export.
 
-    Implements the 6 federation readiness checks from lattice_federation.md §4.1:
+    Implements the 6 federation-block readiness checks from lattice_federation.md
+    §2.3 / §4.1 (this function validates the federation block itself):
     1. Schema validation passes (basic structure check)
     2. federation.shareable is true
     3. federation.source_instance is set
     4. fair.license is declared
     5. fair.keywords has >= 1 entry
     6. All ref fields resolve or use lattice:// URIs
+
+    Note (F-CHM-214 harmonization): this is a DISTINCT gate from the registry
+    *publish-readiness* checklist, whose authoritative list lives in
+    `how/skills/skill_lattice_publish.md` (shareable · source_instance ·
+    version_policy · license · keywords · valid lattice_type). The two overlap
+    but are not identical; the publish skill governs publish-readiness, while this
+    function checks the federation block per lattice_federation.md §2.3.
 
     Args:
         data: Parsed lattice YAML dictionary (with root 'lattice' key).

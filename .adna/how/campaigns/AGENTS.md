@@ -174,6 +174,7 @@ For campaigns that will be executed by multiple agents or span many sessions, cr
 - **Campaign scope is mutable** — add, reorder, or remove missions as needed, but document scope changes
 - **Subsumption** — when a campaign absorbs an existing mission, set the original mission's status to `subsumed`
 - **Archive, don't delete** — campaign documents are permanent records even after completion
+- **Recon beats the charter** — a campaign/plan charter carries counts, named items, and assumed governance that read as facts but are **planning estimates**. Before each destructive/structural op, the executor: (1) re-derives ground truth over the live-ref + consumer surface (estimates run ~3× low); (2) re-verifies each target/absorber's own ratified governance (CLAUDE.md + ADRs + active campaigns) — the charter may predate or contradict it; (3) surfaces material deltas at the entry gate (> ~20% count divergence · governance conflict · surprise live work) **before** proceeding; (4) records the delta so the next op inherits truth, not the stale estimate. The charter is a hypothesis; recon is the test.
 
 ## Load/Skip Decision
 

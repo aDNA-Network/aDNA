@@ -120,6 +120,8 @@ The gallery is intentionally a **static markdown view** of inventory state so it
 ---
 
 > _This is the lattice-home gallery for this node. The role expansion pattern is documented at the standard level (see `aDNA.aDNA/what/decisions/`); see [[MANIFEST]] and [[STATE]] for vault identity + operational state._
+>
+> _Terminal companion: the **Lattice Home cold-start splash** ([[pattern_lattice_home]]) renders a 5-block ASCII state summary at terminal open — install it per [[skill_lattice_home_install]]. HOME.md is the browse/gallery surface; the splash is its terminal counterpart._
 
 <!--
   TEMPLATE NOTES (this comment block stays in `.adna/HOME.md` but skill_node_bootstrap_interview.md

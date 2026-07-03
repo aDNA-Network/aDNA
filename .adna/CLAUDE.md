@@ -1,12 +1,13 @@
 ---
 type: governance
-version: "8.3"
+version: "8.4"
 token_estimate: ~3000
-updated: 2026-06-29
-last_edited_by: agent_stanley
+updated: 2026-07-03
+last_edited_by: agent_rosetta
 ---
 
 # CLAUDE.md — aDNA
+<!-- v8.4 | 2026-07-03 | standard v2.5 fold (ADR-046: §7.7 ratification discipline · §7.2 per-class profile · §5.5 walk scope · §5.3 federation/ row) + Champollion RC batch: template_ratification_record + lattice-home trio (pattern·template·skill) + router Standing Rules 5–7 + broker snippet + AskUserQuestion/single-writer/recon/heavy-file/allowlist/orphan-lint doctrine folds + updated validators + currency (badges v8.4/v2.5 · counts 28 templates/27 skills · README ToC + learn path · Obsidian payload docs 14-plugin truth). Ratified Champollion G6 2026-07-03; record: aDNA.aDNA how/gates/champollion_p6_gate.output.md -->
 <!-- v8.3 | 2026-06-29 | template org-name currency: live-routing refs LatticeProtocol→aDNA-Network/aDNA + display name Agentic-DNA→aDNA; historical + private-repo refs (lattice-protocol/latlab/III.aDNA) KEPT -->
 <!-- v8.2 | 2026-06-29 | standard v2.4 (§6.5 Rename Protocol + §13.2 harness-injection safeguard, ADR-042) + Class-1 fork-template hygiene: persona parameterized ({{persona}}), stale campaign dropped -->
 
@@ -85,6 +86,7 @@ project_name.aDNA/
 |------|------|
 | Low (content files) | Check `updated` before overwriting. Set `last_edited_by` and `updated`. |
 | Medium (shared configs) | Read before write. One config at a time. |
+| Critical (inventory / credentials / identity entity types) | Pre-flight scan `how/sessions/active/` for ANY concurrent session whose `mission_id` touches the same entity type. If present → abort + escalate to operator. **Single-writer lease is mandatory, not advisory, for these entity types** (small-fan-in shared resources; concurrent writes don't merge). |
 | None (new files) | Creating new files has no collision risk. |
 
 ### Collision Prevention Rules
@@ -174,6 +176,17 @@ If a `Home.aDNA/` exists at the workspace root **and** the current session invol
 
 Forward-reference: aDNA-standard development campaigns live in `aDNA.aDNA/how/campaigns/` per ADR-004 of campaign_adna_v2_infrastructure (in aDNA.aDNA), not in `Home.aDNA/`. If a session is about evolving the standard (skills, ontology, frontmatter schema, CLAUDE.md format, version policy), route to `aDNA.aDNA/` instead.
 
+### Credential routing (broker = `Home.aDNA`)
+
+New forks inherit this snippet so credential questions route to the node broker. It is **NAMES ONLY** — a credential *value* is never referenced in any consumer vault. (If no `Home.aDNA/` peer exists on this node, the pointers below are forward-aspiration and no agent will action them — degrades gracefully.)
+
+1. **Discover** — `Home.aDNA/what/inventory/inventory_credentials.md` (name → env-var + `op://` URI/path).
+2. **Access** — read the **env-var** (hot path — no biometric/TTY); else the cold path (TTY-only). **Backend is platform-adaptive; the consumer interface is identical** (macOS: `~/.zshrc` Keychain-export / `op read`; Linux-headless: once-per-session `age` decrypt-to-env / per-call `age -d`).
+3. **Discipline** — never write a value; URI/env-var name only. Apply the workspace credential-handling doctrine §6 (URI-not-value · `head -c N` ≤ 6 · backup-exclusion).
+4. **Rotate / onboard** — route to the broker: a coord memo to `Home.aDNA/who/coordination/` or `Home.aDNA/how/skills/skill_credential_provision_via_op.md`.
+
+Broker docs (all under `Home.aDNA/`): inventory · credential-broker ADR (Keychain + 1P) · onboarding-surfaces ADR · cross-platform-backends ADR · `skill_credential_provision_via_op`.
+
 ### Session Greeting
 
 - **Planning or exploration sessions** (no specific task given): Greet the user as {{persona}}. Summarize operational state — active campaigns, missions, recent sessions, coordination notes. Load relevant context from `what/context/` if the conversation domain is clear. Ask for direction.
@@ -202,6 +215,15 @@ Every session ends with a structured status report:
 Every session MUST include a **Next Session Prompt** — a self-contained paragraph enabling a fresh agent to continue the work.
 
 **Mission completion**: When the final objective of a mission is completed in a session, run the 5-step AAR protocol (see `how/campaigns/AGENTS.md` §4). Produce an AAR artifact at `how/missions/artifacts/` using `template_aar.md`.
+
+### Operator-Decision-Surfacing Discipline (AskUserQuestion)
+
+Load-bearing decisions are surfaced to the operator, not resolved unilaterally — **even when the agent holds a confident default**. Surfacing the question turns a silent agent call into an operator-attested governance event.
+
+1. **When to surface** — decisions whose subtle resolution would otherwise be a silent unilateral call; gate ceremonies (phase-exit, ADR ratification); any decision whose record needs an operator-attestation timestamp. **Not** every choice: routine pacing, formatting, and decisions clearly pre-delegated by prior operator consent do not need surfacing.
+2. **Default-with-escape** — every question carries a recommended default (the agent's confident position) **plus** an escape (the operator's authority to override or defer). Recommend; do not decide.
+3. **Record the resolution** — operator answers land in the relevant mission file or STATE.md `Recent Decisions` table at session close, **not** only in the ephemeral conversation.
+4. **Batch** — multiple decisions at one gate → 1–2 calls (≤ 4 questions each); split only if it improves operator review ergonomics.
 
 ### Execution Hierarchy
 

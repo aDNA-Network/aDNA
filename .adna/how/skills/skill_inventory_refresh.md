@@ -70,6 +70,16 @@ Invoked when:
 
 ## Implementation
 
+### Step 0: Pre-flight — single-writer lease
+
+Before touching any `what/inventory/*` file, scan for a concurrent writer:
+
+```bash
+ls how/sessions/active/ | grep -v '^\.gitkeep$'
+```
+
+If a concurrent session is in flight on the same entity type (inventory / identity), **abort and surface to the operator** — do not proceed. These files are small-fan-in shared resources where concurrent writes don't naturally merge; the cost of pausing is ~1ms, the cost of an unwanted speculative revert is high. Single-writer lease is mandatory here (see `CLAUDE.md` Safety Rules · `AGENTS.md`).
+
 ### Step 1: Enumerate Workspace Directories
 
 ```bash

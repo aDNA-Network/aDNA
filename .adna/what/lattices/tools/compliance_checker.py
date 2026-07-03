@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """aDNA Compliance Checker — scores vault objects across 10 compliance dimensions.
 
-Validates objects against the aDNA Universal Standard v2.3 and produces
+Validates objects against the aDNA Universal Standard v2.5 and produces
 YAML scorecards and Markdown reports.
 
 Usage:
@@ -55,14 +55,26 @@ SKIP_SUBDIRS: dict[str, set[str]] = {
     "lattice": {"skills"},  # companion lattice defs, counted under skills
 }
 
+# Canonical context subtype vocabulary (aDNA Universal Standard v2.5 §7 content
+# subtypes). A context file's frontmatter `type` is one of these; the bare
+# `context` type stays valid alongside the subtypes.
+CONTEXT_TYPES = frozenset(
+    {
+        "context",
+        "context_research",
+        "context_guide",
+        "context_core",
+    }
+)
+
 # Valid frontmatter type values per discovery category.
-# None = accept any type starting with the key string.
+# None = accept any type starting with the key string (see context handling).
 VALID_FM_TYPES: dict[str, set[str] | None] = {
     "module": {"module"},
     "dataset": {"dataset"},
     "lattice": {"lattice"},
     "skill": {"skill"},
-    "context": None,  # accepts type starting with "context"
+    "context": None,  # accepts any type starting with "context" (see CONTEXT_TYPES)
     "hardware": {"hardware"},
     "manifest": None,  # YAML files, no frontmatter type check
 }
@@ -109,11 +121,15 @@ DIM_NAMES = {
 }
 
 # N/A dimensions per type (scored as 3 in totals)
+# Skills: HOW-layer skills are EXEMPT-AS-POLICY from d04/d07/d08 (FAIR ·
+# federation · registry-readiness) per Champollion G3-D5 (2026-07-02) — the same
+# posture as the pre-existing d05/d06/d09/d10 exemptions. A skill that federates
+# MAY still carry those blocks voluntarily; they are not scored as mandatory.
 NA_MAP: dict[str, list[str]] = {
     "module": [],
     "dataset": ["d02", "d08"],
     "lattice": ["d02", "d08"],
-    "skill": ["d05", "d06", "d09", "d10"],
+    "skill": ["d04", "d05", "d06", "d07", "d08", "d09", "d10"],
     "context": ["d04", "d05", "d06", "d07", "d08", "d09", "d10"],
     "hardware": ["d02", "d04", "d05", "d08", "d09"],
     "manifest": ["d02", "d04", "d05", "d06", "d07", "d08", "d09", "d10"],
@@ -277,15 +293,22 @@ def identify_gaps(
       G-009 — Module missing version field (D6=0)
       G-010 — Module missing companion YAML
       G-011 — Context missing status field
-      G-012 — Skill missing FAIR metadata (D4=0)
+      G-012 — Skill missing FAIR metadata (D4=0) — DORMANT for skills: d04 is
+              N/A per EXEMPT-AS-POLICY (G3-D5), so d04 is never 0 for a skill.
       G-013 — Federation-critical object missing federation metadata (D7=0)
       G-014 — (reserved for hardware migration gaps)
+
+    Note (EXEMPT-AS-POLICY, Champollion G3-D5): skill→lattice promotion is
+    optional-by-design (d08 is N/A for skills). G-003 therefore fires only when
+    registration is NOT exempt for the object type — dormant for skills.
     """
     gaps: list[str] = []
 
+    na_dims = set(NA_MAP.get(object_type, []))
+
     if object_type == "lattice" and scores.get("d09", 3) < 3:
         gaps.append("G-002")
-    if object_type == "skill" and not fm.get("lattice_type"):
+    if object_type == "skill" and "d08" not in na_dims and not fm.get("lattice_type"):
         gaps.append("G-003")
     if object_type == "dataset" and scores.get("d09", 3) < 3:
         gaps.append("G-004")
@@ -583,9 +606,11 @@ def _score_companion(path: Path, object_type: str) -> int:
             if not cp.exists():
                 return 0
             return 3 if _validate_companion_yaml(cp, "lattice") else 2
-        # YAML lattice — .md wrapper optional, score 2 if missing
-        md_name = path.name.replace(".lattice.yaml", ".md")
-        return 3 if (parent / md_name).exists() else 2
+        # YAML lattice — the `.lattice.yaml` IS the self-describing object; a
+        # `.md` wrapper is a pure convenience, not a companion the object needs.
+        # Self-describing → full companion score whether or not `.md` exists.
+        # Clears the spurious G-002 on all self-describing lattices. F-CHM-209(d).
+        return 3
     return 0
 
 
@@ -789,9 +814,19 @@ def handle_skill(
 def handle_context(
     path: Path, fm: dict[str, Any], body: str, vault_path: Path
 ) -> dict[str, int]:
-    """Score a context file on applicable dimensions."""
+    """Score a context file on applicable dimensions.
+
+    D1 accepts any canonical context subtype (v2.5 §7: `context`,
+    `context_research`, `context_guide`, `context_core`) — a valid subtype is
+    correct placement, not a triad defect. Fixes F-CHM-209(b).
+    """
+    fm_type = str(fm.get("type", ""))
     return {
-        "d01": 3 if fm.get("type") == "context" else (2 if fm.get("type") else 0),
+        "d01": (
+            3
+            if (fm_type in CONTEXT_TYPES or fm_type.startswith("context"))
+            else (2 if fm_type else 0)
+        ),
         "d02": _check_agents_md(path),
         "d03": _score_frontmatter(fm),
     }
@@ -866,7 +901,7 @@ def format_scorecard_yaml(
         "meta": {
             "generated": datetime.now(timezone.utc).isoformat(),
             "vault": vault_path.name,
-            "standard_version": "2.3",
+            "standard_version": "2.5",
             "schema_version": "1.0",
             "object_count": summary["object_count"],
         },

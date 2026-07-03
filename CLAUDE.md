@@ -115,6 +115,9 @@ On first run, verify the user's environment:
 2. **Each project is self-contained** — own CLAUDE.md, own git repo, own triad structure. Projects can be moved out of this directory and still function independently.
 3. **This CLAUDE.md governs workspace operations only** — project creation, discovery, and environment setup. Inside a project, that project's CLAUDE.md is authoritative.
 4. **Lattice as concept** — when introducing the system to users, frame lattice as a mathematical structure they're building, not a product they're installing.
+5. **Router rows carry routing identity only.** Each Project Discovery / Workspace Layout entry is ≈1 line: directory · type · persona · one-line purpose · `CLAUDE.md` + `STATE.md` pointers. Operational/campaign state — phases, mission IDs, commits, version pins, dated changelogs — lives in each project's `STATE.md`, **never in this router**. On a campaign/phase close, update the project's `STATE.md`, not this file. (This router re-bloats when state is narrated into rows; keep it lean.)
+6. **`Archive.aDNA/` is the archive holder** (bare-role-canonical, like `Home`/`Network`/`Terminal`). It is a **root object, not a vault** — no governance of its own beyond a holder banner; excluded from `vault_count` and from health-check vault enumeration. Two sub-areas: `Archive.aDNA/<Name>.aDNA/` (whole archived graphs, history + banner + back-compat shim intact) and `Archive.aDNA/_archive/` (flat file/tarball archive; gitignored — bytes never tracked). It is the documented exception every workspace census allowlists.
+7. **Shim-window discipline.** Every back-compat shim (symlink or otherwise) is **registered at creation** in the node's shim ledger with: **id · subject (from→to) · class · window** (default 30d) **· retire-condition** (ref-sweep-zero + owner-ack) **· owner** (persona) **· registered-date · retired-date/marker**. "Shim" spans more than a filesystem symlink (merge-archive · dual-home code-relocation · git-remote-rollback · redirect-based · env-var alias · in-code re-export · flat file-archive); several classes are not filesystem-visible, so the ledger — not a symlink scan — is the source of truth. Retirement requires window-lapse **plus** verified ref-sweep-zero (excluding archives + session history) **plus** owner-ack; a lapsed window alone never auto-retires.
 
 ---
 
@@ -135,7 +138,7 @@ To upgrade from L0 to L1, read `.adna/how/skills/skill_l1_upgrade.md`.
 - **aDNA specification**: `.adna/what/docs/adna_standard.md`
 - **Context library**: `.adna/what/context/` (5 topics, 27 subtopics, ~75K tokens)
 - **Lattice examples**: `.adna/what/lattices/examples/` (15 example lattice definitions)
-- **All templates**: `.adna/how/templates/` (22 reusable templates)
-- **All skills**: `.adna/how/skills/` (14 agent recipes)
+- **All templates**: `.adna/how/templates/` (28 reusable templates)
+- **All skills**: `.adna/how/skills/` (27 skills — 24 agent recipes + 3 process)
 - **Detailed overview**: `.adna/what/docs/aDNA_overview.md` (canonical 47K aDNA spec + tutorial)
 - **Docs site**: [adna.network](https://adna.network)

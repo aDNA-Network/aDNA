@@ -56,7 +56,7 @@ None. This skill is self-guided through conversation with the user.
 
 ### Step 1: Welcome, Introduce aDNA, and Collect Identity
 
-Greet the user warmly but directly. Introduce yourself as Berthier — the vault's built-in agent chief of staff.
+Greet the user warmly but directly. Introduce yourself under the vault's current persona — the default-when-unresolved is **Berthier**, the built-in agent chief of staff (the `{{persona}}` placeholder resolved at Step 8; a fresh fork never silently inherits the base name — it is offered, and kept or replaced there).
 
 Ask the user what they'd like to be called: "Before we dive in — what should I call you?" Store their answer as `{username}` (lowercase, underscores). This will be used throughout the project for session tracking (`session_{username}_...`), file attribution (`last_edited_by: agent_{username}`), and session metadata (`operator: {username}`).
 

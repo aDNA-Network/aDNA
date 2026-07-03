@@ -7,7 +7,7 @@
 
 # aDNA — Agentic DNA
 
-[![Governance v7.2](https://img.shields.io/badge/governance-v7.2-663399.svg)](https://github.com/aDNA-Network/aDNA/releases/tag/v7.2) [![Standard v2.2](https://img.shields.io/badge/standard-v2.2-blue.svg)](https://github.com/aDNA-Network/aDNA/blob/main/.adna/what/docs/adna_standard.md) [![Docs](https://img.shields.io/badge/docs-adna--docs.vercel.app-44cc11.svg)](https://adna-docs.vercel.app/)
+[![Governance v8.4](https://img.shields.io/badge/governance-v8.4-663399.svg)](https://github.com/aDNA-Network/aDNA/releases/tag/v8.4) [![Standard v2.5](https://img.shields.io/badge/standard-v2.5-blue.svg)](https://github.com/aDNA-Network/aDNA/blob/main/.adna/what/docs/adna_standard.md) [![Docs](https://img.shields.io/badge/docs-adna.network-44cc11.svg)](https://adna.network)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Obsidian](https://img.shields.io/badge/Obsidian-Compatible-7C3AED)](https://obsidian.md)
@@ -25,6 +25,10 @@ Most knowledge systems weren't designed with AI agents in mind. aDNA is.
 - **Conversational onboarding.** Clone the repo, run `claude`, and the AI builds a project structure tailored to your domain.
 
 *A lattice is a graph of graphs — every project you create becomes a node in a growing graph of structured knowledge. This repo is the seed.*
+
+**On this page:** [Getting Started](#getting-started) · [What Is aDNA?](#what-is-adna) · [How It Works](#how-it-works) · [What's Inside .adna/?](#whats-inside-adna) · [Who Is This For?](#who-is-this-for) · [How aDNA Compares](#how-adna-compares) · [Learn More](#learn-more) · [License](#license)
+
+*New here? Read top-to-bottom — the page runs orient → get started → understand → compare → go deeper. Just want to run it? Jump to [Getting Started](#getting-started).*
 
 ---
 
@@ -142,6 +146,8 @@ aDNA isn't a replacement for these systems — it's what happens when you need y
 ---
 
 ## Learn More
+
+**Start here → the [adna.network](https://adna.network) learning path** — the guided, dual-audience walkthrough (concepts → tutorials → patterns) for newcomers. This image ships the standard and the toolkit, not the tutorials; the learning path is on the web.
 
 The full technical documentation lives inside `.adna/`:
 

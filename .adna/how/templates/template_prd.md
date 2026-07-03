@@ -10,7 +10,7 @@ approved_date:
 created: <% tp.date.now("YYYY-MM-DD") %>
 updated: <% tp.date.now("YYYY-MM-DD") %>
 last_edited_by: agent_<username>
-tags: [prd, <project_slug>]
+tags: [prd, "<% tp.frontmatter.project_slug %>"]
 ---
 
 # PRD: <% tp.file.title %>

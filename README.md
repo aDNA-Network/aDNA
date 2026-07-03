@@ -4,7 +4,7 @@
 
 # aDNA — Agentic DNA
 
-[![Governance v7.2](https://img.shields.io/badge/governance-v7.2-663399.svg)](https://github.com/aDNA-Network/aDNA/releases) [![Standard v2.2](https://img.shields.io/badge/standard-v2.2-blue.svg)](https://github.com/aDNA-Network/aDNA/blob/main/.adna/what/docs/adna_standard.md) [![Docs](https://img.shields.io/badge/docs-adna.network-44cc11.svg)](https://adna.network)
+[![Governance v8.4](https://img.shields.io/badge/governance-v8.4-663399.svg)](https://github.com/aDNA-Network/aDNA/releases/tag/v8.4) [![Standard v2.5](https://img.shields.io/badge/standard-v2.5-blue.svg)](https://github.com/aDNA-Network/aDNA/blob/main/.adna/what/docs/adna_standard.md) [![Docs](https://img.shields.io/badge/docs-adna.network-44cc11.svg)](https://adna.network)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Obsidian](https://img.shields.io/badge/Obsidian-Compatible-7C3AED)](https://obsidian.md)
@@ -21,6 +21,8 @@ Most knowledge systems weren't designed with AI agents in mind. aDNA is.
 - **Clone and run.** This repo *is* a ready workspace — clone it to `~/aDNA/`, run your agent in it, and it builds your first project with you.
 
 *A lattice is a graph of graphs — every project you create becomes a node in a growing graph of structured knowledge. This repo is the seed.*
+
+**New to aDNA?** Start with the guided learning path at [adna.network/learn](https://adna.network/learn) — concepts, tutorials, and a first-hour walkthrough.
 
 ---
 

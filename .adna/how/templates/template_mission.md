@@ -5,6 +5,9 @@ title: "{Human-readable plan title}"
 owner: {username}
 status: active
 mission_class: reconnaissance | implementation | verification | integration | closeout
+executor_tier: fable | opus | sonnet   # planned model-routing class (see pattern_model_tiered_campaign_execution)
+token_budget_estimated: "<kT, per ADR-016>"   # per-mission budget declaration (SO-11 / ADR-016)
+token_budget_actual: "<kT, filled at close>"   # actuals side of the contract; rough is fine
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 last_edited_by: agent_{username}

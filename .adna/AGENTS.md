@@ -62,6 +62,16 @@ When you discover framework-level improvements during normal work (missing templ
 - **Set `last_edited_by` and `updated`** — on every modification
 - **New files are safe** — creating new files has no collision risk
 
+### Single-writer lease for inventory + identity entity types
+
+Before editing **any** file in `what/inventory/*` or `what/identity/*`, scan `how/sessions/active/`. If a concurrent session is in flight on the same entity type, abort and surface to the operator. Reason: these files are small-fan-in shared resources where concurrent writes don't naturally merge — the cost of pausing to confirm is low; the cost of an unwanted speculative revert is high. Single-writer lease is **mandatory, not advisory**, for these entity types.
+
+## Heavy-File Read Convention
+
+For any file ≥ ~ 50 kT content-load OR ≥ 200 KB byte size, default to `offset` + `limit` parameters on Read. Typical heavy files: vault-level `STATE.md`, campaign masters, mission files at S3 close, large AAR aggregates. The router-vs-archive pattern (split heavy files into a live router + an audit archive) is the canonical mitigation; even the router benefits from partial Reads when only the top bullet is needed.
+
+**Rule of thumb**: if Read returns `File content exceeds maximum`, that's a router-vs-archive split candidate — flag for backlog if not already split.
+
 ## Priority Hierarchy
 
 1. **Data integrity** — never corrupt or lose existing data

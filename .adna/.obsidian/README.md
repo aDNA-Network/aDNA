@@ -4,25 +4,26 @@ This directory contains Obsidian vault configuration. Most files are checked int
 
 > **Quick setup**: Run `./setup.sh` from the repo root to download all plugins and the theme automatically.
 
-## Plugins (15 community plugins)
+## Plugins (14 community plugins)
+
+Roster of record: `.obsidian/community-plugins.json` (this table is documentation; the JSON is authoritative). Retired ids never re-seeded: `settings-search` (superseded by Obsidian ≥1.13 native settings search), `termy`, and the orphan `advanced-canvas` (a stale duplicate of `obsidian-advanced-canvas`).
 
 | Plugin | ID | Purpose |
 |--------|----|---------|
 | Dataview | `dataview` | Query and display structured data from frontmatter |
 | Templater | `templater-obsidian` | Template engine with folder-based auto-triggers |
 | Meta Bind | `obsidian-meta-bind-plugin` | Inline metadata editing |
+| Notebook Navigator | `notebook-navigator` | Folder-based notebook navigation with icons |
+| Advanced Canvas | `obsidian-advanced-canvas` | Extended canvas features (groups, portals) |
+| Style Settings | `obsidian-style-settings` | Customize CSS snippet options via GUI |
+| BRAT | `obsidian42-brat` | Beta-plugin reviewer/installer (tracks pre-release plugins) |
+| Icon Folder | `obsidian-icon-folder` | Custom folder/file icons (triad colors) |
 | Homepage | `homepage` | Set a start page on vault open |
 | Tasks | `obsidian-tasks-plugin` | Task tracking with queries |
-| Style Settings | `obsidian-style-settings` | Customize CSS snippet options via GUI |
 | Table Editor | `table-editor-obsidian` | Better markdown table editing |
-| Omnisearch | `omnisearch` | Vault-wide fuzzy search |
-| Terminal | `terminal` | Terminal access from Obsidian |
-| Folder Notes | `folder-notes` | Index files for folder navigation |
-| Notebook Navigator | `notebook-navigator` | Folder-based notebook navigation with icons |
-| Icon Folder | `obsidian-icon-folder` | Custom folder/file icons (triad colors) |
-| Advanced Canvas | `obsidian-advanced-canvas` | Extended canvas features (groups, portals) |
 | Pretty Properties | `pretty-properties` | Polished frontmatter property display |
 | Fold Properties | `fold-properties-by-default` | Auto-fold frontmatter in reading view |
+| Terminal | `terminal` | Terminal access from Obsidian |
 
 ## Theme
 

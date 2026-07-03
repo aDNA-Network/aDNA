@@ -1,10 +1,10 @@
 ---
 type: context
-title: "aDNA Universal Standard v2.4"
+title: "aDNA Universal Standard v2.5"
 created: 2026-02-11
-updated: 2026-06-29
+updated: 2026-07-02
 status: approved
-last_edited_by: agent_stanley
+last_edited_by: agent_rosetta
 tags: [adna, standard, spec, normative]
 ---
 
@@ -13,6 +13,7 @@ tags: [adna, standard, spec, normative]
 <!-- v2.3 | 2026-06-22 | inventory+identity promoted to base (ADR-035) -->
 <!-- v2.3 errata | 2026-06-29 | §3.5 reconciled to ADR-006 (repo rename Agentic-DNA→aDNA) + ADR-008 (airlock embedding at .adna/): base template is the `aDNA` repo embedded at `.adna/`, not a visible `Agentic-DNA/` dir. No normative change. -->
 <!-- v2.4 | 2026-06-29 | §6.5 Rename Protocol (rename-time self-routing sweep) + §13.2 Tier-1 harness-injection safeguard (ADR-042, Drydock M03 fork-template hygiene & rename protocol). -->
+<!-- v2.5 | 2026-07-02 | §7.2 per-class frontmatter profile + §5.5 walk scope (ADR-044 fold) · new §7.7 decision-record ratification discipline · §5.3 federation/ optional row (ADR-045) · §15.4 version-cut checklist. ADR-046, ratified at Champollion G2. -->
 
 **Agentic DNA (aDNA)** — A knowledge architecture standard for AI-native projects.
 
@@ -453,6 +454,7 @@ how/ contains everything about HOW the project works.
 | `skills/` | Reusable agent procedures (see §19.3) |
 | `processes/` | Human-readable workflow documentation |
 | `deliverables/` | Output artifacts |
+| `federation/` | Consumer federation wrappers — one `<wrapper>/` per federated software-element/service graph (v2.5, ADR-045) |
 
 ### 5.4 Universal Skeleton
 
@@ -521,9 +523,11 @@ An aDNA instance at Starter conformance MUST have:
 1. **Governance files**: `CLAUDE.md`, `MANIFEST.md`, `README.md` at the root (bare) or repository root (embedded)
 2. **Triad directories**: `what/`, `how/`, `who/` (bare) or `.agentic/what/`, `.agentic/how/`, `.agentic/who/` (embedded)
 3. **Required subdirectories**: `what/context/`, `how/missions/`, `how/sessions/`, `how/templates/`, `who/coordination/`, `who/governance/`
-4. **Frontmatter**: All content files inside the triad MUST include the base fields defined in §7.2 (`type`, `status`, `created`, `updated`, `last_edited_by`, `tags`)
+4. **Frontmatter**: All content files inside the triad MUST include the base fields defined in §7.2, per its per-class profile (`type`, `status`, `created`, `updated`, `last_edited_by`, `tags`; `status` optional for `directory_index` + `coordination` — v2.5, ADR-044)
 
 Starter conformance represents the minimum viable aDNA instance — sufficient for a single-agent project with basic session tracking.
+
+**Conformance-walk scope** (v2.5, ADR-044): a conformance run validates the instance rooted at the directory being checked; it does NOT recurse into embedded standalone instances (in the reference vault: `what/docs/examples/` and `how/templates/template_node_adna_exemplar/`). Each embedded instance is validated standalone if desired.
 
 #### Level 2: Standard Conformance
 
@@ -659,6 +663,8 @@ tags: []
 | `last_edited_by` | Attribution — who or what last modified this file |
 | `tags` | Categorization array for filtering and discovery |
 
+**Per-class profile** (v2.5, ADR-044): the six base fields are required for content and session entities. **`status` is optional for `type: directory_index` and `type: coordination`** — an index or correspondence record has no lifecycle state, and their canonical templates omit it. The other five base fields remain required for all classes.
+
 ### 7.3 Tag Conventions
 
 Tags MUST use lowercase with underscores (e.g., `mission`, `context_research`).
@@ -688,6 +694,21 @@ Instance-specific frontmatter fields MAY be added to any entity type. The follow
 3. Standard fields (those defined in §7.2 and per-type templates) MUST NOT be repurposed to carry different semantics
 4. Migration tools MUST preserve custom fields — standard version upgrades MUST NOT strip unrecognized frontmatter fields
 5. Projects SHOULD document their custom fields in the relevant `AGENTS.md` or template files
+
+### 7.7 Decision-Record Ratification Discipline
+
+Decision records (ADRs, `what/decisions/`) carry a lifecycle `status` whose advancement beyond `proposed` is a **human** act. Effective v2.5 (ADR-046, folding the discipline installed after an agent thread self-marked an ADR `accepted` without an operator gate):
+
+1. **Agents author; operators ratify.** An agent MAY fully author an ADR — context, decision, consequences, alternatives, references — and MAY set or keep `status: proposed` (or `draft`). An agent MUST NOT set `accepted`, `ratified`, or `rejected`; those transitions require an operator gate.
+2. **Ratification record.** Any ADR moving beyond `proposed` MUST carry a structured ratification block with all four fields present and non-empty:
+   - **Ratifier** — the named human operator/authority. An agent or persona may be named only as author/steward, never as ratifier.
+   - **Gate / reference** — a verifiable pointer to the discrete ratification event: the gate file and/or its output record, the ratifying session id, and/or the ratifying commit.
+   - **Ratification date** — distinct from the authored/created date.
+   - **Scope of authority** — exactly what the ratification authorizes, plus any pending co-signs that keep seams non-operative.
+3. **Retroactivity.** ADRs accepted before v2.5 SHOULD be backfilled with ratification blocks; a pre-v2.5 accepted ADR without one is NOT thereby non-conformant. *(This clause is what keeps the v2.5 cut a minor version under §15.4.)*
+4. **Batch ceremonies.** An N-ADRs-at-once ratification ceremony MAY substitute a single ceremony record for per-ADR gate references, provided each covered ADR's block points to it.
+5. **Validation.** Conformance tooling SHOULD check structure only — the four fields present and non-empty — never the truth of the gate; truth is the operator's, at the gate. Recommended rollout: warn first, promote to fail after a backfill pass.
+6. **Exemption.** Lifecycle-neutral back-references (e.g., adding `superseded_by` once the superseding ADR is itself ratified) are exempt from rule 1.
 
 ---
 
@@ -1120,6 +1141,8 @@ The aDNA standard uses two versioning tracks:
 - Standard **major** versions (e.g., v2.x → v3.0) MAY introduce breaking changes. When they do, migration guidance MUST be provided.
 - Governance version changes are operational and do not affect standard conformance.
 
+**Version-cut checklist** (v2.5, ADR-046 — the footer-lag anti-recurrence rule): on every version bump, the document's four version-bearing surfaces MUST agree before the cut commits — (1) the frontmatter `title`, (2) the frontmatter `updated` date, (3) a new changelog comment line in the header block, and (4) the *End of …* footer line. A cut that leaves any of the four stale is incomplete. *(This rule exists because the footer lagged the title across multiple historical bumps — most recently shipping "v2.3" inside the published v2.4 document.)*
+
 ---
 
 ## 16. Tool Integration Tiers
@@ -1496,4 +1519,4 @@ This appendix maps every design decision to its location in the standard, ensuri
 
 ---
 
-*End of aDNA Universal Standard v2.3*
+*End of aDNA Universal Standard v2.5*

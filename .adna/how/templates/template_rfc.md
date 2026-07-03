@@ -10,7 +10,7 @@ approved_date:
 created: <% tp.date.now("YYYY-MM-DD") %>
 updated: <% tp.date.now("YYYY-MM-DD") %>
 last_edited_by: agent_<username>
-tags: [rfc, <project_slug>]
+tags: [rfc, "<% tp.frontmatter.project_slug %>"]
 ---
 
 # RFC: <% tp.file.title %>

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""aDNA Instance Validator — checks conformance per §5.5 of the aDNA Universal Standard v2.4.
+"""aDNA Instance Validator — checks conformance per §5.5 of the aDNA Universal Standard v2.5.
 
 Usage:
     python adna_validate.py <path>                     # Validate instance at path
@@ -43,6 +43,46 @@ STANDARD_RECOMMENDED_DIRS = [
 REQUIRED_FRONTMATTER = ["type", "created", "updated", "status", "last_edited_by", "tags"]
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
+# Entity classes whose canonical templates omit the lifecycle `status` field by
+# design — a directory index / correspondence record has no lifecycle state.
+# (`.adna/**/AGENTS.md` and `how/templates/template_coordination.md` omit it.)
+# `status` stays REQUIRED for content + session entities. See ADR-044.
+STATUS_OPTIONAL_TYPES = ("directory_index", "coordination")
+
+# Nested example/template INSTANCE trees are documentation sub-vaults — each is a
+# standalone instance, validated on its own, NOT part of THIS instance's
+# conformance. Pruned from the triad walk. See ADR-044.
+#
+# These two hardcoded paths are the FALLBACK: they name doc sub-vaults that carry
+# neither their own `.git` nor governance files (so the general detector below
+# cannot see them). The general detector (see `_is_nested_instance`) auto-excludes
+# any embedded standalone instance — a subtree carrying its own `.git` AND its own
+# governance file (CLAUDE.md or MANIFEST.md), e.g. a code-as-WHAT relocation such
+# as LatticeProtocol.aDNA/what/latticeprotocol/. §5.5's rule is general; this
+# fallback preserves the two known documentation-tree cases. See ADR-044, F-CHM-215.
+NESTED_INSTANCE_DIRS = (
+    os.path.join("what", "docs", "examples"),
+    os.path.join("how", "templates", "template_node_adna_exemplar"),
+)
+
+# Governance files whose presence (with a sibling `.git`) marks a subtree as its
+# own standalone aDNA/code instance — matching what the blessed code-as-WHAT
+# nested instance actually carries (e.g. a relocated repo's own CLAUDE.md).
+NESTED_INSTANCE_GOV_FILES = ("CLAUDE.md", "MANIFEST.md")
+
+
+def _is_nested_instance(dirpath):
+    """True if `dirpath` is an embedded standalone instance: it carries its own
+    `.git` (a nested repo — dir OR file, covering submodules/worktrees) AND at
+    least one of its own governance files. Such a subtree is validated on its
+    own, not as part of THIS instance's conformance (§5.5, ADR-044). General
+    detector added for F-CHM-215 (was: two hardcoded reference paths only)."""
+    if not os.path.exists(os.path.join(dirpath, ".git")):
+        return False
+    return any(
+        os.path.isfile(os.path.join(dirpath, gf)) for gf in NESTED_INSTANCE_GOV_FILES
+    )
+
 # Governance files that MUST NOT carry committed harness-injected context boundaries (§13.2)
 GOVERNANCE_FILES_FOR_HYGIENE = ("CLAUDE.md", "STATE.md", "AGENTS.md")
 # Harness boundaries the agent runtime injects: `# userEmail`, `# currentDate (Today's date is ...)`
@@ -78,12 +118,26 @@ def _parse_frontmatter(filepath):
 
 
 def _find_md_files(root, triad_prefix):
-    """Yield all .md files inside the triad directories."""
+    """Yield all .md files inside the triad directories, pruning nested
+    example/template instance trees (validated standalone — see ADR-044)."""
+    base = os.path.join(root, triad_prefix) if triad_prefix else root
+    excludes = tuple(os.path.normpath(os.path.join(base, d)) for d in NESTED_INSTANCE_DIRS)
     for leg in TRIAD_DIRS:
-        leg_path = os.path.join(root, triad_prefix, leg) if triad_prefix else os.path.join(root, leg)
+        leg_path = os.path.join(base, leg)
         if not os.path.isdir(leg_path):
             continue
-        for dirpath, _, filenames in os.walk(leg_path):
+        for dirpath, dirnames, filenames in os.walk(leg_path):
+            ndp = os.path.normpath(dirpath)
+            # Hardcoded fallback paths (doc sub-vaults with no own .git/governance)
+            if any(ndp == ex or ndp.startswith(ex + os.sep) for ex in excludes):
+                dirnames[:] = []  # don't descend into a nested instance
+                continue
+            # General detector: an embedded standalone instance (own .git +
+            # governance) is validated on its own — prune it and its subtree.
+            # The leg root itself is never treated as a nested instance.
+            if ndp != os.path.normpath(leg_path) and _is_nested_instance(dirpath):
+                dirnames[:] = []
+                continue
             for fn in filenames:
                 if fn.endswith(".md"):
                     yield os.path.join(dirpath, fn)
@@ -144,7 +198,10 @@ def check_starter(root, prefix, result):
             fm_errors += 1
             result.errors.append(f"Frontmatter: missing or unparseable in '{rel}'")
             continue
-        for field in REQUIRED_FRONTMATTER:
+        required = REQUIRED_FRONTMATTER
+        if fm.get("type") in STATUS_OPTIONAL_TYPES:
+            required = [f for f in REQUIRED_FRONTMATTER if f != "status"]
+        for field in required:
             if field not in fm:
                 fm_errors += 1
                 result.errors.append(f"Frontmatter: missing required field '{field}' in '{rel}'")
@@ -289,6 +346,26 @@ def check_governance_sync(root, result):
                 if documented != actual:
                     result.errors.append(
                         f"Governance drift: {gf} says {documented} templates, actual count is {actual}"
+                    )
+
+    # Skill count (mirrors template count; §19.3). Skills are not auto-counted
+    # anywhere else, so this guard is what makes skills-count drift catchable.
+    skills_dir = os.path.join(root, "how", "skills")
+    if os.path.isdir(skills_dir):
+        actual_skills = len([f for f in os.listdir(skills_dir)
+                             if f.endswith(".md") and f.startswith("skill_")])
+        for gf in ["MANIFEST.md", "CLAUDE.md", "README.md", "AGENTS.md"]:
+            gf_path = os.path.join(root, gf)
+            if not os.path.isfile(gf_path):
+                continue
+            with open(gf_path, "r") as f:
+                content = f.read()
+            # Look for patterns like "45 skills" or "Skills (45)"
+            for m in re.finditer(r"(\d+)\s*skills|Skills?\s*\((\d+)\)", content):
+                documented = int(m.group(1) or m.group(2))
+                if documented != actual_skills:
+                    result.errors.append(
+                        f"Governance drift: {gf} says {documented} skills, actual count is {actual_skills}"
                     )
 
     # Version string consistency

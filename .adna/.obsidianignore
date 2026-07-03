@@ -18,6 +18,10 @@ node_modules/
 # System files
 .DS_Store
 
+# Template files — placeholder frontmatter (e.g. tags with <project_slug> /
+# Templater directives) is not real content; keep it out of the tag index.
+how/templates/
+
 # Large binary directories (add project-specific exclusions below)
 # If you symlink git repos into this vault, add them here to prevent
 # Obsidian from watching thousands of files it doesn't need to index.
