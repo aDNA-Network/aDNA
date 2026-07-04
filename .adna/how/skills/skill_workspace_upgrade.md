@@ -112,7 +112,7 @@ git clone https://github.com/aDNA-Network/aDNA.git .adna
 ```
 
 If a workspace router (`<workspace_root>/CLAUDE.md`) doesn't yet exist, install it from
-the template (Step 3 alternative — template-based bootstrap per [ADR-007](../../what/decisions/adr_007_outer_adna_claude_md_disposition.md)):
+the template (Step 3 alternative — template-based bootstrap per ADR-007):
 
 ```bash
 cp .adna/how/templates/template_workspace_claude.md CLAUDE.md
@@ -130,7 +130,7 @@ Path A (in-place rename) or Path B (clean re-clone) for migration to the flat po
 layout. The `upgrade_v6_to_v7.md` guide (M08a finalized; post-M08b at
 `.adna/how/docs/upgrade_v6_to_v7.md`) is the canonical operator-facing reference.
 
-**Naming convention (per [ADR-009](../../what/decisions/adr_009_aDNA_naming_convention.md)):**
+**Naming convention (per ADR-009):**
 
 The canonical aDNA naming convention is `<name>.aDNA/` directory ↔ `<name>.aDNA.git` GitHub repo where `<name>` is snake_case (`[a-z][a-z0-9_]*`). New projects forked via `skill_project_fork.md` enforce this via the warn-on-non-conformant step (per ADR-009 §4 enforcement).
 

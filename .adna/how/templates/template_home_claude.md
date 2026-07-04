@@ -264,7 +264,7 @@ Inventory / health / membership / credentials queries route here ({{persona}}). 
 
 ### Base Ontology
 
-16 base entity types across the triad (aDNA standard v2.3+; `inventory` + `identity` promoted to base per [ADR-035](aDNA.aDNA/what/decisions/adr_035_inventory_identity_base_entity_types.md)):
+16 base entity types across the triad (aDNA standard v2.3+; `inventory` + `identity` promoted to base per ADR-035):
 
 | Triad Leg | Entities |
 |---|---|

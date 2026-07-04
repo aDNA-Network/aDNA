@@ -62,7 +62,7 @@ If `carry_forward_answers` are provided (from the calling flow), use them. Other
 1. **Project name** — base folder name (the `.aDNA` suffix is appended automatically). Must be lowercase with underscores. Example: `my_research_lab`, `acme_crm`, `sleep_study` → creates `my_research_lab.aDNA/`
 2. **Brief description** — 1-2 sentences describing the project's purpose
 
-Validate the project name (per [ADR-009](../../what/decisions/adr_009_aDNA_naming_convention.md) §1 + §4):
+Validate the project name (per ADR-009 §1 + §4):
 - **Snake_case pattern**: must match `[a-z][a-z0-9_]*` — lowercase letter start, then lowercase letters / digits / underscores only. (Per ADR-009 §1.)
 - Must not collide with an existing directory in the workspace
 - Must not be `.adna` (that's the base template; ADR-009 §3.4 template-repo exception)

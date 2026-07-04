@@ -30,7 +30,7 @@ requirements:
 >
 > The v7.0 workspace-init flow is content-only (no procedural skill needed):
 >
-> 1. **Fresh workspace bootstrap**: `cp .adna/how/templates/template_workspace_claude.md ~/aDNA/CLAUDE.md` (per [ADR-007](../../what/decisions/adr_007_outer_adna_claude_md_disposition.md))
+> 1. **Fresh workspace bootstrap**: `cp .adna/how/templates/template_workspace_claude.md ~/aDNA/CLAUDE.md` (per ADR-007)
 > 2. **Existing-content workspace upgrade**: run `skill_workspace_upgrade.md` (per M03 Obj 4 Commit 4.2 update; symlink-step removed; Step 3 alternative added)
 
 ## Replacement

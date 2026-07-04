@@ -27,7 +27,7 @@ Adds an `iii/` consumer wrapper to a new vault so it can run III (Inspect / Intr
 
 This skill is the counterpart to `skill_iii_review.md` — that skill runs the review; this skill bootstraps the substrate so a vault can call it.
 
-Canonical contract: [ADR-002 Consumer Federation Contract](../../what/decisions/adr_002_consumer_federation_contract.md) (`federation_ref` schema + `kind:` enum) + [ADR-003 Learning Store Ownership](../../what/decisions/adr_003_learning_store_ownership.md) (per-vault local store + canonical-as-read-only + graduation ceremony).
+Canonical contract: the III Consumer Federation Contract (`federation_ref` schema + `kind:` enum) + III Learning Store Ownership (per-vault local store + canonical-as-read-only + graduation ceremony).
 
 ## When to Use
 

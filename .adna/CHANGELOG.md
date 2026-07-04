@@ -28,6 +28,15 @@ Changelog entries are organized by **governance version** (primary heading). Sta
 
 ---
 
+## [v8.5] — 2026-07-03
+
+**Release-cut hygiene** (governance 8.4→8.5; **standard unchanged at v2.5** — currency/hygiene only, no normative change).
+
+### Fixed
+- **Install flow (F-CHM-216):** the embedded `.adna/README.md` Getting Started now teaches the canonical **one-step** install (`git clone …/aDNA ~/aDNA && cd ~/aDNA && claude`), matching the root README; removed the stale two-step clone-into-`.adna/` + `cp`-router flow (the workspace router ships pre-instantiated at the image root).
+- **Release-cut leak (F-CHM-217):** de-linked dangling ADR citations on shipped skills/context surfaces (the cited ADRs live in the public dev graph `aDNA-Network/aDNA.aDNA`, not the image); stripped a private `aDNA.aDNA/`-prefixed path from `template_home_claude.md`; disambiguated two dangling III ADR references in `skill_iii_setup.md`. (A full dev-vault-name genericization of that file is routed to the v8.5 queue — it needs a consistent whole-file pass.)
+- **Doc currency:** internal doc-index version label → v2.5 (`what/docs/AGENTS.md`); fixed a dead `#quick-start` anchor → `#getting-started` (`agent_first_guide.md`); added an archival-snapshot banner to the pre-v7.0 `aDNA_overview.md`.
+
 ## [v8.4] — 2026-07-03
 
 **Standard v2.5** (coincides — ADR-046, ratified at Champollion G2; folded to the image at G6).

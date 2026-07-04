@@ -3,8 +3,8 @@ type: docs
 title: "aDNA Overview"
 status: active
 created: 2026-04-05
-updated: 2026-05-11
-last_edited_by: agent_stanley
+updated: 2026-07-03
+last_edited_by: agent_rosetta
 moved_from: README.md
 moved_at: 2026-05-11
 moved_by: M03_S2_B0
@@ -12,6 +12,8 @@ tags: [docs, overview, aDNA, introduction]
 ---
 
 # aDNA Overview
+
+> **⚠ Archival snapshot (stamped v8.5, 2026-07-03).** This overview predates aDNA v7.0 and is preserved as a historical point-in-time snapshot — some counts (e.g. template/example totals) and structure references are out of date. For the current standard see `what/docs/adna_standard.md` and the live docs at [adna.network](https://adna.network).
 
 > **Provenance**: This file was the inner template `README.md` (aDNA specification +
 > tutorial hybrid; ~47K of canonical aDNA documentation) pre-aDNA-v7.0. The v7.0 repo

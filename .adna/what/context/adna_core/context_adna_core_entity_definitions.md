@@ -21,7 +21,7 @@ last_evaluated: 2026-03-17
 
 # aDNA Core: Entity Definitions — 16 Base Types
 
-Complete definitions for the 16 base entity types in the aDNA ontology. The original 14 are grouped by triad leg below; `inventory` (WHAT) and `identity` (WHO) were promoted from node-local extensions to base types by [ADR-035](../../decisions/adr_035_inventory_identity_base_entity_types.md) (aDNA standard v2.3) and follow in § Promoted Base Types. Each entry covers: definition, purpose, location, key fields, and relationships. Use `ontology_design` to add domain-specific extensions (e.g., `lab_experiment`, `crm_customer`).
+Complete definitions for the 16 base entity types in the aDNA ontology. The original 14 are grouped by triad leg below; `inventory` (WHAT) and `identity` (WHO) were promoted from node-local extensions to base types by ADR-035 (aDNA standard v2.3) and follow in § Promoted Base Types. Each entry covers: definition, purpose, location, key fields, and relationships. Use `ontology_design` to add domain-specific extensions (e.g., `lab_experiment`, `crm_customer`).
 
 **Execution hierarchy**: Campaign → Mission → Session. Campaigns contain missions. Sessions execute mission objectives.
 
@@ -207,7 +207,7 @@ Complete definitions for the 16 base entity types in the aDNA ontology. The orig
 
 ## Promoted Base Types (ADR-035)
 
-`inventory` (WHAT) and `identity` (WHO) were promoted from node-local extensions to base entity types by [ADR-035](../../decisions/adr_035_inventory_identity_base_entity_types.md) (aDNA standard v2.3). They carry their canonical triad legs and base-ontology row numbers (15/16). Both are un-namespaced with `merge: invariant`.
+`inventory` (WHAT) and `identity` (WHO) were promoted from node-local extensions to base entity types by ADR-035 (aDNA standard v2.3). They carry their canonical triad legs and base-ontology row numbers (15/16). Both are un-namespaced with `merge: invariant`.
 
 ### 15. Inventory (WHAT leg)
 
