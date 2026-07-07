@@ -132,7 +132,30 @@ Before updating campaign status fields (`status`, `phase`):
 2. If the file was modified since your last read, re-read it before writing
 3. After updating status, commit promptly — status changes are coordination signals
 
-### 6. Abandonment
+### 6. Reopen
+
+Before resuming a **dormant** campaign (one paused long enough that its recorded state may have drifted), run a
+**re-orientation pass** — never a blind resume. A dormant campaign's `status`/`phase` frontmatter drifts; in a
+busy fleet its scope is often delivered piecemeal by sibling tracks, and its terminal target may already have
+shipped under another banner.
+
+1. **Diff the terminal target against the release CHANGELOG.** If the campaign's `tag_target_at_close` /
+   terminal milestone already appears in the release log, the campaign may be *terminal* — run closeout (§5),
+   not resumption.
+2. **Diff each open phase/mission against sibling closures.** Mark each unit delivered-elsewhere / superseded /
+   still-open.
+3. **Re-validate the plan's external dependencies.** Contracts naming other vaults/personas may reference
+   archived or renamed entities — re-resolve each against current routing.
+4. **Trust the mission files + closures + CHANGELOG over the campaign frontmatter** (truth hierarchy: git HEAD >
+   closures > frontmatter fields).
+5. **Produce a decision-ready reconciliation ledger + an operator gate** before executing any remaining work.
+
+The pass either resumes execution against a corrected plan or — commonly — reveals the campaign is already at
+its finish line, turning a nominal multi-session resume into an honest closeout. *(Graduated from a real reopen
+where a stale "P0 open" frontmatter masked a campaign whose terminal target had already shipped under a
+sibling's banner; the reconciliation collapsed a nominal 60–80-session resume into a ~2-session closeout.)*
+
+### 7. Abandonment
 
 1. Set `status: abandoned` with rationale
 2. Note which missions completed, which were dropped

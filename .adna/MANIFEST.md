@@ -35,7 +35,7 @@ aDNA/
 | Layer | Question | Contains |
 |-------|----------|----------|
 | **what/** | WHAT does this project know? | Context library (5 topics, 27 subtopics), decisions, aDNA docs, lattice YAML tools + schema + examples |
-| **how/** | HOW does this project work? | Missions, sessions, 28 templates, 27 skills, backlog, campaigns, PRD/RFC pipeline |
+| **how/** | HOW does this project work? | Missions, sessions, 30 templates, 32 skills, backlog, campaigns, PRD/RFC pipeline |
 | **who/** | WHO is involved? | People, teams, coordination, governance |
 
 ### Base Ontology
@@ -84,7 +84,7 @@ how/pipelines/prd_rfc/
 └── 04_review/        → Final approval (human gate)
 ```
 
-### Templates (28)
+### Templates (30)
 
 | Template | Auto-triggers in |
 |----------|-----------------|
@@ -116,6 +116,8 @@ how/pipelines/prd_rfc/
 | `template_identity_entry.md` | `who/identity/` |
 | `template_ratification_record.md` | — (N-ADRs-at-once ratification ceremony) |
 | `template_lattice_home_render.md` | — (terminal cold-start splash render) |
+| `template_second_genesis_dossier.md` | — (second-genesis intake dossier) |
+| `template_disposition_ledger.md` | — (workspace-houseclean disposition ledger) |
 
 ## Active Builds
 
@@ -126,7 +128,7 @@ how/pipelines/prd_rfc/
 | Lattice YAML tools | Shipped | Validate, convert (YAML↔canvas), JSON Schema, 15 example lattices + 3 canvas templates |
 | Mermaid-enhanced spec docs | Shipped | 19 diagrams across 3 aDNA specification documents |
 | PRD/RFC pipeline | Shipped | 4-stage planning pipeline (research → requirements → design → review) |
-| 28 templates | Shipped | Session, mission, campaign, campaign mission, context, ADR, backlog, coordination, PRD, RFC, skill, AAR, lightweight AAR, strategic compass, campaign CLAUDE.md, registry, data record, folder note, governance, migration, side quest, quest result, workspace CLAUDE.md, home CLAUDE.md, inventory entry, identity entry, ratification record, lattice-home render |
+| 30 templates | Shipped | Session, mission, campaign, campaign mission, context, ADR, backlog, coordination, PRD, RFC, skill, AAR, lightweight AAR, strategic compass, campaign CLAUDE.md, registry, data record, folder note, governance, migration, side quest, quest result, workspace CLAUDE.md, home CLAUDE.md, inventory entry, identity entry, ratification record, lattice-home render, second-genesis dossier, disposition ledger |
 | Execution hierarchy v2 | Shipped | OODA cascade (3-level evaluation loops), AAR protocol, mission classes, escalation cascade |
 | Quality framework | Shipped | 10-dimension compliance rubric, quality audit skill, context graduation pipeline |
 

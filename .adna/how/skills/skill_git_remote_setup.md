@@ -87,7 +87,7 @@ fi
 
 ```bash
 # Derive default repo_name from the vault directory name
-vault_dir=$(basename "$PWD")  # e.g., "Spacemacs.aDNA"
+vault_dir=$(basename "$PWD")  # e.g., "MyProject.aDNA"
 
 if [[ -z "$repo_name" ]]; then
   repo_name="$vault_dir"
@@ -253,13 +253,13 @@ Per `adr_006_github_repo_rename_to_adna.md` (amended 2026-05-18), the template r
 
 Per ADR-009: `science-stanley-adna`, `wga-adna`, `context-commons-adna`, `LAStartupLattice` already exist with non-conformant names. The skill warns and proceeds (after operator confirmation). Renames are **operator-discretionary** — handled at the operator's pace, not forced by v7.0.
 
-### The seven no-remote vaults
+### Primary use case: vaults with no configured remote
 
-The skill's primary use case. After M03 ships the v7.0 template, operators of the seven no-remote vaults (Spacemacs, VideoForge, III, VAASLattice, zeta, RareHarness, strategic_interface_protocol) can run `skill_git_remote_setup` once to configure GitHub remotes that follow the convention out of the box.
+The skill's primary use case. Any vault created without a configured git remote can run `skill_git_remote_setup` once to configure a remote that follows the convention out of the box.
 
-### The LP path-style exception
+### Path-style local remotes
 
-LPWhitepaper.aDNA's remote currently points at a local filesystem path (`/Users/stanley/lattice/whitepaper`). This is a Stanley-side artifact of LPWhitepaper's separate-repo-but-co-located history. The skill does not migrate this — the operator decides whether to re-anchor at GitHub during v3 successor execution. The skill warns if it detects an existing non-URL remote and recommends `git remote set-url` directly rather than running this skill.
+A vault may have a remote that points at a local filesystem path rather than a hosting URL — an artifact of a separate-repo-but-co-located history. The skill does not migrate this — the operator decides whether to re-anchor at a git host. The skill warns if it detects an existing non-URL remote and recommends `git remote set-url` directly rather than running this skill.
 
 ## Self-reference (Standing Order #2)
 

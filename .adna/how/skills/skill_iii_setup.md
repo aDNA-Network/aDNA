@@ -281,7 +281,7 @@ grep -r "source_vault:.*<vault_name>" <workspace_root>/*/iii/CLAUDE.md <workspac
 
 Expected outcomes:
 - **Zero downstream consumers** (wga MB-5 case): vacuous pass. All changes are additive at the new vault root.
-- **Active downstream consumers** (CanvasForge MB-4 case — 3 downstream wrappers at SS + CC): verify that the paths the downstream wrappers pin are NOT touched by the new `iii/` directory + Standing Order. Document the downstream-safety check in the wrapper file.
+- **Active downstream consumers** (a vault with downstream wrappers that depend on it): verify that the paths the downstream wrappers pin are NOT touched by the new `iii/` directory + Standing Order. Document the downstream-safety check in the wrapper file.
 
 ### Step 9 — Wikilink sweep (only if migrating from pre-federation)
 
@@ -321,7 +321,7 @@ If you do not have write access (or the new consumer is external to the Lattice 
 
 ## Variants
 
-### Minimal wrapper (wga MB-5 precedent)
+### Minimal wrapper
 
 For clean-slate consumers with no domain-specific traps, no multi-voice review, no consumer-specific orchestration skill:
 
@@ -332,19 +332,19 @@ For clean-slate consumers with no domain-specific traps, no multi-voice review, 
 
 Fastest wrapper to author (~0.5 session). Recommended for new vaults that adopt III early.
 
-### Full-extension wrapper (CanvasForge MB-4 precedent)
+### Full-extension wrapper
 
 For consumers with rich domain-specific III infrastructure:
 
 - 5/7 canonical packs (with one canonical pack deliberately omitted — e.g., `canvas_visual` — in favor of a `bridge_pack`)
 - All 8 modules
 - **3+** `local_extensions` entries: `bridge_pack` + `local_skill` + `learning_store_local`
-- May involve pre-federation artifact relocation (worked precedent at MB-4 closed via governance registration — physical move had already happened)
+- May involve pre-federation artifact relocation (a worked precedent closed this via governance registration — the physical move had already happened)
 - Verify downstream-safety carefully (Step 8)
 
 Longest wrapper to author (~1 session). Required when the consumer has accumulated significant pre-federation III work.
 
-### Bridge wrapper (VideoForge MB-3 precedent)
+### Bridge wrapper
 
 For consumers whose primary III usage is gated through a separate operation catalog or ADR-defined operation set (the bridge is a pointer-only pack that maps III canonical procedures onto the consumer's operations):
 
@@ -355,7 +355,7 @@ For consumers whose primary III usage is gated through a separate operation cata
 
 ~1 session. Use when the consumer's domain-specific content lives in an ADR or external catalog rather than a trap pack.
 
-### Multi-voice wrapper (SiteForge MB-2 precedent)
+### Multi-voice wrapper
 
 For consumers that use named voices in INSPECT (Voice Critic / Design / UX / SEO / Brand etc.):
 
@@ -368,17 +368,17 @@ For consumers that use named voices in INSPECT (Voice Critic / Design / UX / SEO
 
 ## Worked Precedents
 
-All 5 live wrappers in the Lattice ecosystem (as of 2026-05-12):
+Across the ecosystem, a range of `.aDNA` vaults run III consumer wrappers (`<vault>/iii/`) — Framework, Forge, and Org vaults alike. The wrappers vary by shape:
 
-| Wrapper | Mission | Pin | Shape | Story |
-|---------|---------|-----|-------|-------|
-| `lattice-labs/iii/` | MB-1 (2026-05-08) | `v0.1.0` (`1628793`) | 7/7 packs + 8 modules + 2 local_extensions (`domain_pack` KINN brand-voice; `learning_store_local`) | First consumer wrapper; retired the operational pre-migration corrections.jsonl; KINN pack physically relocated at MB-7 |
-| `SiteForge.aDNA/iii/` | MB-2 (2026-05-10) | `v0.2.0` (`04ae724`) | 5/7 packs + 8 modules + 2 local_extensions (`reviewer_registry`; `learning_store_local`) | First multi-voice wrapper; MA-3 carry-forward #2 absorbed |
-| `VideoForge.aDNA/iii/` | MB-3 (2026-05-11) | `v0.2.0` (`246124d`) | 5/7 packs + 8 modules + 2 local_extensions (`bridge_pack` ADR-006; `learning_store_local`) | First inbound v0.2 cross-vault request to traverse full lifecycle; R3 risk closed |
-| `CanvasForge.aDNA/iii/` | MB-4 (2026-05-11) | `v0.2.0` (`246124d`) | 5/7 packs (canvas_visual deliberately omitted) + 8 modules + 3 local_extensions (`bridge_pack` canvas; `local_skill` 5-voice canvas review; `learning_store_local`) | Full-extension; downstream-safety verified for 3 downstream wrappers at SS + CC |
-| `wga.aDNA/iii/` | MB-5 (2026-05-11) | `v0.2.0` (`246124d`) | 5/7 packs + 8 modules + 1 local_extension (`learning_store_local`) | Minimal-wrapper baseline; clean-slate consumer; zero downstream vaults |
+| Shape | Local extensions (beyond the packs) | When to use it |
+|-------|-------------------------------------|----------------|
+| **Minimal baseline** | `learning_store_local` only (5/7 packs) | Clean-slate consumer, zero downstream vaults — the cleanest starting template |
+| **Multi-voice** | `reviewer_registry` + `learning_store_local` | Consumer uses named review voices (Design / UX / SEO / Brand …) |
+| **Domain/brand** | `domain_pack` (brand-voice) + `learning_store_local` | Branded vault with a distinct voice |
+| **Bridge** | `bridge_pack` (pointer-only) + `learning_store_local` | III usage gated through a separate operation catalog / ADR |
+| **Full-extension** | `bridge_pack` + `local_skill` + `learning_store_local` | Rich domain-specific III infrastructure (one canonical pack often omitted in favor of the bridge) |
 
-Read any of these wrappers as a concrete reference. The minimal-baseline (wga MB-5) is the cleanest starting template.
+Read any live `iii/` wrapper in a sibling vault as a concrete reference — its `iii/CLAUDE.md` + `federation_ref` block show the full shape. Start from a minimal-baseline wrapper and add extensions only as your vault needs them.
 
 ## Cross-References
 

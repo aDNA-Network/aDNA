@@ -1,14 +1,15 @@
 ---
 type: governance
-version: "8.5"
+version: "8.6"
 token_estimate: ~3000
-updated: 2026-07-03
+updated: 2026-07-06
 last_edited_by: agent_rosetta
 ---
 
 # CLAUDE.md — aDNA
+<!-- v8.6 | 2026-07-06 | Ouroboros release (governance 8.5→8.6; standard stays v2.5): +5 graph-lifecycle skills (skill_project_archive · skill_second_genesis · skill_graph_merge · skill_graph_rename · skill_workspace_spring_clean) + template_disposition_ledger + template_second_genesis_dossier + §6 Reopen clause (how/campaigns/AGENTS.md) + optional webforge fork scaffold + governance_doctrine_adoption_checklist (what/docs/) + Batch-G doc-currency (skill_iii_setup census→generic; skill_git_remote_setup genericized). Counts 30 templates/32 skills. Operator release gate 2026-07-06. -->
 <!-- v8.5 | 2026-07-03 | release-cut hygiene (governance 8.4→8.5; standard stays v2.5): README one-step install (F-CHM-216); F-CHM-217 leak sweep — de-link dangling ADR citations on shipped skills/context + strip private aDNA.aDNA/ path + disambiguate two dangling III ADR refs in skill_iii_setup; doc-currency (AGENTS v2.5 label · agent_first_guide anchor · aDNA_overview archival banner). Operator release gate 2026-07-03. -->
-<!-- v8.4 | 2026-07-03 | standard v2.5 fold (ADR-046: §7.7 ratification discipline · §7.2 per-class profile · §5.5 walk scope · §5.3 federation/ row) + Champollion RC batch: template_ratification_record + lattice-home trio (pattern·template·skill) + router Standing Rules 5–7 + broker snippet + AskUserQuestion/single-writer/recon/heavy-file/allowlist/orphan-lint doctrine folds + updated validators + currency (badges v8.4/v2.5 · counts 28 templates/27 skills · README ToC + learn path · Obsidian payload docs 14-plugin truth). Ratified Champollion G6 2026-07-03; record: aDNA.aDNA how/gates/champollion_p6_gate.output.md -->
+<!-- v8.4 | 2026-07-03 | standard v2.5 fold (ADR-046: §7.7 ratification discipline · §7.2 per-class profile · §5.5 walk scope · §5.3 federation/ row) + Champollion RC batch: template_ratification_record + lattice-home trio (pattern·template·skill) + router Standing Rules 5–7 + broker snippet + AskUserQuestion/single-writer/recon/heavy-file/allowlist/orphan-lint doctrine folds + updated validators + currency (badges v8.4/v2.5 · README ToC + learn path · Obsidian payload docs 14-plugin truth). Ratified Champollion G6 2026-07-03. -->
 <!-- v8.3 | 2026-06-29 | template org-name currency: live-routing refs LatticeProtocol→aDNA-Network/aDNA + display name Agentic-DNA→aDNA; historical + private-repo refs (lattice-protocol/latlab/III.aDNA) KEPT -->
 <!-- v8.2 | 2026-06-29 | standard v2.4 (§6.5 Rename Protocol + §13.2 harness-injection safeguard, ADR-042) + Class-1 fork-template hygiene: persona parameterized ({{persona}}), stale campaign dropped -->
 
@@ -63,7 +64,7 @@ project_name.aDNA/
 │       ├── tools/               # Python validation and conversion tools
 │       └── examples/            # Example .lattice.yaml files
 ├── how/                         # HOW — Operations, sessions, templates
-│   ├── templates/               # 22 reusable templates
+│   ├── templates/               # 30 reusable templates
 │   ├── sessions/                # Session tracking (active/ + history/)
 │   ├── missions/                # Multi-session plans (standalone)
 │   ├── backlog/                 # Ideation and improvement tracking
@@ -266,6 +267,11 @@ Reusable agent recipes and documented procedures in `how/skills/`. Skills have t
 | `skill_sqlite_persistence` | process | Multiple agents, sessions hard to query, learnings accumulating without validation signal |
 | `skill_orchestration_tiers` | process | Multi-file tasks, tier classification, agent spawning, model routing decisions |
 | `skill_project_rename` | agent | A vault/project/persona is renamed — sweep its own live-routing self-references to the old name (Standard §6.5) |
+| `skill_project_archive` | agent | A vault is superseded / wound-down / merged — archive it intact under the Archive holder (never delete) |
+| `skill_second_genesis` | process | Re-found a vault that drifted far from the standard — archive-old → re-fork → migrate selectively |
+| `skill_graph_merge` | agent | One vault is absorbed into another — drain → fold → re-anchor every live ref → archive the drained shell |
+| `skill_graph_rename` | agent | A fleet-referenced vault is renamed — mv + back-compat shim + cross-fleet live-ref sweep (delegates the self-routing sweep to `skill_project_rename`) |
+| `skill_workspace_spring_clean` | process | Fleet-wide houseclean — classify every disposition into one ledger, ratify at one operator gate, execute in waves |
 
 ---
 

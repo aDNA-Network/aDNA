@@ -28,6 +28,23 @@ Changelog entries are organized by **governance version** (primary heading). Sta
 
 ---
 
+## [v8.6] — 2026-07-06
+
+> **Governance 8.5 → 8.6 · Standard track: v2.5 (unchanged)** — operator-ratified **graph-lifecycle skills + doc-currency** release (Operation Ouroboros). Adds the five skills that complete a context graph's lifecycle — fork → rename → merge → archive → second-genesis — plus supporting templates and a fork-time governance-doctrine checklist. Changes are **additive / corrective** (minor per the §Version Policy table / ADR-011). Released via `skill_template_release`.
+
+### Added
+- **Five graph-lifecycle skills** (`how/skills/`): `skill_project_archive` (leaf — archive a superseded vault under the Archive holder, never delete), `skill_second_genesis` (re-found a drifted vault: archive-old → re-fork → migrate selectively), `skill_graph_merge` (absorb one vault into another: drain → fold → re-anchor every live ref → archive the shell), `skill_graph_rename` (rename a fleet-referenced vault: mv + back-compat shim + cross-fleet live-ref sweep; delegates the self-routing sweep to `skill_project_rename`), and `skill_workspace_spring_clean` (fleet-wide houseclean orchestrating all four behind one operator gate).
+- **Two operational templates** (`how/templates/`): `template_second_genesis_dossier.md` (second-genesis intake dossier) + `template_disposition_ledger.md` (§A–H workspace-houseclean ledger).
+- **Governance-doctrine adoption checklist** (`what/docs/governance_doctrine_adoption_checklist.md`) — the v8.4 consumer-facing doctrine itemized with a project/node/router applicability model; a fresh fork verifies or retrofits the doctrine against it (referenced from `skill_project_fork`).
+
+### Changed
+- **Campaign lifecycle** (`how/campaigns/AGENTS.md`): added a **§6 Reopen** re-orientation clause (diff a dormant campaign's terminal target against the release log + sibling closures before resuming, never a blind resume); the former §6 Abandonment is renumbered §7.
+- **`skill_project_fork`**: the fork skeleton now optionally lays down a `webforge/` wrapper (scaffold-only; degrades cleanly when WebForge is absent — the same optional-with-degradation pattern as `canvas_core`).
+- **Doc currency (Batch G):** genericized dev-vault-specific example prose — `skill_iii_setup.md` (worked-precedents census table → a generic wrapper-shape table) and `skill_git_remote_setup.md` (removed workspace-specific vault lists + a local-path example). Historical migration guides preserved.
+- Router counts re-censused (30 templates · 32 skills).
+
+*Released via `skill_template_release` at the Operation Ouroboros P3 gate (governance 8.5 → 8.6; standard stays v2.5).*
+
 ## [v8.5] — 2026-07-03
 
 **Release-cut hygiene** (governance 8.4→8.5; **standard unchanged at v2.5** — currency/hygiene only, no normative change).
