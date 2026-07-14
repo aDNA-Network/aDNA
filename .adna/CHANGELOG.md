@@ -28,6 +28,20 @@ Changelog entries are organized by **governance version** (primary heading). Sta
 
 ---
 
+## [v8.8] — 2026-07-14
+
+> **Governance 8.7 → 8.8 · Standard track: v2.5 (unchanged)** — operator-ratified **template-quality prune** release (Operation Distillery). The always-loaded governance layer (`CLAUDE.md`) drops **~7,720 → ~5,820 tokens (−24%)** with zero governance-rule loss, plus a first-contact III pass on the READMEs. No count change (30 templates · 32 skills).
+
+### Changed
+- **`CLAUDE.md` prune (−~1,900 tok)**: the Domain-Knowledge reference tables (lattice types, execution modes, object standards, registry, compute tiers, FAIR metadata, convergence model), the full Compliance-Dimensions definitions, and the Personality-Customization examples were **extracted** to companion docs (see Added), leaving in-place pointers. The 16-entity ontology triad, the Skills-inventory table, and the headless-first Visual-inspection doctrine were **kept inline**. Header changelog trimmed to the current entry; conservative currency fixes (stale `token_estimate`, dropped `(NEW v7.0)` marker). **No governance rule removed** — verified by section-header diff (only reference/duplication content left the file).
+- **`README.md` (root + `.adna/`)**: first-contact III pass — tightened the clone / older-install upgrade notes; both governance badges bumped v8.7 → v8.8.
+
+### Added
+- **`what/docs/adna_reference.md`** — reference companion holding the extracted Domain-Knowledge tables + full Compliance-Dimensions definitions.
+- **`how/templates/example_personalities.md`** — three worked `## Identity & Personality` examples backing the persona-customization pointer.
+
+---
+
 ## [v8.7] — 2026-07-13
 
 > **Governance 8.6 → 8.7 · Standard track: v2.5 (unchanged)** — operator-ratified **currency + inheritable-defaults** release (Operation Cleanroom). Four low-risk riders that make the base image a cleaner, more complete seed for every fork. No count change (30 templates · 32 skills).

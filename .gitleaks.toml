@@ -1,0 +1,18 @@
+# .gitleaks.toml — aDNA workspace image (aDNA-Network/aDNA)
+#
+# Extends gitleaks' default ruleset. The only project-specific rule is a PATH
+# allowlist for third-party Obsidian plugin bundles (vendored, minified JS),
+# whose compressed code triggers `generic-api-key` false positives. Paths only —
+# this file contains no secrets and no secret patterns.
+#
+# Added v8.8 (Operation Distillery) per ratified DP3: 8 pre-existing minified-JS
+# false positives in .obsidian/plugins/ were blocking the pre-push scan.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Third-party Obsidian plugin bundles — minified vendor JS (false positives, not aDNA source)"
+paths = [
+  '''\.obsidian/plugins/''',
+]

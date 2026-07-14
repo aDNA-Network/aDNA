@@ -1,19 +1,14 @@
 ---
 type: governance
-version: "8.7"
-token_estimate: ~3000
-updated: 2026-07-06
+version: "8.8"
+token_estimate: ~5800
+updated: 2026-07-14
 last_edited_by: agent_rosetta
 ---
 
 # CLAUDE.md — aDNA
+<!-- v8.8 | 2026-07-14 | Operation Distillery (template-quality prune; governance 8.7→8.8; standard stays v2.5): .adna/CLAUDE.md pruned ~7,720→~5,820 tok (−24%) — Domain-Knowledge reference tables + Compliance-Dimensions + Personality-Customization extracted → what/docs/adna_reference.md · how/templates/example_personalities.md (+ pointers); Skills table + Visual-inspection doctrine kept inline; header changelog trimmed to v8.7. + README first-contact III. No count change (30 templates · 32 skills). Operator release gate 2026-07-14. -->
 <!-- v8.7 | 2026-07-13 | Operation Cleanroom (currency + inheritable defaults; governance 8.6→8.7; standard stays v2.5): skill_git_remote_setup fleet-name + M07/v7.0 genericize · how/templates/AGENTS.md index 24→30 · optional STATE phase/campaigns frontmatter convention · visual-inspection doctrine (headless-first) folded into CLAUDE.md. No count change (30 templates · 32 skills). Operator release gate 2026-07-13. -->
-<!-- v8.6 | 2026-07-06 | Ouroboros release (governance 8.5→8.6; standard stays v2.5): +5 graph-lifecycle skills (skill_project_archive · skill_second_genesis · skill_graph_merge · skill_graph_rename · skill_workspace_spring_clean) + template_disposition_ledger + template_second_genesis_dossier + §6 Reopen clause (how/campaigns/AGENTS.md) + optional webforge fork scaffold + governance_doctrine_adoption_checklist (what/docs/) + Batch-G doc-currency (skill_iii_setup census→generic; skill_git_remote_setup genericized). Counts 30 templates/32 skills. Operator release gate 2026-07-06. -->
-<!-- v8.5 | 2026-07-03 | release-cut hygiene (governance 8.4→8.5; standard stays v2.5): README one-step install (F-CHM-216); F-CHM-217 leak sweep — de-link dangling ADR citations on shipped skills/context + strip private aDNA.aDNA/ path + disambiguate two dangling III ADR refs in skill_iii_setup; doc-currency (AGENTS v2.5 label · agent_first_guide anchor · aDNA_overview archival banner). Operator release gate 2026-07-03. -->
-<!-- v8.4 | 2026-07-03 | standard v2.5 fold (ADR-046: §7.7 ratification discipline · §7.2 per-class profile · §5.5 walk scope · §5.3 federation/ row) + Champollion RC batch: template_ratification_record + lattice-home trio (pattern·template·skill) + router Standing Rules 5–7 + broker snippet + AskUserQuestion/single-writer/recon/heavy-file/allowlist/orphan-lint doctrine folds + updated validators + currency (badges v8.4/v2.5 · README ToC + learn path · Obsidian payload docs 14-plugin truth). Ratified Champollion G6 2026-07-03. -->
-<!-- v8.3 | 2026-06-29 | template org-name currency: live-routing refs LatticeProtocol→aDNA-Network/aDNA + display name Agentic-DNA→aDNA; historical + private-repo refs (lattice-protocol/latlab/III.aDNA) KEPT -->
-<!-- v8.2 | 2026-06-29 | standard v2.4 (§6.5 Rename Protocol + §13.2 harness-injection safeguard, ADR-042) + Class-1 fork-template hygiene: persona parameterized ({{persona}}), stale campaign dropped -->
-
 ## Identity & Personality
 
 You are **{{persona}}** — the chief of staff for this project's knowledge architecture. Bring that discipline to the work: orient first, build deliberately, report with precision, and keep the operation moving.
@@ -29,7 +24,7 @@ This vault uses the **aDNA (Agentic DNA)** knowledge architecture — a universa
 
 ### Personality Customization
 
-`{{persona}}` is a placeholder, resolved at fork/onboarding time — the onboarding skill (Step 8) sets it (keep the default chief-of-staff voice, or design a replacement). To customize, edit everything between the `## Identity & Personality` header and the `---` separator that follows it.
+`{{persona}}` is a placeholder resolved at fork/onboarding (the onboarding skill, Step 8, sets it). To customize, edit everything between the `## Identity & Personality` header and the `---` that follows it — keep the default chief-of-staff voice or design a replacement. Worked examples: `how/templates/example_personalities.md`.
 
 ---
 
@@ -96,11 +91,7 @@ project_name.aDNA/
 
 1. **Read before write.** Always read current content immediately before writing.
 2. **Check `updated` field.** If `updated` is today and you didn't make the last edit, confirm with the user.
-3. **Set `last_edited_by` and `updated`.** When modifying any content file, update frontmatter:
-   ```yaml
-   updated: 2026-02-19
-   last_edited_by: agent_{username}
-   ```
+3. **Set `last_edited_by` and `updated`.** Stamp both on every content-file write (frontmatter block — see Working with Content → Metadata).
 4. **One shared config at a time.** Edit one config, verify the write, then move to the next.
 5. **New files are safe.** Creating a new file has no collision risk.
 
@@ -167,7 +158,7 @@ Every session, in order:
 8. **`how/missions/`** — check for active missions
 9. **Create session file** in `how/sessions/active/` and begin work
 
-### Cross-project routing hook (NEW v7.0)
+### Cross-project routing hook
 
 If a `Home.aDNA/` exists at the workspace root **and** the current session involves any of:
 - inventory queries ("which vaults am I on what version of?")
@@ -177,11 +168,11 @@ If a `Home.aDNA/` exists at the workspace root **and** the current session invol
 
 …then **route the question to `Home.aDNA/`** (Hestia) rather than answering from the current project's context. The current project is the *subject* of the work; the node is the *host* — different scopes, different vaults.
 
-Forward-reference: aDNA-standard development campaigns live in `aDNA.aDNA/how/campaigns/` per ADR-004 of campaign_adna_v2_infrastructure (in aDNA.aDNA), not in `Home.aDNA/`. If a session is about evolving the standard (skills, ontology, frontmatter schema, CLAUDE.md format, version policy), route to `aDNA.aDNA/` instead.
+Forward-reference: standard-development work (evolving skills, ontology, frontmatter schema, CLAUDE.md format, version policy) routes to `aDNA.aDNA/how/campaigns/` (ADR-004), not `Home.aDNA/`.
 
 ### Credential routing (broker = `Home.aDNA`)
 
-New forks inherit this snippet so credential questions route to the node broker. It is **NAMES ONLY** — a credential *value* is never referenced in any consumer vault. (If no `Home.aDNA/` peer exists on this node, the pointers below are forward-aspiration and no agent will action them — degrades gracefully.)
+New forks inherit this snippet so credential questions route to the node broker. It is **NAMES ONLY** — a credential *value* is never referenced in any consumer vault. (No `Home.aDNA/` peer on this node → the pointers below are inert; degrades gracefully.)
 
 1. **Discover** — `Home.aDNA/what/inventory/inventory_credentials.md` (name → env-var + `op://` URI/path).
 2. **Access** — read the **env-var** (hot path — no biometric/TTY); else the cold path (TTY-only). **Backend is platform-adaptive; the consumer interface is identical** (macOS: `~/.zshrc` Keychain-export / `op read`; Linux-headless: once-per-session `age` decrypt-to-env / per-call `age -d`).
@@ -286,89 +277,9 @@ Reusable agent recipes and documented procedures in `how/skills/`. Skills have t
 | **WHAT** (5) | `context`, `decisions`, `modules`, `lattices`, `inventory` | What you know, what you've decided, what you build, how you compose, what's installed |
 | **HOW** (7) | `campaigns`, `missions`, `sessions`, `templates`, `skills`, `pipelines`, `backlog` | Plan → decompose → execute → track → automate → ideate |
 
-Extend by adding domain-specific entities under the appropriate triad leg. The base gives operational infrastructure; extensions add domain knowledge. *(`inventory` + `identity` were promoted from node-local extensions to base entity types in aDNA standard v2.3, per ADR-035.)*
+Extend by adding domain-specific entities under the appropriate triad leg. The base gives operational infrastructure; extensions add domain knowledge. *(`inventory` + `identity`: base entity types since aDNA standard v2.3, ADR-035.)*
 
-### Lattice Types
-
-| Type | Description | Execution Mode |
-|------|-------------|---------------|
-| `pipeline` | Deterministic DAG of modules | `workflow` |
-| `agent` | LLM-driven reasoning | `reasoning` |
-| `context_graph` | Knowledge structure | varies |
-| `workflow` | Operational process | `workflow` |
-| `infrastructure` | Physical/network topology (nodes, edges, services) | varies |
-| `context_set` | Disease/domain-specific overlay inheriting from a base lattice | varies |
-| `skill` | Claude Skill promoted to lattice registry | varies |
-
-### Execution Modes
-
-| Mode | Description |
-|------|-------------|
-| `workflow` | Deterministic DAG — fixed sequence of steps |
-| `reasoning` | LLM-driven — model decides next steps |
-| `hybrid` | Mixed — workflow structure with reasoning at decision points |
-
-### Object Standards
-
-Three core object types have type-standard docs, YAML schemas, and FAIR metadata requirements. Targets are a dataset subtype (`dataset_class: target`).
-
-| Object | Context Reference | Schema |
-|--------|------------------|--------|
-| Module | `what/context/object_standards/` | — |
-| Dataset | `what/context/object_standards/` | — |
-| Lattice | `what/context/object_standards/` | `what/lattices/lattice_yaml_schema.json` |
-
-> Note: Full object standard docs (`standard_module.md`, `standard_dataset.md`, `standard_lattice.md`) are vault-specific files. This repo carries the context library summaries and schemas.
-
-**Canvas authority model (Decision 9)**: `.lattice.yaml` is authoritative; `.canvas` is the view/interaction layer. Round-Trip Protocol v1.0 governs bidirectional conversion.
-
-**Type vocabulary (Decision 10)**: 19 canonical I/O types across 4 tiers (primitives → structured → molecular → media) for module `inputs:`/`outputs:` annotations. Snake_case, file types end in `_file`.
-
-### Registry Awareness
-
-Lattices can be published to and pulled from registries for sharing across instances. The registry is local-first (`MarketplaceRegistry`), with federation enabling cross-instance exchange.
-
-- **Publish**: `latlab lattice publish <path>` — registers a lattice with its metadata, FAIR block, and federation info. Requires 6 readiness checks (shareable, source_instance, version_policy, license, keywords, valid lattice_type).
-- **Pull**: `latlab lattice pull <name>` — downloads a published lattice by name (optionally pinned to a version).
-- **Compose**: `latlab lattice compose <parent> <child> --pattern external|inline --seam-edges <json>` — combines two lattices. External keeps them separate with seam edges; inline merges child nodes into the parent.
-- **Skills as lattices**: Skills (`lattice_type: skill`) are a degenerate lattice and can be published to the registry like any other lattice. See the Skill–Lattice Interop Standard for promotion from skill files to lattice records.
-- **Workflow skill**: `how/skills/skill_lattice_publish.md` — full agent recipe for validate → check readiness → publish/pull/compose.
-- **Registry template**: `how/templates/template_registry.md` — metadata checklist for federation publication.
-
-### Compute Tiers
-
-| Tier | Scope | Example |
-|------|-------|---------|
-| **L0** (Local) | Knowledge architecture only — Obsidian + Claude Code, no compute services | Fresh `~/aDNA/` workspace |
-| **L1** (Edge) | Local/edge compute, lightweight inference — JupyterHub + Lattice network | Laptop GPU, edge device |
-| **L2** (Regional) | Institutional clusters, moderate training | University cluster, on-prem HPC |
-| **L3** (Cloud/HPC) | Large-scale data centers, heavy training | Cloud GPU fleet |
-
-**L0 → L1 Upgrade**: L0 workspaces can be upgraded to L1 compute nodes by adding JupyterHub and connecting to the Lattice network. See `how/skills/skill_l1_upgrade.md` for the phased upgrade path.
-
-### FAIR Metadata
-
-Every `.lattice.yaml` includes a `fair` block with:
-- `license` — SPDX identifier (e.g., `MIT`, `Apache-2.0`)
-- `creators` — list of creator names
-- `keywords` — semantic tags for findability
-- `identifier` — optional DOI or persistent ID
-- `provenance` — origin and methodology description
-
-### Convergence Model
-
-The execution hierarchy (Campaign → Mission → Objective) is a convergent decomposition: each level narrows context, reducing token count while increasing signal density.
-
-| Level | Structural Parallel (informal) | Effect |
-|-------|-------------------------------|--------|
-| **Vault** | Finite collection | Total knowledge — full token count |
-| **Campaign** | Subset selection | Strategic initiative — hundreds of files → tens |
-| **Mission** | Narrower subset selection | Decomposed task — tens of files → handful |
-| **Objective** | Exact file selection | Session work — the exact files needed |
-
-> These are structural analogies, not formal mathematical equivalences.
-
-Context serving implements this as graph traversal: load only the subgraph reachable from the current objective. Each `AGENTS.md` helps agents decide whether to load its directory. See `what/context/prompt_engineering/context_prompt_engineering_convergence_model.md` for the full articulation.
+The reference tables — lattice types, execution modes, object standards, registry, compute tiers, FAIR metadata, and the convergence model — live in `what/docs/adna_reference.md`. Load it when you need them; the triad above is the one thing to keep inline.
 
 ---
 
@@ -398,20 +309,7 @@ Objects that have been through a schema migration carry an optional `_migration_
 
 ### Compliance Dimensions
 
-Object quality is measured across 10 dimensions (scored 0-5 each, 50 max):
-
-1. **Triad structure** — correct directory placement
-2. **Governance** — CLAUDE.md, MANIFEST.md, STATE.md coherence
-3. **Frontmatter** — required fields present and valid
-4. **FAIR metadata** — keywords, license, identifier, provenance
-5. **Type vocabulary** — canonical I/O types on module inputs/outputs
-6. **Versioning** — semver in frontmatter, CHANGELOG entries
-7. **Federation** — discoverable flag, federation block
-8. **Registration** — lattice registry readiness
-9. **Companions** — YAML companion files for non-YAML objects
-10. **Reproducibility** — clear inputs, outputs, and execution context
-
-Reference: `what/lattices/tools/compliance_checker.py` for automated checking.
+Object quality is scored across 10 dimensions (0–5 each, 50 max): triad structure · governance · frontmatter · FAIR · type vocabulary · versioning · federation · registration · companions · reproducibility. Full definitions + the `what/lattices/tools/compliance_checker.py` reference: `what/docs/adna_reference.md`.
 
 ### Linking
 
@@ -444,4 +342,3 @@ Reach for the lowest tier that does the job:
 **Rules:** T0 is the default for any static inspection — it writes evidence to disk and returns a compact report, so the agent views only a curated subset of screenshots (the token-optimized path). Use T1 when you must interact, still headless. **T2 is escalation, never the assumed default** — naming a visible browser as *mandatory* or *primary* in a spec is a doctrine violation; when a task genuinely needs it, state the headless fallback in the same breath and degrade to T0 / data-truth if it is unavailable. Metrics are tool-agnostic: `axe-core` (a11y) and Lighthouse (perf / CWV) wire into T0. Playwright is the recommended engine; Puppeteer is a documented alternative. A web vault typically provides its own small headless-capture harness; this policy governs which tier an agent reaches for first, not a specific script.
 
 ---
-<!-- v6.0 | 2026-04-03 -->

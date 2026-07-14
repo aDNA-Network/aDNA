@@ -7,7 +7,7 @@
 
 # aDNA — Agentic DNA
 
-[![Governance v8.7](https://img.shields.io/badge/governance-v8.7-663399.svg)](https://github.com/aDNA-Network/aDNA/releases/tag/v8.7) [![Standard v2.5](https://img.shields.io/badge/standard-v2.5-blue.svg)](https://github.com/aDNA-Network/aDNA/blob/main/.adna/what/docs/adna_standard.md) [![Docs](https://img.shields.io/badge/docs-adna.network-44cc11.svg)](https://adna.network)
+[![Governance v8.8](https://img.shields.io/badge/governance-v8.8-663399.svg)](https://github.com/aDNA-Network/aDNA/releases/tag/v8.8) [![Standard v2.5](https://img.shields.io/badge/standard-v2.5-blue.svg)](https://github.com/aDNA-Network/aDNA/blob/main/.adna/what/docs/adna_standard.md) [![Docs](https://img.shields.io/badge/docs-adna.network-44cc11.svg)](https://adna.network)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Obsidian](https://img.shields.io/badge/Obsidian-Compatible-7C3AED)](https://obsidian.md)
@@ -43,11 +43,9 @@ git clone https://github.com/aDNA-Network/aDNA.git ~/aDNA && cd ~/aDNA && claude
 
 Claude reads the workspace router (`~/aDNA/CLAUDE.md`) and walks you through creating your first project. Tell it about your domain — it builds the right structure for you.
 
-> For a faster clone, add `--depth 1` (`git clone --depth 1 https://github.com/aDNA-Network/aDNA.git ~/aDNA`) — you'll get the latest workspace without full git history.
+> For a faster clone, add `--depth 1` — the latest workspace without full git history. `~/aDNA/` is the recommended root, but any path works (it's detected, never hardcoded).
 >
-> **v7.0 flatten note**: post-aDNA-v7.0 (campaign_adna_v2_infrastructure 2026-05-18), the template clones directly into `.adna/` as a flat repo (no nested `adna/.adna/` layer). The workspace router (`~/aDNA/CLAUDE.md`) ships pre-instantiated at the image root — no manual bootstrap. See the v6→v7 upgrade guide at [`.adna/how/docs/upgrade_v6_to_v7.md`](how/docs/upgrade_v6_to_v7.md) for existing-operator migration.
->
-> **Workspace-root note**: `~/aDNA/` is the recommended workspace root; any path works — `<workspace_root>` is detected, never hardcoded. Operators on the legacy `~/lattice/` root migrate via [`skill_workspace_path_migration`](how/skills/skill_workspace_path_migration.md) (a turnkey agentic transition) plus a `~/lattice → ~/aDNA` symlink shim that keeps every existing reference valid mid-migration.
+> **Upgrading an older install?** Pre-v7.0 workspaces (the nested `adna/.adna/` layout) and the legacy `~/lattice/` root both keep working — migrate at your pace with the [v6→v7 guide](how/docs/upgrade_v6_to_v7.md) for the flatten, or [`skill_workspace_path_migration`](how/skills/skill_workspace_path_migration.md) for the root move.
 
 ---
 
