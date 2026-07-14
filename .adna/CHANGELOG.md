@@ -28,6 +28,20 @@ Changelog entries are organized by **governance version** (primary heading). Sta
 
 ---
 
+## [v8.7] — 2026-07-13
+
+> **Governance 8.6 → 8.7 · Standard track: v2.5 (unchanged)** — operator-ratified **currency + inheritable-defaults** release (Operation Cleanroom). Four low-risk riders that make the base image a cleaner, more complete seed for every fork. No count change (30 templates · 32 skills).
+
+### Changed
+- **`how/skills/skill_git_remote_setup.md`**: genericized the last fleet-specific example — the grandfathered non-conformant repo names (the `GRANDFATHERED` array is now empty-by-default with populate-guidance; the warn/grandfather mechanism + its pedagogy are preserved) — plus residual milestone references → generic.
+- **`how/templates/AGENTS.md`**: completed the template index — all **30** `template_*.md` reconciled (12 auto-triggered + 13 manual-apply + 5 operational), fixing a pre-existing undercount (7 missing, including the two operational templates shipped in v8.6).
+- **`STATE.md` seed**: added two *optional*, honest-absent frontmatter keys — `phase:` (one-line machine-readable current phase) + `campaigns:` (active campaign ids) — a fleet convention consumed by inventory→hub derivation (additive; no schema change).
+
+### Added
+- **Visual-inspection doctrine** (`CLAUDE.md` → Working with Content): a short headless-first policy (T0 batch capture / T1 Playwright MCP / T2 visible-browser escalation-only; "never assume a visible browser") so new vaults inherit the default at fork time.
+
+*Released via `skill_template_release` at the Operation Cleanroom P3 gate (governance 8.6 → 8.7; standard stays v2.5).*
+
 ## [v8.6] — 2026-07-06
 
 > **Governance 8.5 → 8.6 · Standard track: v2.5 (unchanged)** — operator-ratified **graph-lifecycle skills + doc-currency** release (Operation Ouroboros). Adds the five skills that complete a context graph's lifecycle — fork → rename → merge → archive → second-genesis — plus supporting templates and a fork-time governance-doctrine checklist. Changes are **additive / corrective** (minor per the §Version Policy table / ADR-011). Released via `skill_template_release`.

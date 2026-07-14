@@ -3,6 +3,8 @@ type: state
 created: 2026-02-17
 updated: 2026-04-03
 status: active
+phase: "production"        # optional · machine-readable one-line current phase (honest-absent if omitted; consumed by inventory-refresh → hub cards, never parsed from prose banners)
+campaigns: []              # optional · active campaign ids (machine-readable list; honest-absent → [])
 last_edited_by: agent_init
 last_session: session_example_20260402_identity_rename
 tags: [state, governance]

@@ -2,12 +2,12 @@
 type: skill
 skill_type: agent
 created: 2026-05-18
-updated: 2026-05-18
+updated: 2026-07-13
 status: active
 category: development
 trigger: When a vault has no GitHub remote configured and the operator wants to publish it for the first time
-last_edited_by: agent_stanley
-tags: [skill, git, remote, github, first_time_setup, naming_convention, v7_0]
+last_edited_by: agent_rosetta
+tags: [skill, git, remote, github, first_time_setup, naming_convention]
 
 requirements:
   tools: [git, gh CLI authenticated to the target org]
@@ -37,7 +37,7 @@ If `origin` already exists, the skill exits cleanly with a message and does noth
 Invoke when:
 - A vault was created (typically via `skill_project_fork`) and the operator wants to publish it to GitHub.
 - A vault was cloned without a remote (rare; usually means the vault was cloned by directory copy rather than `git clone`).
-- An audit (e.g., M07 §Obj 7 (b.1) naming-convention check) flagged a vault as remoteless and the operator wants to add one.
+- A naming-convention audit flagged a vault as remoteless and the operator wants to add one.
 
 **Pre-requisites**:
 - `gh` CLI is installed and authenticated to the target org or user account (verify with `gh auth status`).
@@ -63,7 +63,7 @@ Invoke when:
 - `gh` CLI (used for `gh auth status`, `gh repo create`).
 
 ### Context Files
-- `what/decisions/adr_009_aDNA_naming_convention.md` — the naming convention this skill enforces (informationally at v7.0 ship; default-on after M07 audit). Includes the four grandfathered hyphen-flat names (`science-stanley-adna`, `wga-adna`, `context-commons-adna`, `LAStartupLattice`) and the LP path-style exception.
+- `what/decisions/adr_009_aDNA_naming_convention.md` — the naming convention this skill enforces (informational at first; enforced after the audit pass). Documents how pre-existing non-conformant repo names are grandfathered (rather than force-renamed) and the path-style-remote exception.
 
 ### Permissions
 - `gh` token must have `repo:create` scope on the target org (verify via `gh auth status`).
@@ -94,16 +94,18 @@ if [[ -z "$repo_name" ]]; then
 fi
 
 # Lint: warn if the name doesn't follow <name>.aDNA convention
-# Grandfathered exceptions per ADR-009
-GRANDFATHERED=("science-stanley-adna" "wga-adna" "context-commons-adna" "LAStartupLattice")
+# Grandfathered exceptions per ADR-009 — repo names created before the convention
+# that the operator has chosen not to rename. Empty by default; populate for your
+# own workspace if needed, e.g.: GRANDFATHERED=("legacy-project" "old-name-flat")
+GRANDFATHERED=()
 
 if [[ "$repo_name" != *.aDNA ]] && \
    ! printf '%s\n' "${GRANDFATHERED[@]}" | grep -qx "$repo_name"; then
   echo "WARNING: repo_name '$repo_name' does not follow <name>.aDNA convention."
   echo "WARNING: ADR-009 recommends <name>.aDNA form for vault repos."
-  echo "WARNING: Grandfathered exceptions: ${GRANDFATHERED[*]}"
+  [[ ${#GRANDFATHERED[@]} -gt 0 ]] && echo "WARNING: Grandfathered exceptions: ${GRANDFATHERED[*]}"
   echo "WARNING: Override with --repo-name if intentional, or rename the vault directory."
-  # TODO(M07/ADR-009): consider flipping this from warn-and-continue to hard-fail after M07 audit
+  # TODO(ADR-009): consider flipping this from warn-and-continue to hard-fail after a future audit pass
   read -p "Continue with non-conformant name? [y/N] " yn
   [[ "$yn" =~ ^[Yy]$ ]] || exit 1
 fi
@@ -249,9 +251,9 @@ Per `adr_006_github_repo_rename_to_adna.md` (amended 2026-05-18), the template r
 
 **Skill behavior for the template repo**: not applicable — the template repo's remote is configured upstream by `aDNA-Network`. Operators of the template repo do not run this skill.
 
-### The four grandfathered hyphen-flat vaults
+### Grandfathered non-conformant repo names
 
-Per ADR-009: `science-stanley-adna`, `wga-adna`, `context-commons-adna`, `LAStartupLattice` already exist with non-conformant names. The skill warns and proceeds (after operator confirmation). Renames are **operator-discretionary** — handled at the operator's pace, not forced by v7.0.
+A workspace may contain repos created before the `<name>.aDNA` convention (or under a different scheme) that the operator has chosen not to rename. Add them to the `GRANDFATHERED` array (Step 2) and the skill recognizes them instead of warning. Otherwise the skill warns and proceeds (after operator confirmation) — renames are **operator-discretionary**, handled at the operator's pace, never forced.
 
 ### Primary use case: vaults with no configured remote
 
@@ -263,14 +265,14 @@ A vault may have a remote that points at a local filesystem path rather than a h
 
 ## Self-reference (Standing Order #2)
 
-The skill enforces the convention ADR-009 codifies. Until M07's audit pass flips this from warn-and-continue to hard-fail, the lint is informational. This staging — *informational → enforced* — is itself a v7.0 demonstration of how convention codification works in this campaign: the convention is built, then the tooling enforces it, then the ecosystem migrates at its own pace.
+The skill enforces the convention ADR-009 codifies. Until a future audit pass flips this from warn-and-continue to hard-fail, the lint is informational. This staging — *informational → enforced* — demonstrates how convention codification works: the convention is built, then the tooling enforces it, then the ecosystem migrates at its own pace.
 
-The four grandfathered hyphen-flat names are documented in this skill's source — every operator running it sees the exception list and learns the convention by encountering its boundary cases. The convention is taught by the tool that enforces it.
+Grandfathered exceptions live in this skill's own source (the `GRANDFATHERED` array) — an operator who populates it for their workspace encounters the convention's boundary cases directly, and learns the rule by naming its exceptions. The convention is taught by the tool that enforces it.
 
 ## Related
 
 - **`skill_vault_publish.md`** — uses `origin` configured by this skill.
 - **`skill_deploy.md`** — installs the pre-push hook (run after this skill).
 - **`what/decisions/adr_009_aDNA_naming_convention.md`** — the naming convention.
-- **`what/decisions/adr_010_publish_skill_naming.md`** — the v7.0 publish-skill family decision.
+- **`what/decisions/adr_010_publish_skill_naming.md`** — the publish-skill family decision.
 - **`how/skills/skill_project_fork.md`** — the skill that creates new vaults; suggests running this skill afterward if GitHub publish is desired.

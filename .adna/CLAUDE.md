@@ -1,12 +1,13 @@
 ---
 type: governance
-version: "8.6"
+version: "8.7"
 token_estimate: ~3000
 updated: 2026-07-06
 last_edited_by: agent_rosetta
 ---
 
 # CLAUDE.md — aDNA
+<!-- v8.7 | 2026-07-13 | Operation Cleanroom (currency + inheritable defaults; governance 8.6→8.7; standard stays v2.5): skill_git_remote_setup fleet-name + M07/v7.0 genericize · how/templates/AGENTS.md index 24→30 · optional STATE phase/campaigns frontmatter convention · visual-inspection doctrine (headless-first) folded into CLAUDE.md. No count change (30 templates · 32 skills). Operator release gate 2026-07-13. -->
 <!-- v8.6 | 2026-07-06 | Ouroboros release (governance 8.5→8.6; standard stays v2.5): +5 graph-lifecycle skills (skill_project_archive · skill_second_genesis · skill_graph_merge · skill_graph_rename · skill_workspace_spring_clean) + template_disposition_ledger + template_second_genesis_dossier + §6 Reopen clause (how/campaigns/AGENTS.md) + optional webforge fork scaffold + governance_doctrine_adoption_checklist (what/docs/) + Batch-G doc-currency (skill_iii_setup census→generic; skill_git_remote_setup genericized). Counts 30 templates/32 skills. Operator release gate 2026-07-06. -->
 <!-- v8.5 | 2026-07-03 | release-cut hygiene (governance 8.4→8.5; standard stays v2.5): README one-step install (F-CHM-216); F-CHM-217 leak sweep — de-link dangling ADR citations on shipped skills/context + strip private aDNA.aDNA/ path + disambiguate two dangling III ADR refs in skill_iii_setup; doc-currency (AGENTS v2.5 label · agent_first_guide anchor · aDNA_overview archival banner). Operator release gate 2026-07-03. -->
 <!-- v8.4 | 2026-07-03 | standard v2.5 fold (ADR-046: §7.7 ratification discipline · §7.2 per-class profile · §5.5 walk scope · §5.3 federation/ row) + Champollion RC batch: template_ratification_record + lattice-home trio (pattern·template·skill) + router Standing Rules 5–7 + broker snippet + AskUserQuestion/single-writer/recon/heavy-file/allowlist/orphan-lint doctrine folds + updated validators + currency (badges v8.4/v2.5 · README ToC + learn path · Obsidian payload docs 14-plugin truth). Ratified Champollion G6 2026-07-03. -->
@@ -427,6 +428,20 @@ When you notice one, mention it to the user at a **natural pause point** (end of
 ### Side-Quest Awareness
 
 The `how/quests/` directory contains structured validation experiments ("side-quests") that community members can run with spare agent tokens. At natural session-end points, if the user has spare context budget, you may briefly mention available quests. Never interrupt active work for this. See `what/docs/side_quest_guide.md` for the full participation guide and `how/quests/AGENTS.md` for directory structure.
+
+### Visual inspection (headless-first)
+
+When an agent needs to **render and inspect a visual surface** — screenshot it, check it responsively, measure a11y/perf, read its console, or walk it as a user — reach for **headless, zero-setup tooling first, and never assume a visible or logged-in browser exists.** A visible browser (e.g. a Chrome extension) is absent in headless runs, CI, cron, fresh nodes, and most agent contexts, and needs per-user setup — so a review must never *depend* on it. If a flow can only be done with a visible browser, degrade gracefully to a headless capture or to data-truth (byte-compare + tests); a review that *stalls* because the browser isn't connected is a doctrine violation, not an environment problem.
+
+Reach for the lowest tier that does the job:
+
+| Tier | Tool | Use for |
+|------|------|---------|
+| **T0 — batch capture (DEFAULT)** | headless Playwright (a small capture script over routes × viewports × themes) | Screenshot every surface, produce a compact report; the standing default for review / inspection / evidence |
+| **T1 — interactive headless** | Playwright MCP (`@playwright/mcp`) | Agentic navigate / click / type / resize when you must *interact* — no extension, no login |
+| **T2 — visible / authenticated (ESCALATION ONLY)** | a visible-browser MCP (e.g. Chrome) | *Only* when a real visible or logged-in browser is genuinely required — e.g. a live recording to share, an authenticated session |
+
+**Rules:** T0 is the default for any static inspection — it writes evidence to disk and returns a compact report, so the agent views only a curated subset of screenshots (the token-optimized path). Use T1 when you must interact, still headless. **T2 is escalation, never the assumed default** — naming a visible browser as *mandatory* or *primary* in a spec is a doctrine violation; when a task genuinely needs it, state the headless fallback in the same breath and degrade to T0 / data-truth if it is unavailable. Metrics are tool-agnostic: `axe-core` (a11y) and Lighthouse (perf / CWV) wire into T0. Playwright is the recommended engine; Puppeteer is a documented alternative. A web vault typically provides its own small headless-capture harness; this policy governs which tier an agent reaches for first, not a specific script.
 
 ---
 <!-- v6.0 | 2026-04-03 -->
