@@ -4,11 +4,16 @@
 Validates objects against the aDNA Universal Standard v2.5 and produces
 YAML scorecards and Markdown reports.
 
+Runtime: requires python3.13 (the vault's `yaml` dependency is installed there); a
+plain `python3` invocation exits with a one-line message, not an opaque traceback.
+Reports default to ./.compliance_out (git-ignored) — pass --outdir . to write them
+into the tree.
+
 Usage:
-    python compliance_checker.py <vault_path>                          # Score all objects
-    python compliance_checker.py <vault_path> --type skill             # Filter by type
-    python compliance_checker.py <vault_path> --file what/modules/x.md # Single file
-    python compliance_checker.py <vault_path> --output yaml --verbose  # YAML only, verbose
+    python3.13 compliance_checker.py <vault_path>                          # Score all objects
+    python3.13 compliance_checker.py <vault_path> --type skill             # Filter by type
+    python3.13 compliance_checker.py <vault_path> --file what/modules/x.md # Single file
+    python3.13 compliance_checker.py <vault_path> --output yaml --verbose  # YAML only, verbose
 """
 
 from __future__ import annotations
@@ -21,7 +26,22 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-import yaml
+# Runtime guard — the vault's `yaml` dependency is installed for python3.13 (same
+# constraint as adna_validate.py). Convert the opaque ModuleNotFoundError a plain
+# `python3` invocation would raise into a one-line, self-explaining message. A
+# version check alone is insufficient (a python3.14 without yaml is >3.13 yet still
+# fails), so guard the import itself.
+try:
+    import yaml
+except ModuleNotFoundError as _exc:  # pragma: no cover - runtime-env guard
+    if getattr(_exc, "name", "") != "yaml":
+        raise
+    sys.stderr.write(
+        "compliance_checker.py requires python3.13 (yaml dep) — got "
+        f"python{sys.version_info.major}.{sys.version_info.minor}; "
+        "re-run with `python3.13 compliance_checker.py ...`.\n"
+    )
+    raise SystemExit(1)
 
 try:
     from .lattice_validate import check_federation_readiness, validate_lattice_file
@@ -1002,6 +1022,10 @@ def format_report_md(
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="aDNA Compliance Checker — scores vault objects across 10 dimensions",
+        epilog=(
+            "Runtime: requires python3.13 (yaml dep). Output defaults to "
+            "./.compliance_out (git-ignored); use --outdir . to write reports into the tree."
+        ),
     )
     parser.add_argument("vault_path", help="Path to vault root")
     parser.add_argument(
@@ -1022,7 +1046,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--verbose", "-v", action="store_true", help="Show per-object scores"
     )
     parser.add_argument(
-        "--outdir", default=".", help="Directory for output files (default: cwd)"
+        "--outdir",
+        default="./.compliance_out",
+        help="Directory for output files (default: ./.compliance_out, git-ignored; use --outdir . for cwd)",
     )
     return parser.parse_args(argv)
 
@@ -1074,6 +1100,7 @@ def main(argv: list[str] | None = None) -> int:
 
     # Score each object
     results: list[ComplianceResult] = []
+    unsupported: list[tuple[Path, str]] = []
     for path, obj_type in objects:
         fm: dict[str, Any] = {}
 
@@ -1096,14 +1123,16 @@ def main(argv: list[str] | None = None) -> int:
             elif obj_type == "lattice":
                 scores = handle_lattice_md(path, fm, body, vault)
             else:
-                if args.verbose:
-                    try:
-                        print(
-                            f"  SKIP (unknown type '{obj_type}'): "
-                            f"{path.relative_to(vault)}"
-                        )
-                    except ValueError:
-                        print(f"  SKIP (unknown type '{obj_type}'): {path}")
+                # Type outside the graded vocabulary (e.g. an extended-ontology content
+                # type such as concept/pattern/glossary_entry). Report it explicitly as
+                # "unsupported type — not scored" and exclude it from the aggregate,
+                # rather than letting it read as a 0.0% compliance failure.
+                try:
+                    rel: Path | str = path.relative_to(vault)
+                except ValueError:
+                    rel = path
+                unsupported.append((path, obj_type))
+                print(f"  unsupported type '{obj_type}' — not scored: {rel}")
                 continue
 
         result = build_result(path, obj_type, scores, vault, fm)
@@ -1143,6 +1172,10 @@ def main(argv: list[str] | None = None) -> int:
         f"{summary['tier_3_count']} T3"
     )
     print(f"Active gaps: {summary['gaps_active']}")
+    if unsupported:
+        print(
+            f"Unsupported (not scored, excluded from aggregate): {len(unsupported)}"
+        )
     print(f"{'=' * 50}")
 
     return 0

@@ -27,6 +27,12 @@ build/
 venv/
 env/
 
+# compliance_checker.py output — a read-only audit tool must not dirty the tree.
+# Default outdir is ./.compliance_out; the two report names are ignored belt-and-suspenders for --outdir . runs.
+.compliance_out/
+compliance_report.md
+compliance_scorecard.yaml
+
 # Note: Obsidian plugin binaries and themes ARE tracked so the vault works on clone.
 # Run ./setup.sh --force to update all plugins to latest versions.
 

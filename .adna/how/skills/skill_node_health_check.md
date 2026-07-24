@@ -146,7 +146,17 @@ For each `inventory_*.md` file, check the `updated` frontmatter field. If older 
 
 Read `who/identity/identity_node.md`. Compare hostname, operator against current node state (`hostname`, `whoami`). If mismatch, fail (exit 11) — node identity drift is high-severity per `who/identity/AGENTS.md`.
 
-### Step 12: Optional STATE.md Update
+### Step 12: STATE.md / CHANGELOG Size Tripwire
+
+Check the byte size of `STATE.md` (and `CHANGELOG.md`, if present). If either exceeds **100 KB**, log a GRADUATION-DUE warning (exit 0 — advisory, not a hard failure):
+
+    ⚠ STATE.md is <size> KB (>100 KB) — graduation due. Remediation: run skill_state_graduation
+      (append aged sections VERBATIM to STATE_history.md; archive, never delete — SO-6). Do NOT delete or
+      summarize; compaction-without-graduation demonstrably re-bloats.
+
+The tripwire only flags — it never edits STATE.md itself. The remediation is the STATE-graduation skill (`skill_state_graduation`), whose loss-gate guarantees the move is verbatim and lossless.
+
+### Step 13: Optional STATE.md Update
 
 If `update_state: true` and all prior steps passed (exit 0), update `STATE.md` frontmatter:
 
@@ -173,6 +183,7 @@ blocked_count: 0
 ✓ Federation block valid (8 keys)
 ✓ Inventory-vs-disk: M vaults listed; M on disk (D drift warnings)
 ✓ Last-update freshness: all <7 days
+✓ STATE.md size: <size> KB (<100 KB)          # or:  ⚠ STATE.md size: <size> KB — graduation due
 ✓ Identity drift: hostname=<host> matches; operator=<operator> matches
 
 Healthy. Last full health check: <iso-timestamp>.

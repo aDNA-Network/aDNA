@@ -1,7 +1,7 @@
 ---
 type: directory_index
 created: 2026-02-19
-updated: 2026-07-13
+updated: 2026-07-24
 last_edited_by: agent_rosetta
 tags: [directory_index, templates]
 ---
@@ -14,7 +14,7 @@ Templates for all content types in the vault. Each template defines the frontmat
 
 ## Template Index
 
-> **30 `template_*.md` total** = 12 auto-triggered + 13 manual-apply + 5 operational. (The Fork-Skeleton Bundle is a directory, not a `template_*.md`, so it sits outside the 30.)
+> **31 `template_*.md` total** = 12 auto-triggered + 13 manual-apply + 6 operational. (The Fork-Skeleton Bundle is a directory, not a `template_*.md`, so it sits outside the 31.)
 
 ### Auto-Triggered Templates (12)
 
@@ -55,7 +55,7 @@ These templates have no Templater auto-trigger. Copy their structure manually or
 | `template_quest_result.md` | Side-quest result record | `how/quests/` | `quest_result` | Quest dir mixes definitions + results |
 | `template_side_quest.md` | Side-quest definition | `how/quests/` | `side_quest` | Quest dir mixes definitions + results |
 
-### Operational / Lifecycle Templates (5)
+### Operational / Lifecycle Templates (6)
 
 Vault-agnostic operational templates (manual-apply; not entity-type templates). Added since the original index was written:
 
@@ -66,6 +66,7 @@ Vault-agnostic operational templates (manual-apply; not entity-type templates). 
 | `template_ratification_record.md` | Ratification record (ceremony header + per-ADR/decision block) | `what/decisions/` · `how/gates/` | `ratification_record` |
 | `template_second_genesis_dossier.md` | Second-genesis intake dossier (9-section read of a stale vault) | new `<Name>.aDNA/` re-genesis intake | `second_genesis_dossier` |
 | `template_workspace_claude.md` | Workspace-root router CLAUDE.md (the `~/aDNA/CLAUDE.md` project-routing file) | workspace root (fork / init) | `template` |
+| `template_STATE_history.md` | STATE-graduation immortal-spine seed (append-only `## Graduated` sections) | `<Vault>.aDNA/` (STATE lifecycle) | `state_history` |
 
 ### Fork-Skeleton Bundles (1)
 

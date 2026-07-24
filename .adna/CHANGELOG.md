@@ -28,6 +28,26 @@ Changelog entries are organized by **governance version** (primary heading). Sta
 
 ---
 
+## [v8.9] — 2026-07-24
+
+> **Governance 8.8 → 8.9 · Standard track: v2.5 (unchanged)** — operator-ratified **convention + machinery** release (Operation Palimpsest): a STATE.md lifecycle discipline (graduate aged content to a history file, verbatim), three STATE-frontmatter/authoring conventions, and fork-kit + tooling hardening. **Count change: 30 → 31 templates · 32 → 33 skills.**
+
+### Added
+- **`how/skills/skill_state_graduation.md`** (+1 skill) — the STATE-graduation lifecycle discipline: keep-set rule, era-boundary-outranks-day-count, a byte-exact loss-gate, a `>100 KB` auto-graduate tripwire, and a CHANGELOG variant. Archive, never delete.
+- **`how/templates/template_STATE_history.md`** (+1 template) — the append-only immortal-spine seed the skill writes to (the `state_history:` pointer convention).
+- **`skill_node_health_check` — `>100 KB` STATE/CHANGELOG size tripwire** (new step) — flags an oversized register as graduation-due (advisory, exit 0).
+- **STATE.md seed `mission:` key** — the third optional posture key beside `phase:`/`campaigns:` (mission-of-record; honest-absent; not a liveness claim).
+
+### Changed
+- **`CLAUDE.md` → Working with Content**: two new authoring subsections — **STATE conventions** (the `mission:` key + the `P<n>[/<count>]` phase-display grammar + normalize-at-render) and **Path references** (`~/aDNA/…` in prose, absolute in execution contexts). Governance badge bumped v8.8 → v8.9 (root + `.adna/` READMEs).
+- **`skill_project_fork`** — a 4-file root-governance-kit completion gate (CLAUDE · AGENTS · MANIFEST · STATE presence-verified), an AGENTS.md `agent_init` seed step, and a genesis-stub carve-out.
+- **`template_campaign`** — a "grep the codename before you set it" naming-discipline note at the campaign heading.
+- **`what/lattices/tools/compliance_checker.py`** — output defaults to a git-ignored scratch dir (a read-only run no longer dirties the tree), a clear `requires python3.13` runtime guard, and an `unsupported type — not scored` marker (extended-ontology content types no longer read as 0.0% failures).
+
+*Released via `skill_template_release` at the Operation Palimpsest P3 gate (governance 8.8 → 8.9; standard stays v2.5).*
+
+---
+
 ## [v8.8] — 2026-07-14
 
 > **Governance 8.7 → 8.8 · Standard track: v2.5 (unchanged)** — operator-ratified **template-quality prune** release (Operation Distillery). The always-loaded governance layer (`CLAUDE.md`) drops **~7,720 → ~5,820 tokens (−24%)** with zero governance-rule loss, plus a first-contact III pass on the READMEs. No count change (30 templates · 32 skills).

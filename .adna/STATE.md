@@ -5,6 +5,7 @@ updated: 2026-04-03
 status: active
 phase: "production"        # optional · machine-readable one-line current phase (honest-absent if omitted; consumed by inventory-refresh → hub cards, never parsed from prose banners)
 campaigns: []              # optional · active campaign ids (machine-readable list; honest-absent → [])
+mission:                   # optional · mission-of-record for the register's current contents (honest-absent if omitted; mirrors last_session:, NOT a liveness claim)
 last_edited_by: agent_init
 last_session: session_example_20260402_identity_rename
 tags: [state, governance]

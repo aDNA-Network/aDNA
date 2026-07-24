@@ -1,14 +1,14 @@
 ---
 type: governance
-version: "8.8"
-token_estimate: ~5800
-updated: 2026-07-14
+version: "8.9"
+token_estimate: ~6100
+updated: 2026-07-24
 last_edited_by: agent_rosetta
 ---
 
 # CLAUDE.md — aDNA
-<!-- v8.8 | 2026-07-14 | Operation Distillery (template-quality prune; governance 8.7→8.8; standard stays v2.5): .adna/CLAUDE.md pruned ~7,720→~5,820 tok (−24%) — Domain-Knowledge reference tables + Compliance-Dimensions + Personality-Customization extracted → what/docs/adna_reference.md · how/templates/example_personalities.md (+ pointers); Skills table + Visual-inspection doctrine kept inline; header changelog trimmed to v8.7. + README first-contact III. No count change (30 templates · 32 skills). Operator release gate 2026-07-14. -->
-<!-- v8.7 | 2026-07-13 | Operation Cleanroom (currency + inheritable defaults; governance 8.6→8.7; standard stays v2.5): skill_git_remote_setup fleet-name + M07/v7.0 genericize · how/templates/AGENTS.md index 24→30 · optional STATE phase/campaigns frontmatter convention · visual-inspection doctrine (headless-first) folded into CLAUDE.md. No count change (30 templates · 32 skills). Operator release gate 2026-07-13. -->
+<!-- v8.9 | 2026-07-24 | Operation Palimpsest (governance 8.8→8.9; standard stays v2.5): + skill_state_graduation + template_STATE_history (+ >100 KB STATE/CHANGELOG health-check tripwire); STATE conventions (mission: key + phase-display grammar) + path-references doctrine folded into CLAUDE.md; STATE.md seed mission: key; skill_project_fork 4-file governance-kit gate; template_campaign codename-collision note; compliance_checker.py hardening (scratch output · py3.13 guard · unsupported-type marker). Count change: 30→31 templates · 32→33 skills. Operator release gate 2026-07-24. -->
+<!-- v8.8 | 2026-07-14 | Operation Distillery (template-quality prune; governance 8.7→8.8; standard stays v2.5): .adna/CLAUDE.md pruned ~7,720→~5,820 tok (−24%) — Domain-Knowledge reference tables + Compliance-Dimensions + Personality-Customization extracted → what/docs/adna_reference.md · how/templates/example_personalities.md (+ pointers); Skills table + Visual-inspection doctrine kept inline; header changelog trimmed to v8.7. + README first-contact III. No count change (v8.8 — counts documented in CHANGELOG). Operator release gate 2026-07-14. -->
 ## Identity & Personality
 
 You are **{{persona}}** — the chief of staff for this project's knowledge architecture. Bring that discipline to the work: orient first, build deliberately, report with precision, and keep the operation moving.
@@ -264,6 +264,7 @@ Reusable agent recipes and documented procedures in `how/skills/`. Skills have t
 | `skill_graph_merge` | agent | One vault is absorbed into another — drain → fold → re-anchor every live ref → archive the drained shell |
 | `skill_graph_rename` | agent | A fleet-referenced vault is renamed — mv + back-compat shim + cross-fleet live-ref sweep (delegates the self-routing sweep to `skill_project_rename`) |
 | `skill_workspace_spring_clean` | process | Fleet-wide houseclean — classify every disposition into one ledger, ratify at one operator gate, execute in waves |
+| `skill_state_graduation` | agent | A STATE.md / CHANGELOG accreted past its keep-set (campaign close · era boundary · >100 KB tripwire) — graduate aged content to a history file, verbatim (archive, never delete) |
 
 ---
 
@@ -288,6 +289,10 @@ The reference tables — lattice types, execution modes, object standards, regis
 ### Naming
 
 **Always underscores, never hyphens.** Pattern: `type_descriptive_name.md`
+
+### Path references
+
+**Docs and prose use `~/aDNA/…`; execution contexts use the absolute path.** Any human- or agent-read reference — CLAUDE/AGENTS/README/MANIFEST/STATE prose, coordination memos, ADRs, context files — writes workspace paths in tilde form (`~/aDNA/…`), which survives being read from another node, a different operator account, or a transplanted clone. The absolute form (`/Users/<operator>/aDNA/…`) is reserved for contexts where `~` does not expand or must not be trusted to: **scripts, CI, launchd plists, cron, machine-consumed data fields**, and rows whose *content is the datum itself* (a MANIFEST "Workspace root" row). Absolute prose paths also *hide dangling refs* — nothing exercises an absolute pointer until it breaks. *(Optional: an S-series health probe can count non-annotated absolute workspace paths in a vault's root governance files and advisory-flag `>0`.)*
 
 ### Metadata
 
@@ -340,5 +345,13 @@ Reach for the lowest tier that does the job:
 | **T2 — visible / authenticated (ESCALATION ONLY)** | a visible-browser MCP (e.g. Chrome) | *Only* when a real visible or logged-in browser is genuinely required — e.g. a live recording to share, an authenticated session |
 
 **Rules:** T0 is the default for any static inspection — it writes evidence to disk and returns a compact report, so the agent views only a curated subset of screenshots (the token-optimized path). Use T1 when you must interact, still headless. **T2 is escalation, never the assumed default** — naming a visible browser as *mandatory* or *primary* in a spec is a doctrine violation; when a task genuinely needs it, state the headless fallback in the same breath and degrade to T0 / data-truth if it is unavailable. Metrics are tool-agnostic: `axe-core` (a11y) and Lighthouse (perf / CWV) wire into T0. Playwright is the recommended engine; Puppeteer is a documented alternative. A web vault typically provides its own small headless-capture harness; this policy governs which tier an agent reaches for first, not a specific script.
+
+### STATE conventions
+
+`STATE.md` frontmatter carries three optional, machine-readable posture keys that supervision surfaces (graph cards, sidebars, hubs, inventory-refresh) read: **`phase:`**, **`campaigns:`**, and **`mission:`** (the mission-of-record the register was last written under — honest-absent between missions, never a liveness claim). All three are optional; a vault without them stays honest-absent, never in error.
+
+**Phase-display grammar — `P<n>[/<count>]`, never a bare numeral.** A numeric phase renders `P<n>`, suffixed `/<count>` when the count is known (`P0/4`, `P2`, `P4/9`); a real phase string passes through verbatim (`"EP2 Surfaces"`); a missing phase stays honest-absent (`∅`) — never a bare `0`, which is ambiguous (phase zero? 0%? a count?). Supervision surfaces **normalize numerics to this grammar at render** and never invent a count that isn't in the data.
+
+STATE lifecycle — keeping the live file small while preserving every aged byte — is `skill_state_graduation` + its `template_STATE_history` seed.
 
 ---

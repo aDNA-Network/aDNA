@@ -18,6 +18,11 @@ tags: [campaign]
 
 # Campaign: <% tp.file.title %>
 
+> **Naming discipline — grep the codename before you set it.** A codename (e.g. "Operation <Name>") is a
+> fleet-unique key. Before committing to one, run `grep -ril "Operation <Name>" ~/aDNA`; if it resolves to any
+> existing or closed campaign, pick another — a collision produces ambiguous cross-fleet references that route
+> cold-start agents to the wrong campaign.
+
 ## Goal
 
 [One-paragraph strategic objective. What does the world look like when this campaign is complete?]
