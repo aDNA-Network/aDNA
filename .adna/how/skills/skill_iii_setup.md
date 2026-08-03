@@ -3,7 +3,7 @@ type: skill
 lattice_type: skill
 skill_type: agent
 created: 2026-05-12
-updated: 2026-05-12
+updated: 2026-07-26
 mission_origin: campaign_b_iii_federation MB-6
 status: active
 category: onboarding
@@ -27,7 +27,7 @@ Adds an `iii/` consumer wrapper to a new vault so it can run III (Inspect / Intr
 
 This skill is the counterpart to `skill_iii_review.md` — that skill runs the review; this skill bootstraps the substrate so a vault can call it.
 
-Canonical contract: the III Consumer Federation Contract (`federation_ref` schema + `kind:` enum) + III Learning Store Ownership (per-vault local store + canonical-as-read-only + graduation ceremony).
+Canonical contract: [ADR-002 Consumer Federation Contract](../../what/decisions/adr_002_consumer_federation_contract.md) (`federation_ref` schema + `kind:` enum) + [ADR-003 Learning Store Ownership](../../what/decisions/adr_003_learning_store_ownership.md) (per-vault local store + canonical-as-read-only + graduation ceremony).
 
 ## When to Use
 
@@ -71,9 +71,9 @@ Do NOT use this skill to:
 
 **Pin convention** (per ADR-002 §3): the wrapper pins to a specific minor.patch version AND the exact closure commit. Patch bumps apply transparently; minor bumps trigger consumer-side review of the upstream CHANGELOG diff before updating.
 
-### Step 2 — Author `iii/CLAUDE.md`
+### Step 2 — Author `how/federation/iii/CLAUDE.md`
 
-Create `<consumer_vault>/iii/CLAUDE.md`. Use this skeleton (fill the bracketed values):
+Create `<consumer_vault>/how/federation/iii/CLAUDE.md`. Use this skeleton (fill the bracketed values):
 
 ```markdown
 ---
@@ -122,7 +122,7 @@ federation_ref:
   local_extensions:
     # See Step 5 — declare any consumer-specific extensions here
     - kind: learning_store_local
-      path: <workspace_root>/<vault_name>.aDNA/iii/what/context/<vault_name>_iii_learning_store.jsonl
+      path: <workspace_root>/<vault_name>.aDNA/how/federation/iii/what/context/<vault_name>_iii_learning_store.jsonl
       rationale: Per ADR-003 §2 at III.aDNA; ACCUMULATE writes target this file, never the canonical upstream.
 ```
 
@@ -207,7 +207,7 @@ ADR-002 §1a defines 5 valid `kind:` values. Every entry MUST declare exactly on
 
 | `kind:` | When to use it |
 |---------|----------------|
-| `learning_store_local` | **Always include this.** Per-vault JSONL fork of the canonical learning store. ACCUMULATE writes target this file, never canonical. Required for any consumer that runs ACCUMULATE cycles (i.e., every consumer that does real III work). Seed empty. |
+| `learning_store_local` | **Always include this.** Per-vault JSONL fork of the canonical learning store. ACCUMULATE writes target this file, never canonical. Required for any consumer that runs ACCUMULATE cycles (i.e., every consumer that does real III work). Seed empty — and record the ADR-003 §4 entry schema in the wrapper now (Step 6), since the agent that first appends to it will not have the schema in context. |
 | `domain_pack` | Vault has a consumer-specific trap pack that **extends** (not replaces) canonical packs. Example: lattice-labs KINN brand-voice traps. Subject to graduation per ADR-003 §3 if domain-general. |
 | `reviewer_registry` | Vault uses multi-voice review (named voices like Voice Critic / Design / UX / SEO / Brand). YAML registry declares the voices. Example: SiteForge MB-2 `siteforge_reviewers.yaml`. |
 | `bridge_pack` | Vault has a consumer-specific operation catalog or domain trap pack that **supersedes** a canonical pack on overlapping traps. **Carries `not_graduating_to_canonical: true`** per ADR-002 §6 (modality-agnostic-core boundary). Examples: VideoForge ADR-006 bridge (MB-3); CanvasForge 10-trap canvas pack (MB-4). |
@@ -243,15 +243,51 @@ Always:    1 × learning_store_local (seeded empty)
 Create the empty file:
 
 ```bash
-mkdir -p <workspace_root>/<vault_name>.aDNA/iii/what/context/
-touch <workspace_root>/<vault_name>.aDNA/iii/what/context/<vault_name>_iii_learning_store.jsonl
+mkdir -p <workspace_root>/<vault_name>.aDNA/how/federation/iii/what/context/
+touch <workspace_root>/<vault_name>.aDNA/how/federation/iii/what/context/<vault_name>_iii_learning_store.jsonl
 ```
 
 Per ADR-003 §2:
 - File is 0 bytes at wrapper creation.
 - ACCUMULATE writes append corrections here, never to canonical.
-- The canonical store at `<workspace_root>/III.aDNA/what/context/core_domain_packs/iii_corrections_canonical.jsonl` (md5 `dde2cbd88c0b45956fb22285a2a0f856` as of 2026-05-12, 26 founding entries) is **read-only** from the consumer side.
+- The canonical store at `<workspace_root>/III.aDNA/what/context/core_domain_packs/iii_corrections_canonical.jsonl` (md5 `5adb0dfa38d9224649c3b2cba83852ae`, 28 entries, invariant since 2026-05-21) is **read-only** from the consumer side.
 - Graduation ceremony (ADR-003 §3) flips eligible local entries upstream when frequency ≥ 3 across ≥ 2 sessions and acceptance ≥ 80%, subject to operator + Argus approval.
+
+#### Entry schema — write this down now, not at first ACCUMULATE
+
+The file is seeded empty, so the first agent to append to it is typically in a *review* session weeks later with no schema in context. **Record the schema in the wrapper's "Local extensions explained" section at setup time.** Canonical definition: ADR-003 §4.
+
+One JSON object per line, eleven required fields:
+
+```json
+{"id":"<VAULT>-001","trap":"confidence","pattern":"projective_claim_as_fact",
+ "description":"What the failure is, stated generally enough to recognise next time",
+ "example":"The concrete instance + where it was seen",
+ "source_review":"<campaign or batch that surfaced it>","source_finding":"<finding ID>",
+ "frequency":1,"accepted":true,"graduated":false,"created":"2026-07-26"}
+```
+
+| Field | Notes |
+|---|---|
+| `id` | `<VAULT>-NNN`, vault-scoped and stable |
+| `trap` | **Category, from the canonical vocabulary below — not a free-text label.** This is the aggregation key. |
+| `pattern` | The specific named pattern, snake_case. This is where vault-specific naming belongs. |
+| `description` / `example` | What it is / one concrete instance |
+| `source_review` / `source_finding` | Provenance — which review, which finding |
+| `frequency` | Times observed. Increment an existing entry rather than appending a near-duplicate. |
+| `accepted` | `true` only if the operator accepted the suggested fix. Drives `acceptance_rate` at graduation. |
+| `graduated` | `false` at creation; the ceremony flips it. Omitting this field makes the entry permanently ungraduatable. |
+| `created` | ISO date |
+
+Consumer-specific extra fields are permitted alongside these (e.g. a `correction:` field carrying the remedy). They are ignored upstream. Do **not** rename or drop the eleven.
+
+**`trap` must come from the canonical vocabulary.** Current values, in canonical frequency order:
+
+`confidence` · `completeness` · `tone` · `web_design` · `boundary` · `analogy` · `staleness` · `level` · `security` · `architecture` · `forward_link` · `meta_pattern`
+
+This is the single most common wrapper-setup error and it is silent. A vault that invents its own `trap` values — or files a per-observation name like `border_detector_false_positives` in the `trap` field instead of in `pattern` — produces entries that **can never graduate**, because cross-vault evidence is aggregated on `trap` and a unique string never matches a second vault. The entries look fine and accumulate forever. If none of the twelve fits, use the closest and say so in `description`; proposing a new category is an ADR-003 amendment, not a local decision.
+
+**If the observations are stable domain knowledge rather than recurring mistakes** — reusable "here is how this class of artifact fails" material — they belong in a `kind: domain_pack` local extension (Step 5), not in the corrections store. Corrections are an observation log with frequency counts; a domain pack is a curated trap library with detection methods. Knowledge filed in the wrong container is not lost, but it is inert.
 
 **If migrating from pre-federation**: a pre-existing operational corrections jsonl at the vault (e.g., `<vault>/what/context/iii_domain_packs/iii_corrections.jsonl`) is **retired**, not migrated. Truncate it to 0 bytes (`truncate -s 0 <file>` or `: > <file>`) and author a sibling `MIGRATION_NOTE.md` documenting the disposition. All entries in the pre-federation jsonl that already exist in canonical are accounted for upstream from MA-1; the local store starts fresh post-wrapper. (Worked precedent: lattice-labs MB-1, SiteForge MB-2.)
 
@@ -260,7 +296,7 @@ Per ADR-003 §2:
 Add a Standing Order (or Standing Rule, whichever the vault uses) routing all III review through the new wrapper. Place it after the last existing Standing Order. Template:
 
 ```markdown
-**Standing Order N** ([YYYY-MM-DD]) — III review routes through the `iii/` wrapper at `<vault_name>/iii/CLAUDE.md`. The wrapper pins III.aDNA at version `<X.Y.Z>` (commit `<short_hash>`) per ADR-002 §3. Local extensions: <enumerate kind: path pairs>. ACCUMULATE writes target the local learning store at `<path>` per ADR-003 §2; the canonical upstream at `<workspace_root>/III.aDNA/what/context/core_domain_packs/iii_corrections_canonical.jsonl` is read-only from this vault.
+**Standing Order N** ([YYYY-MM-DD]) — III review routes through the `iii/` wrapper at `<vault_name>/how/federation/iii/CLAUDE.md`. The wrapper pins III.aDNA at version `<X.Y.Z>` (commit `<short_hash>`) per ADR-002 §3. Local extensions: <enumerate kind: path pairs>. ACCUMULATE writes target the local learning store at `<path>` per ADR-003 §2; the canonical upstream at `<workspace_root>/III.aDNA/what/context/core_domain_packs/iii_corrections_canonical.jsonl` is read-only from this vault.
 ```
 
 Precedent voice (mirror these for tonal consistency):
@@ -276,12 +312,12 @@ Precedent voice (mirror these for tonal consistency):
 Check whether any other vaults federate against THIS vault as a `source_vault`. If yes, the wrapper edits must be additive only — never move or rename paths that downstream wrappers pin.
 
 ```bash
-grep -r "source_vault:.*<vault_name>" <workspace_root>/*/iii/CLAUDE.md <workspace_root>/*/*/CLAUDE.md 2>/dev/null
+grep -r "source_vault:.*<vault_name>" <workspace_root>/*/how/federation/iii/CLAUDE.md <workspace_root>/*/*/CLAUDE.md 2>/dev/null
 ```
 
 Expected outcomes:
 - **Zero downstream consumers** (wga MB-5 case): vacuous pass. All changes are additive at the new vault root.
-- **Active downstream consumers** (a vault with downstream wrappers that depend on it): verify that the paths the downstream wrappers pin are NOT touched by the new `iii/` directory + Standing Order. Document the downstream-safety check in the wrapper file.
+- **Active downstream consumers** (CanvasForge MB-4 case — 3 downstream wrappers at SS + CC): verify that the paths the downstream wrappers pin are NOT touched by the new `iii/` directory + Standing Order. Document the downstream-safety check in the wrapper file.
 
 ### Step 9 — Wikilink sweep (only if migrating from pre-federation)
 
@@ -303,7 +339,7 @@ For each hit:
 If you have write access to III.aDNA, add a row to the MANIFEST.md § Active Consumers table:
 
 ```markdown
-| `<vault_name>.aDNA` | `<vault_name>.aDNA/iii/` | <packs_used joined by comma> | **<MB-N> ✅ <YYYY-MM-DD>** — pinned at `vX.Y.Z` (commit `<hash>`); N/7 canonical packs; M modules; K local_extensions (enumerated) |
+| `<vault_name>.aDNA` | `<vault_name>.aDNA/how/federation/iii/` | <packs_used joined by comma> | **<MB-N> ✅ <YYYY-MM-DD>** — pinned at `vX.Y.Z` (commit `<hash>`); N/7 canonical packs; M modules; K local_extensions (enumerated) |
 ```
 
 If you do not have write access (or the new consumer is external to the Lattice ecosystem), the wrapper still works — III.aDNA's MANIFEST is informational, not a runtime gate.
@@ -312,16 +348,16 @@ If you do not have write access (or the new consumer is external to the Lattice 
 
 | Output | Type | Description |
 |--------|------|-------------|
-| `<vault>/iii/CLAUDE.md` | new file | Federation wrapper (federation_ref + body) |
-| `<vault>/iii/what/context/<vault>_iii_learning_store.jsonl` | new file (0 bytes) | Local learning store |
-| `<vault>/iii/what/context/<extension files>` | new files (if any) | Any `domain_pack` / `bridge_pack` / `local_skill` / `reviewer_registry` artifacts declared in `local_extensions` |
+| `<vault>/how/federation/iii/CLAUDE.md` | new file | Federation wrapper (federation_ref + body) |
+| `<vault>/how/federation/iii/what/context/<vault>_iii_learning_store.jsonl` | new file (0 bytes) | Local learning store |
+| `<vault>/how/federation/iii/what/context/<extension files>` | new files (if any) | Any `domain_pack` / `bridge_pack` / `local_skill` / `reviewer_registry` artifacts declared in `local_extensions` |
 | `<vault>/CLAUDE.md` | edited | Standing Order added |
 | `<workspace_root>/III.aDNA/MANIFEST.md` Active Consumers row | edited (optional) | New consumer registered |
 | Optional: `<vault>/what/context/iii_domain_packs/MIGRATION_NOTE.md` | new file | If migrating from pre-federation, document the disposition of retired artifacts |
 
 ## Variants
 
-### Minimal wrapper
+### Minimal wrapper (wga MB-5 precedent)
 
 For clean-slate consumers with no domain-specific traps, no multi-voice review, no consumer-specific orchestration skill:
 
@@ -332,19 +368,19 @@ For clean-slate consumers with no domain-specific traps, no multi-voice review, 
 
 Fastest wrapper to author (~0.5 session). Recommended for new vaults that adopt III early.
 
-### Full-extension wrapper
+### Full-extension wrapper (CanvasForge MB-4 precedent)
 
 For consumers with rich domain-specific III infrastructure:
 
 - 5/7 canonical packs (with one canonical pack deliberately omitted — e.g., `canvas_visual` — in favor of a `bridge_pack`)
 - All 8 modules
 - **3+** `local_extensions` entries: `bridge_pack` + `local_skill` + `learning_store_local`
-- May involve pre-federation artifact relocation (a worked precedent closed this via governance registration — the physical move had already happened)
+- May involve pre-federation artifact relocation (worked precedent at MB-4 closed via governance registration — physical move had already happened)
 - Verify downstream-safety carefully (Step 8)
 
 Longest wrapper to author (~1 session). Required when the consumer has accumulated significant pre-federation III work.
 
-### Bridge wrapper
+### Bridge wrapper (VideoForge MB-3 precedent)
 
 For consumers whose primary III usage is gated through a separate operation catalog or ADR-defined operation set (the bridge is a pointer-only pack that maps III canonical procedures onto the consumer's operations):
 
@@ -355,7 +391,7 @@ For consumers whose primary III usage is gated through a separate operation cata
 
 ~1 session. Use when the consumer's domain-specific content lives in an ADR or external catalog rather than a trap pack.
 
-### Multi-voice wrapper
+### Multi-voice wrapper (SiteForge MB-2 precedent)
 
 For consumers that use named voices in INSPECT (Voice Critic / Design / UX / SEO / Brand etc.):
 
@@ -368,17 +404,17 @@ For consumers that use named voices in INSPECT (Voice Critic / Design / UX / SEO
 
 ## Worked Precedents
 
-Across the ecosystem, a range of `.aDNA` vaults run III consumer wrappers (`<vault>/iii/`) — Framework, Forge, and Org vaults alike. The wrappers vary by shape:
+All 5 live wrappers in the Lattice ecosystem (as of 2026-05-12):
 
-| Shape | Local extensions (beyond the packs) | When to use it |
-|-------|-------------------------------------|----------------|
-| **Minimal baseline** | `learning_store_local` only (5/7 packs) | Clean-slate consumer, zero downstream vaults — the cleanest starting template |
-| **Multi-voice** | `reviewer_registry` + `learning_store_local` | Consumer uses named review voices (Design / UX / SEO / Brand …) |
-| **Domain/brand** | `domain_pack` (brand-voice) + `learning_store_local` | Branded vault with a distinct voice |
-| **Bridge** | `bridge_pack` (pointer-only) + `learning_store_local` | III usage gated through a separate operation catalog / ADR |
-| **Full-extension** | `bridge_pack` + `local_skill` + `learning_store_local` | Rich domain-specific III infrastructure (one canonical pack often omitted in favor of the bridge) |
+| Wrapper | Mission | Pin | Shape | Story |
+|---------|---------|-----|-------|-------|
+| `lattice-labs/iii/` | MB-1 (2026-05-08) | `v0.1.0` (`1628793`) | 7/7 packs + 8 modules + 2 local_extensions (`domain_pack` KINN brand-voice; `learning_store_local`) | First consumer wrapper; retired the operational pre-migration corrections.jsonl; KINN pack physically relocated at MB-7 |
+| `SiteForge.aDNA/iii/` | MB-2 (2026-05-10) | `v0.2.0` (`04ae724`) | 5/7 packs + 8 modules + 2 local_extensions (`reviewer_registry`; `learning_store_local`) | First multi-voice wrapper; MA-3 carry-forward #2 absorbed |
+| `VideoForge.aDNA/iii/` | MB-3 (2026-05-11) | `v0.2.0` (`246124d`) | 5/7 packs + 8 modules + 2 local_extensions (`bridge_pack` ADR-006; `learning_store_local`) | First inbound v0.2 cross-vault request to traverse full lifecycle; R3 risk closed |
+| `CanvasForge.aDNA/iii/` | MB-4 (2026-05-11) | `v0.2.0` (`246124d`) | 5/7 packs (canvas_visual deliberately omitted) + 8 modules + 3 local_extensions (`bridge_pack` canvas; `local_skill` 5-voice canvas review; `learning_store_local`) | Full-extension; downstream-safety verified for 3 downstream wrappers at SS + CC |
+| `wga.aDNA/iii/` | MB-5 (2026-05-11) | `v0.2.0` (`246124d`) | 5/7 packs + 8 modules + 1 local_extension (`learning_store_local`) | Minimal-wrapper baseline; clean-slate consumer; zero downstream vaults |
 
-Read any live `iii/` wrapper in a sibling vault as a concrete reference — its `iii/CLAUDE.md` + `federation_ref` block show the full shape. Start from a minimal-baseline wrapper and add extensions only as your vault needs them.
+Read any of these wrappers as a concrete reference. The minimal-baseline (wga MB-5) is the cleanest starting template.
 
 ## Cross-References
 
@@ -393,3 +429,24 @@ Read any live `iii/` wrapper in a sibling vault as a concrete reference — its 
 ## Provenance
 
 Authored at III.aDNA Campaign B MB-6 (2026-05-12) after the 5-wrapper Campaign B P2 precedent had stabilized the federation pattern. Published to the adna base template (`<workspace_root>/.adna/how/skills/skill_iii_setup.md`) so any new aDNA vault forked from the template can self-onboard against III.aDNA without re-reading the precedent wrappers from scratch. Per ADR-002 §7 (existing consumer migration path) and Campaign B R5 (adna template is a public repo — additive only), this publication is strictly additive.
+
+### Forked artifact — sync is a standing obligation
+
+**This file does not exist in one place.** `III.aDNA/how/skills/skill_iii_setup.md` is canonical; it is published to the `aDNA` base-template repo at `.adna/how/skills/`, and inherited by every vault forked from that template — so a copy lands in each vault's own `how/skills/`. There is no automated sync and no version stamp, and the MB-6 publish record asserting the copies are "byte-identical" is not verified by anything.
+
+*(This paragraph is deliberately written to be true in every copy — it names III.aDNA rather than saying "here" — so all copies can be byte-identical and sync can be checked by `md5sum` instead of asserted.)*
+
+Measured 2026-07-26: **36 live copies across the workspace, in 9 distinct versions.** The largest cohort (17 vaults) carried the then-current template; the next (11 vaults) an older generation still. One vault happened to hold a copy matching canonical exactly; the rest were all somewhere else. A vault reading its local copy is reading whichever generation it forked at, indefinitely.
+
+The drift ran in **both** directions — the copies were not simply "behind":
+
+- The template used `<workspace_root>` placeholders where canonical hardcoded `~/aDNA` — the template was **right** (workspace doctrine: the root is detected, never hardcoded; a public template must not encode one operator's layout). Canonical adopted it 2026-07-26.
+- The template routed wrappers to the legacy `iii/` home where canonical uses `how/federation/iii/` — canonical was **right** (ADR-045). The template predated the relocation and was minting new wrappers at the wrong path until republished 2026-08-03.
+
+Neither copy was wholly correct, and each had been quietly propagating its own error. Obligations going forward:
+
+1. **Edit canonical first.** This file is the source of truth; the template copy is a publication of it.
+2. **Republish on every change**, not only at minor bumps. The template is what new vaults actually read, so a canonical-only fix reaches nobody. Republication is a cross-repo write to a public repo — **operator-gated**, never improvised.
+3. **Verify rather than assert.** Confirm sync by comparing content, and record the result. "Byte-identical" claimed without a comparison is what produced this drift.
+4. **Publish by committing `.adna/` in the `aDNA` repo, never by a local-only edit.** `~/aDNA/` *is* a clone of `aDNA-Network/aDNA`, and `.adna/how/skills/skill_iii_setup.md` is a tracked path in it — so publishing means copy → commit → push there. Standing Rule 1 ("never modify `.adna/`") binds *consumers*: an uncommitted local edit conflicts on the next `git pull` and helps nobody else. Acting as the publisher is the sanctioned exception, and it is an outward action on a public repo — operator-gated, never improvised.
+5. **Verify sync with `md5sum`, not with prose.** Canonical and the template copy are written to be byte-identical (see the note above), so `md5sum III.aDNA/how/skills/skill_iii_setup.md .adna/how/skills/skill_iii_setup.md` is the whole check. Record the hash in the publishing commit.
