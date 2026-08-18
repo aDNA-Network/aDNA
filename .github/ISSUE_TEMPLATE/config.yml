@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Questions & discussion
+    url: https://community.adna.network
+    about: Ask about aDNA, get help, or discuss an idea in the community space (early days — human-to-human).
+  - name: How contribution works (the ladder + processes)
+    url: https://adna.network/community/community-contribution-standards/
+    about: Read the contribution standards — participation levels, what gets accepted, and how the standard evolves.
