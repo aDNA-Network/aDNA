@@ -1,0 +1,21 @@
+---
+type: inventory
+created: 2026-09-07
+updated: 2026-09-07
+confidential: true
+tags: [fixture, dirty, r5]
+---
+node_inventory: redacted
+
+# Fixture purpose: triggers R5 (frontmatter `confidential: true`) in a NON-`.md` file.
+#
+# Pairs with control_confidential.md, which carries the identical flag in a .md file.
+# 4.0.1 does NOT flag this file — its R5/R6 predicate short-circuited on the extension
+# (`[[ "$f" == *.md ]] || continue`), so any confidential non-.md file was pushed UNSCANNED.
+# 4.3.0 does flag it. The PAIR is what makes that difference attributable to the extension
+# and to nothing else.
+#
+# ⛔ This label sits BELOW the closing fence deliberately. The hook's frontmatter reader skips
+# only blank lines and `>` blockquote preamble before the opening `---`; a `#` comment above it
+# means "no frontmatter" and the file goes silently unflagged — a fixture that reads as coverage
+# and is not, which is the exact defect this pair exists to close.

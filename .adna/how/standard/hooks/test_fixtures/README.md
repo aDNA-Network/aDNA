@@ -23,13 +23,24 @@ test_fixtures/
 |---|---|---|
 | R1 (private path leakage) | ✅ | `dirty/what/local/notes.md` |
 | R2 (secret-pattern match) | ✅ | `dirty/fake_with_secret.md` |
-| R3 (filename patterns) | ✅ | `dirty/config/.env` |
+| R3 (filename patterns) | ⚠ **not in the repo** | `dirty/config/.env` is excluded by `.gitignore` (`.env`), so it is tracked **nowhere** and no clone can exercise R3 — see the note below |
 | R4 (large binary > threshold) | ✅ | `dirty/large_binary.bin` (12 MiB) |
-| R5 (frontmatter confidential/private: true) | ⏳ deferred | not in M05 S2 fixture set |
+| R5 (frontmatter confidential/private: true) | ✅ | `dirty/control_confidential.md` (`.md`) + `dirty/test_confidential.yaml` (non-`.md`) |
 | R6 (frontmatter status: draft) | ✅ | `dirty/draft_post.md` |
 | R7 (operator deny list) | ⏳ deferred | not in M05 S2 fixture set |
 
-Spec authority: `pre_push_hook_spec.md` §5 (covers R1/R2/R3/R4/R6; R5+R7 deferred to first operator use).
+Spec authority: `pre_push_hook_spec.md` §5 (covers R1/R2/R3/R4/R6; **R5 is covered as of v8.10**; R7 deferred to first operator use).
+
+> ⚠ **R3 is claimed by the spec and unexercisable in a clone.** Its fixture path matches the repo's
+> own `.gitignore` rule for `.env`, so the file has never been committed. This was found while adding
+> R5's fixtures (v8.10) and is **named rather than fixed** — repairing it means either a `.gitignore`
+> exception or a renamed fixture, and that is a decision, not a mechanical edit. Until then R3's row
+> reads what is true of a clone, not what is true of the author's working tree.
+
+> ⛔ **Where a dirty fixture's label may sit.** The hook's frontmatter reader skips only blank lines
+> and `>` blockquote preamble before the opening `---`. A `#` comment above the fence means *no
+> frontmatter*, and the fixture goes silently unflagged — coverage that reads as coverage and is not.
+> In non-markdown fixtures, put the label **below** the closing fence.
 
 ## Authoring conventions
 

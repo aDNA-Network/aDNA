@@ -51,7 +51,7 @@ action:
   link: https://adna.network
 ```
 
-<span class="landing-secondary">↗ &nbsp;browse the <a href="https://adna.network">context-graph marketplace</a> — <em>coming soon, via the Lighthouse network</em></span>
+<span class="landing-secondary">↗ &nbsp;browse the <a href="https://adna.network/vaults">public vault registry</a> — context graphs are plain files, shared directly</span>
 
 <div class="dashboard-band">
 <span class="db-num"><strong>{{vault_count}}</strong> vaults</span><span class="db-ok">&#10003;&nbsp;{{drift_count}} drift</span><span class="db-ok">&#10003;&nbsp;{{blocked_count}} blocked</span><span class="db-stamp">last full check&nbsp; {{last_health_check}}</span>

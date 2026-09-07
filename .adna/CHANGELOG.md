@@ -28,6 +28,29 @@ Changelog entries are organized by **governance version** (primary heading). Sta
 
 ---
 
+## [v8.10] — 2026-09-07
+
+> **Governance 8.9 → 8.10 · Standard track: v2.5 (unchanged)** — operator-ratified **security-gate repair** release (Operation Lantern). The `pre-push-sanitize` hook goes **4.0.1 → 4.3.0**, closing a **fail-open** in which any file flagged `confidential: true` was pushed **UNSCANNED** unless it ended in `.md`. Ships with **R5's first fixtures in the project's history**. **Count change: NONE** — no skill and no template is added, so no governance count moves.
+
+### Fixed
+- **⭐ R5/R6 fail-open (the reason for this release).** `pre-push-sanitize.sh` gated its frontmatter rules behind `[[ "$f" == *.md ]] || continue` at **two sites**, so `confidential: true` or `status: draft` in a `.yaml`, `.json`, `.csv` or any other extension was **never scanned** and pushed clean. Both sites now use a shared `sanitize_is_text` / `sanitize_frontmatter` predicate. *A vault that installs this hook will now have pushes refused that 4.0.1 allowed — that is the repair, not a regression.*
+- **`R8` content deny list scoped to the lines a push would ADD**, rather than to whole-file state, so a pre-existing match in an untouched file no longer blocks an unrelated push.
+- **The tty guard that could never fire.** The WARN-confirmation path tested `-t 0` (stdin, which at push time is git's ref list — a pipe, never a tty) and `! -e /dev/tty` (a device node that exists on macOS regardless). Both false ⇒ fall through to `read < /dev/tty` ⇒ *"Device not configured"* ⇒ non-zero under `set -e`. **The right verdict for the wrong reason: the operator-facing message had never once printed.** The test is now the act — try to open the terminal, in a subshell.
+- **Two false promises about a marketplace that does not exist.** `how/skills/skill_onboarding.md` told every new operator that their work *"can eventually be published to the Lattice Protocol marketplace … with agentic residuals flowing back to you. The marketplace is coming soon."* The HOME exemplar template carried the same promise on the **cold-start splash**. Both now say what is true: aDNA objects are plain files in a documented layout, copied and shared directly, and **no marketplace is promised**.
+
+### Added
+- **`how/standard/hooks/test_fixtures/dirty/control_confidential.md`** and **`dirty/test_confidential.yaml`** — **R5's first fixtures, ever.** The fixture README had carried R5 as `⏳ deferred | not in M05 S2 fixture set` since the set was authored, so the rule shipped **untested in every downstream vault**. The two files differ **only in extension**, which is what makes the 4.0.1 → 4.3.0 difference *attributable*: at 4.0.1 the self-test flags the `.md` control and reports `❌ test_confidential.yaml — NO findings (rule miss)`; at 4.3.0 it flags both. **Exactly one assertion changes state.**
+- **Per-rule coverage reporting** in `--self-test`, and the first shared predicates (`sanitize_is_text`, `sanitize_frontmatter`).
+
+### Changed
+- **`how/standard/hooks/test_fixtures/README.md`** — R5's coverage row moves to ✅ with both fixtures named; a note records **where a dirty fixture's label may sit** (the frontmatter reader skips blank lines and `>` preamble, but **a `#` comment above the opening fence means "no frontmatter"** and the fixture goes silently unflagged).
+- **⚠ R3's coverage row moves DOWN from ✅ to "not in the repo".** Its fixture path `dirty/config/.env` matches the repository's own `.gitignore` rule for `.env`, so the file **has never been committed** and no clone can exercise R3. Found while adding R5's fixtures; **named rather than fixed**, since repairing it needs either a `.gitignore` exception or a renamed fixture — a decision, not a mechanical edit.
+- **Hook header re-authored as a contract** — what each rule does and why, with no cross-vault internal identifiers. Governance badge bumped v8.9 → v8.10 (root + `.adna/` READMEs).
+
+*Released via `skill_template_release` at the Operation Lantern gate (governance 8.9 → 8.10; standard stays v2.5).*
+
+---
+
 ## [v8.9] — 2026-07-24
 
 > **Governance 8.8 → 8.9 · Standard track: v2.5 (unchanged)** — operator-ratified **convention + machinery** release (Operation Palimpsest): a STATE.md lifecycle discipline (graduate aged content to a history file, verbatim), three STATE-frontmatter/authoring conventions, and fork-kit + tooling hardening. **Count change: 30 → 31 templates · 32 → 33 skills.**

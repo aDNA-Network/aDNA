@@ -205,7 +205,7 @@ Conversational offer — don't make it a big deal:
 
 Brief mention — 2-3 sentences max:
 
-"One more thing — what you build here has value beyond your project. Ontology extensions, lattice definitions, skills, and templates you create can eventually be published to the **Lattice Protocol marketplace** for others to discover, deploy, and build on — with agentic residuals flowing back to you. The marketplace is coming soon. For now, just know that everything you build here is portable and composable."
+"One more thing — what you build here has value beyond your project. Ontology extensions, lattice definitions, skills, and templates are portable and composable by design: they are plain files in a documented layout, so they can be copied, forked, and shared directly, without a platform in between. There is no marketplace today and none is promised here."
 
 This is a teaser, not a tutorial. Don't oversell.
 

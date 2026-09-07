@@ -1,12 +1,13 @@
 ---
 type: governance
-version: "8.9"
+version: "8.10"
 token_estimate: ~6100
-updated: 2026-07-24
+updated: 2026-09-07
 last_edited_by: agent_rosetta
 ---
 
 # CLAUDE.md — aDNA
+<!-- v8.10 | 2026-09-07 | Operation Lantern (governance 8.9→8.10; standard stays v2.5): pre-push-sanitize hook 4.0.1→4.3.0 — closes the R5/R6 FAIL-OPEN that pushed any confidential NON-.md file UNSCANNED (two sites), + R8 content deny list scoped to added lines, + per-rule coverage; + R5's first fixtures ever (dirty/control_confidential.md + dirty/test_confidential.yaml) — the fixture README had carried R5 as "deferred" since M05 S2, so the rule shipped untested; the dead tty guard (the operator-facing WARN confirmation had never once printed); F-w marketplace promise struck from skill_onboarding.md + the HOME exemplar template. Count change: NONE (no skill, no template added). Operator release gate 2026-09-07. -->
 <!-- v8.9 | 2026-07-24 | Operation Palimpsest (governance 8.8→8.9; standard stays v2.5): + skill_state_graduation + template_STATE_history (+ >100 KB STATE/CHANGELOG health-check tripwire); STATE conventions (mission: key + phase-display grammar) + path-references doctrine folded into CLAUDE.md; STATE.md seed mission: key; skill_project_fork 4-file governance-kit gate; template_campaign codename-collision note; compliance_checker.py hardening (scratch output · py3.13 guard · unsupported-type marker). Count change: 30→31 templates · 32→33 skills. Operator release gate 2026-07-24. -->
 <!-- v8.8 | 2026-07-14 | Operation Distillery (template-quality prune; governance 8.7→8.8; standard stays v2.5): .adna/CLAUDE.md pruned ~7,720→~5,820 tok (−24%) — Domain-Knowledge reference tables + Compliance-Dimensions + Personality-Customization extracted → what/docs/adna_reference.md · how/templates/example_personalities.md (+ pointers); Skills table + Visual-inspection doctrine kept inline; header changelog trimmed to v8.7. + README first-contact III. No count change (v8.8 — counts documented in CHANGELOG). Operator release gate 2026-07-14. -->
 ## Identity & Personality
