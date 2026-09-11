@@ -2,7 +2,7 @@
 type: skill
 skill_type: agent
 created: 2026-05-12
-updated: 2026-06-19
+updated: 2026-09-11   # C4 (marketplace categories) RETIRED at v8.11 — a promise the product does not keep, asked at first boot and persisted into the operator's own inventory. Old C5 (default license) renumbered → C4; counts 19 → 18 across every site, including the machine-readable `question_count` field.
 status: active
 category: onboarding
 trigger: Workspace router Step 0.3 — operator accepts `Home.aDNA/` bootstrap; runs after `skill_project_fork.md` + `skill_inventory_refresh.md` to fill operator-specific fields the auto-detect engine cannot infer
@@ -11,7 +11,7 @@ related_skills: [skill_project_fork, skill_inventory_refresh, skill_node_health_
 related_artifacts:
   - aDNA.aDNA/how/campaigns/campaign_adna_v2_infrastructure/missions/artifacts/m04b_obj2_skill_node_bootstrap_interview_spec.md  # source spec
   - aDNA.aDNA/how/campaigns/campaign_adna_v2_infrastructure/missions/artifacts/m04b_obj1_dynamic_ux_gap_analysis.md  # 7+2 gaps this skill closes
-question_count: 19  # base mode: 5 topics × {2,5,4,3,5}. Exemplar mode adds an OPTIONAL Topic 6 (theming, T1-T5) — default-driven, does not change the base 19.
+question_count: 18  # base mode: 5 topics × {2,5,4,3,4}. Exemplar mode adds an OPTIONAL Topic 6 (theming, T1-T5) — default-driven, does not change the base 18. ⛩ 19 → 18 on 2026-09-09: C4 (marketplace categories) STRUCK — F-w, a promise the product does not keep, asked at first boot and PERSISTED as an answer. Old C5 (default license) renumbered → C4.
 estimated_runtime: "4-7 minutes"  # operator-paced; defaults speed it up (+~1 min if exemplar Topic 6 runs)
 operator_persona: Hestia
 exit_codes: [0, 2, 3, 4]
@@ -20,11 +20,11 @@ tags: [skill, agent, onboarding, dynamic_bootstrap, interview, node_adna, hestia
 
 # skill_node_bootstrap_interview
 
-Hybrid interview that fills the **operator-specific** fields of a freshly-forked `Home.aDNA/` vault — purpose, user-info, stack overlay, hardware confirm, and lattice connections. The interview NEVER re-asks what the auto-detect engine (`skill_inventory_refresh.md`) already captured. 19 questions across 5 topics; 4-7 min runtime; Hestia voice register.
+Hybrid interview that fills the **operator-specific** fields of a freshly-forked `Home.aDNA/` vault — purpose, user-info, stack overlay, hardware confirm, and lattice connections. The interview NEVER re-asks what the auto-detect engine (`skill_inventory_refresh.md`) already captured. 18 questions across 5 topics; 4-7 min runtime; Hestia voice register.
 
 When the operator opts into the **premium themed HOME** (`exemplar_mode` — chosen at the router/fork or via `skill_project_fork --exemplar-home`), an OPTIONAL **Topic 6 (theming)** runs and Step 9 materializes the exemplar bundle instead of the plain base HOME. Declining keeps the plain base `.adna/HOME.md` — exemplar is always opt-in.
 
-> **Dev-graph canonical source (mirror established Hearthstone P4, 2026-06-19).** This is the dev-graph copy of the skill; `.adna/how/skills/skill_node_bootstrap_interview.md` is assembled from *here* by `skill_template_release` (the dev graph is the source of truth — there is no auto-sync). It was a missing mirror until P4 (the `.adna/` copy had been the only canonical version); the exemplar-invocation wiring below (Topic 6 + the Step-9 exemplar branch) is authored here and ships to `.adna/` at Hearthstone P5. **Edit here, never `.adna/`** (Workspace Standing Rule 1).
+> **This is the released copy of the skill.** It is assembled from the aDNA development graph by `skill_template_release`; there is no auto-sync. Do not edit it in place — Standing Rule 1 holds that the embedded standard tree is replaced at release cadence, so a local edit here is lost at the next release and never reaches the source.
 
 ## Trigger
 
@@ -57,7 +57,7 @@ Before asking any question, load:
 
 ## Produce
 
-19 operator answers written into 8 target surfaces:
+18 operator answers written into 8 target surfaces:
 
 | Output file | Fields | Source questions |
 |---|---|---|
@@ -66,7 +66,7 @@ Before asking any question, load:
 | `who/identity/identity_node.yaml` | `operator_alias`, `role`, `git_author`, `contact`, `persona_preferences`, `machine_class`, `gpu`, `peripherals`, `default_new_vault_license` | U1-U5, H1-H3, C5 |
 | `who/identity/identity_lattice_protocol.yaml` | `peer_id`, `signing_key_path`, `permission_set` (or placeholder) | C3 |
 | `what/inventory/inventory_system.yaml` (overlay) | `primary_languages`, `primary_ide`, `primary_frameworks`, `services_connected` | S1-S4 |
-| `what/inventory/inventory_memberships.yaml` | `subscribed_lattices`, federation overrides, `marketplace_interests` | C1, C2, C4 |
+| `what/inventory/inventory_memberships.yaml` | `subscribed_lattices`, federation overrides | C1, C2 |
 | `CLAUDE.md` | 1-sentence persona-context paragraph (after Identity & Personality, before Operating Style) | P1 excerpt |
 | `CHANGELOG.md` | v0.1 footnote — interview-complete + non-default license note if applicable | (always; C5 footnote) |
 
@@ -77,12 +77,12 @@ Before asking any question, load:
 ## Steps
 
 1. **Verify preconditions**: `Home.aDNA/` exists (forked by `skill_project_fork.md`); `inventory_vaults.yaml` + `inventory_system.yaml` exist (auto-detected by `skill_inventory_refresh.md`). If any precondition fails → exit `2: precondition_unmet`.
-2. **Greet operator in Hestia voice**: "Welcome to your new node vault. I'm Hestia — the hearth-keeper. Let me ask 19 quick questions to fill in the operator-specific fields. Most have sensible defaults; press Enter to accept. We'll be done in 4-7 minutes."
+2. **Greet operator in Hestia voice**: "Welcome to your new node vault. I'm Hestia — the hearth-keeper. Let me ask 18 quick questions to fill in the operator-specific fields. Most have sensible defaults; press Enter to accept. We'll be done in 4-7 minutes."
 3. **Run Topic 1 (Purpose, P1-P2)** → write to `MANIFEST.md` `purpose:` + FAIR `keywords:` (append).
 4. **Run Topic 2 (User-info, U1-U5)** → write to `identity_node.yaml`; reflect persona tone in `STATE.md` Hestia greeting block.
 5. **Run Topic 3 (Stack, S1-S4)** → write to `inventory_system.yaml` overlay fields.
 6. **Run Topic 4 (Hardware, H1-H3)** → write to `identity_node.yaml` `machine_class` / `gpu` / `peripherals`.
-7. **Run Topic 5 (Connections, C1-C5)** → write to `inventory_memberships.yaml` + `identity_lattice_protocol.yaml`.
+7. **Run Topic 5 (Connections, C1-C4)** → write to `inventory_memberships.yaml` + `identity_lattice_protocol.yaml`.
 8. **Apply C5 license override**: if operator chose anything other than `private`, update `MANIFEST.md` FAIR `license:` accordingly and emit a one-line note in `CHANGELOG.md` v0.1 entry.
 8.5. **Run Topic 6 (Theming, T1-T5) — EXEMPLAR MODE ONLY** (skip entirely when `exemplar_mode == false`): collect the persona accent triple + canvas text pair + greeting + banner, each defaulting to the `SUBSTITUTIONS.md` §2 per-persona lookup so the operator can accept all defaults in one keypress. Writes `identity_node.yaml` `persona_preferences.theme:` and feeds the Step-9 exemplar profile. `exemplar_mode` normally arrives from the router/fork (`skill_project_fork --exemplar-home`, or any Home-class fork); if it did not but `Home.aDNA/HOME.md` is the themed exemplar template, offer it here ("Use the premium themed HOME — banner · §Gallery · §Topology · persona accent? Default: yes for a Home node."). Decline → `exemplar_mode = false`, plain base HOME at Step 9.
 9. **Substitute HOME.md template `{{VARS}}`** (NEW 2026-05-12; exemplar branch added Hearthstone P4): if `Home.aDNA/HOME.md` exists with `{{VARS}}` (operator forked from v7.x+ template), substitute from interview answers + auto-detected inventory. **Two profiles — pick by `exemplar_mode`:**
@@ -101,11 +101,11 @@ Before asking any question, load:
      - `{{named_projects_table}}` → `> - **<group>** · [name](../path/) · …` lines for named-projects / external-deps / archived groups; or `> No named projects on this node yet.` when inventory has none
      - **Do NOT** emit a `<div class="vault-grid">` or a blank-line-bearing markdown table here — either breaks the callout open. (The base profile's grid/table is the WRONG shape for the exemplar HOME; this is the single substitution difference that most often renders incorrectly.)
    - then materialize the rest of the bundle (the `{{persona_lower}}_accent.css` + `{{persona_lower}}_canvas.css` snippets, the `what/code/` generators, the `who/assets/` + `who/curation/` skeleton, `ONBOARDING.md`) and run the first `build_topology_canvas.py` / `build_curation_cards.py` regen — identical to `skill_project_fork.md` Step 4.5 (whichever runs first lays it down; idempotent). Accent defaults: `SUBSTITUTIONS.md` §2 per-persona lookup.
-10. **Show summary**: all 19 answers in a single readable block; ask "Confirm and continue, or revise any?" — if revise, jump back to specific question by ID (P1/U2/S1/etc.).
+10. **Show summary**: all 18 answers in a single readable block; ask "Confirm and continue, or revise any?" — if revise, jump back to specific question by ID (P1/U2/S1/etc.).
 11. **Commit answers**: write all file mutations atomically (track via `files_modified:` list); produce summary report.
 12. **Hand off to `skill_node_health_check.md`** — run validator; if exit 0, bootstrap complete; if exit >0, surface drift to operator.
 
-## Interview question table (19 questions × 5 topics)
+## Interview question table (18 questions × 5 topics)
 
 Each row: question wording (operator-facing, Hestia voice) · type · default · output target · validation · branching.
 
@@ -143,19 +143,29 @@ Each row: question wording (operator-facing, Hestia voice) · type · default ·
 | **H2** | "GPU info (model + memory). Auto-detected: '{detected_or_NONE}'." | confirm-or-override or `none` | auto-detected from `system_profiler SPDisplaysDataType` (Mac) or `nvidia-smi` (Linux) | `identity_node.yaml` `gpu:` | — | If `none`: omit field |
 | **H3** | "Peripherals / setup notes (multi-monitor count, external storage, anything else worth recording): free-text or skip." | free-text or skip | skip | `identity_node.yaml` `peripherals:` | max 200 chars | — |
 
-### Topic 5: Connections (5 questions)
+### Topic 5: Connections (4 questions)
 
 | # | Question | Type | Default | Output | Validation | Branching |
 |---|---|---|---|---|---|---|
 | **C1** | "Subscribe to any LP lattices at bootstrap? (Multi-select from known IDs, or `skip` to subscribe later via `latlab lattice pull`.)" | multi-select or skip | skip | `inventory_memberships.yaml` `subscribed_lattices:` | known lattice IDs only | — |
 | **C2** | "Federate inventory observability with other nodes? (Default: NO — node-private posture.)" | yes/no | `no` (federation block stays `shareable: false / discoverable: false`) | `inventory_memberships.yaml` federation block (overrides if yes) | — | If `yes`: ask which metrics (`tool_versions`, `vault_count`, `hardware_class`, `last_health_check`) + which nodes |
 | **C3** | "LP-network identity: peer-id, signing-key path, permission-set. Leave blank if not yet joined." | 3-field form or skip | skip (placeholders stay; `note: filled in when node joins LP network — TBD per LatticeProtocol release`) | `identity_lattice_protocol.yaml` `{peer_id, signing_key_path, permission_set}` | if any field provided: all 3 required | — |
-| **C4** | "Marketplace categories of interest (for HOME.md gallery suggestions): `[decks, sites, video, comics, scientific_papers, code, clinical_research, design, other]`." | multi-select or skip | skip | `inventory_memberships.yaml` `marketplace_interests:` | snake_case | If `other`: free-text |
-| **C5** | "Default license for new vaults you create on this node: (a) **private** / (b) Apache-2.0 / (c) MIT / (d) CC-BY-4.0 / (e) other-SPDX." | single-select | `private` (matches `MANIFEST.md` FAIR `license: private`) | `identity_node.yaml` `default_new_vault_license:` (consumed by `skill_project_fork.md`) | valid SPDX if `other` | If `other`: free-text SPDX |
+| **C4** | "Default license for new vaults you create on this node: (a) **private** / (b) Apache-2.0 / (c) MIT / (d) CC-BY-4.0 / (e) other-SPDX." | single-select | `private` (matches `MANIFEST.md` FAIR `license: private`) | `identity_node.yaml` `default_new_vault_license:` (consumed by `skill_project_fork.md`) | valid SPDX if `other` | If `other`: free-text SPDX |
+
+> ⛩ **RETIRED 2026-09-09 — the old `C4` (marketplace categories). Struck, not silently dropped (SO-6), because a retirement with no event is its own defect.**
+> ~~*"Marketplace categories of interest (for HOME.md gallery suggestions): `[decks, sites, video, comics, scientific_papers, code, clinical_research, design, other]`"* → `inventory_memberships.yaml` `marketplace_interests:`~~
+> **Why:** this is **`F-w`'s family** — a marketplace the product does not have, surfaced to a brand-new operator **at first boot**, phrased as a question and then **written down as an answer**. `F-w` was the vendored *"marketplace is coming soon"*; `v8.10` struck it from `skill_onboarding.md` and the HOME exemplar and **did not reach here**, because the release fixed the sites that were **filed**, not the **class**.
+> ⭐ **Asking is worse than asserting, which is why this one outlived the copy fix.** A banner is a claim a reader can discount. A *question* presumes the thing exists, invites the operator to invest in it, and **persists their answer into their own inventory** — where it reads as a real preference for a real surface, on their disk, indefinitely.
+> ⚠ **Existing nodes may still carry the key.** A node bootstrapped from an earlier release can have `marketplace_interests:` written into its `inventory_memberships.yaml`. That is a data change to a node's own inventory and belongs to whoever operates it; this skill governs what is asked at first boot, not what is already on disk.
+> **Old `C5` (default license) is renumbered to `C4`.** Count: **19 → 18**, Topic 5: **5 → 4**.
+>
+> **The stored field is dropped too, not merely the question.** `marketplace_interests:` is removed from `inventory_memberships.yaml` rather than renamed or preserved: it recorded a preference for a surface that does not exist, so there is nothing for a migration to carry forward.
+> ⚠ **A node bootstrapped from an earlier release may still carry the key.** Removing it is a data change to that node's own inventory and belongs to whoever operates it — this skill governs what is asked at first boot, not what is already written on disk.
+
 
 ### Topic 6: Exemplar theming (OPTIONAL — exemplar mode only; 0 questions in base mode)
 
-Runs at Step 8.5 only when `exemplar_mode == true` (operator chose the premium themed HOME, or `skill_project_fork --exemplar-home`). Every question defaults to the persona accent lookup (`how/templates/template_node_adna_exemplar/SUBSTITUTIONS.md` §2), so accepting all defaults is one keypress. Covers the 9 exemplar theming vars + the persona pick. Does **not** count toward the base 19.
+Runs at Step 8.5 only when `exemplar_mode == true` (operator chose the premium themed HOME, or `skill_project_fork --exemplar-home`). Every question defaults to the persona accent lookup (`how/templates/template_node_adna_exemplar/SUBSTITUTIONS.md` §2), so accepting all defaults is one keypress. Covers the 9 exemplar theming vars + the persona pick. Does **not** count toward the base 18.
 
 | # | Question | Type | Default | Output | Validation | Branching |
 |---|---|---|---|---|---|---|
@@ -167,13 +177,13 @@ Runs at Step 8.5 only when `exemplar_mode == true` (operator chose the premium t
 
 > `{{health_detail_note}}` is **not** asked (defaults to empty — a live-node narration field filled later; keeps skeleton parity). The count-derived vars (`{{vault_count}}`, `{{healthy_count}}`, `{{blocked_count}}`, `{{drift_count}}`, `{{last_inventory_refresh}}`) come from `inventory_vaults.yaml`, not the operator.
 
-**Question count check**: base mode = 2 + 5 + 4 + 3 + 5 = **19 questions across 5 topics**. Exemplar mode adds an OPTIONAL **Topic 6** (T1-T5, theming) — default-driven, accept-all-in-one-keypress; not counted in the base 19.
+**Question count check**: base mode = 2 + 5 + 4 + 3 + 4 = **18 questions across 5 topics**. Exemplar mode adds an OPTIONAL **Topic 6** (T1-T5, theming) — default-driven, accept-all-in-one-keypress; not counted in the base 18.
 
 ## Exit codes
 
 | Code | Meaning | Recoverable? |
 |---|---|---|
-| `0` | Interview complete; all 19 questions answered (or skipped per skip-eligible rules); vault healthy after `skill_node_health_check.md` | n/a (success) |
+| `0` | Interview complete; all 18 questions answered (or skipped per skip-eligible rules); vault healthy after `skill_node_health_check.md` | n/a (success) |
 | `2` | Precondition unmet (fork or inventory_refresh didn't run) | Yes — re-run skill_project_fork → skill_inventory_refresh, then re-invoke |
 | `3` | Operator aborted mid-interview (partial state captured; resumable via re-invocation; session log flagged `#interview_partial`) | Yes — re-invoke; resume from last unanswered question |
 | `4` | Write conflict (in-flight session editing one of the target files; operator must resolve) | Yes — close other session, re-invoke |
@@ -187,7 +197,7 @@ Runs at Step 8.5 only when `exemplar_mode == true` (operator chose the premium t
 
 | Downstream skill | Contract |
 |---|---|
-| `skill_node_health_check.md` | MUST run after this skill; validates all 19 written fields parse correctly (`yaml.safe_load` passes) + no required field is left as `agent_init` placeholder. |
+| `skill_node_health_check.md` | MUST run after this skill; validates all 18 written fields parse correctly (`yaml.safe_load` passes) + no required field is left as `agent_init` placeholder. |
 | `skill_project_fork.md` (future invocations) | Reads `identity_node.yaml` `default_new_vault_license:` (from C5) as the default `license:` for new forks. |
 
 ## Hestia voice register
@@ -197,7 +207,7 @@ Operator-facing prompts use Hestia voice (per the node vault's `CLAUDE.md`). Ref
 - **Greeting**: "Welcome to your new node vault. I'm Hestia — the hearth-keeper."
 - **Confirmation**: "Got it. Noted." (terse default per U5=a)
 - **Clarification**: "Let me make sure I have this right — you said `{paraphrased answer}`. Correct?"
-- **Completion**: "All 19 answers captured. Running `skill_node_health_check.md` now to confirm the vault is healthy. Welcome home."
+- **Completion**: "All 18 answers captured. Running `skill_node_health_check.md` now to confirm the vault is healthy. Welcome home."
 - **Error**: "Hmm, that didn't parse — `{validation_error_brief}`. Can you re-state?"
 
 Tone presets via U5:
@@ -208,7 +218,7 @@ Tone presets via U5:
 
 ## Design discipline (D1=b hybrid)
 
-The interview NEVER re-asks what `skill_inventory_refresh.md` already auto-detected. Auto-detected values surface as **confirmation prompts** or **defaults**, not re-asks. The 19 questions target exactly the 7 strict gaps + 2 overlay gaps from `m04b_obj1_dynamic_ux_gap_analysis.md`. If an answer is auto-detectable, it is NOT in this interview.
+The interview NEVER re-asks what `skill_inventory_refresh.md` already auto-detected. Auto-detected values surface as **confirmation prompts** or **defaults**, not re-asks. The 18 questions target exactly the 7 strict gaps + 2 overlay gaps from `m04b_obj1_dynamic_ux_gap_analysis.md`. If an answer is auto-detectable, it is NOT in this interview.
 
 ## Self-reference
 

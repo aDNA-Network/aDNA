@@ -1183,7 +1183,7 @@
 /* ════════════════════════════════════════════════════════════════════════════
    M3.2 (Prytaneion P3 — Home-Page Content Architecture)
    Landing strip — the top band the page lacked: 1-line aDNA-network intro + primary
-   adna.network CTA (meta-bind button) + secondary marketplace link. Prominent band
+   adna.network CTA (meta-bind button) + secondary registry link. Prominent band
    (visible tint + gold rule); §Gallery engine = Bases (the .curation-card / DataviewJS
    styling above stays dormant while Dataview JS is off). Translucent accents are
    intentionally literal rgba() (the design-constant convention; only solid stops + the

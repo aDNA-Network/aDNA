@@ -77,4 +77,10 @@ Ship the interactive agent onboarding experience that walks new users from clone
 
 ### Scope Changes
 - Added Step 9 (Marketplace Teaser) mid-execution — not in original PRD but natural fit
+
+> ⓘ **Historical record — the step named above has since been renamed.** `skill_onboarding.md`'s
+> **Step 9** was *"Marketplace Teaser"* when this mission ran; it is now **"Portability Note"**, and the
+> marketplace claim it carried was retired (v8.10 / v8.11). The two lines above are **kept verbatim
+> because they record what that mission actually did** — rewriting them would falsify the record — but a
+> reader following the name to the skill will not find it. This note is the pointer.
 - Removed "template walkthrough" step — too detailed for onboarding, better as a separate skill

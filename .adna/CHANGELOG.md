@@ -28,6 +28,19 @@ Changelog entries are organized by **governance version** (primary heading). Sta
 
 ---
 
+## [v8.11] — 2026-09-11
+
+> **Governance 8.10 → 8.11 · Standard track: v2.5 (unchanged)** — operator-ratified **content-honesty and metadata** release. It finishes what v8.10 started: the marketplace promise is removed from the **class**, not from the two sites that happened to be filed, and the canvas examples adopt the `metadata.frontmatter._reserved` shape ratified in Canvas.aDNA ADR-011. **Count change: NONE** for skills and templates; the bootstrap interview goes **19 → 18 questions**.
+
+### Fixed
+- **⭐ The marketplace promise, at every remaining site — including the loudest one, which no prior list named.** `HOME.md` — the **template node-home substituted into every bootstrapped node** — carried an entire `## Marketplace` section with a live link, plus an intro line pointing at it. The link was measured at release time and returns **HTTP 404**: the first page a new operator opened offered them a dead destination for a product that does not exist. Replaced with the honest destination the rest of the template already used — *browse the public vault registry* at `adna.network/vaults`. ⇒ *a claim can rot in two independent ways at once, and checking the one you filed does not check the other.*
+- **`skill_onboarding.md` Step 9 heading.** v8.10 rewrote this step's **body** to be honest and left its **heading** reading *"Marketplace Teaser"* with the instruction *"this is a teaser… don't oversell."* An agent reading the heading rather than the paragraph beneath it reconstructed exactly the pitch the release had removed. Now **"Portability Note"**. ⇒ *a fix aimed at the sentence that was filed does not look up, and a heading is the last place anyone re-reads.*
+- **Three exemplar-template structure comments** (`HOME.md.template`, the exemplar `README.md`, and the persona accent stylesheet) that described the splash as carrying a *marketplace link*. These describe the mechanism rather than render it, which is why a grep for the rendered promise never found them.
+
+### Changed
+- **The node bootstrap interview asks 18 questions, not 19.** Question **C4** — *"marketplace categories of interest"* — is **retired**. It was the sharpest member of the same family: a promise the product does not keep, asked at **first boot**, phrased as a question (which presumes the thing exists) and then **persisted into the operator's own inventory as an answer**. The old **C5** (default new-vault licence) is renumbered to **C4**. The `marketplace_interests:` field is **dropped** rather than renamed or migrated — it recorded a preference for a surface that does not exist, so there is nothing to carry forward. *A node bootstrapped from an earlier release may still hold the key; removing it belongs to whoever operates that node.*
+- **Canvas examples adopt `metadata.frontmatter._reserved`** (Canvas.aDNA **ADR-011**). All four examples — `hello_world`, `template_agent_graph`, `template_architecture`, `template_pipeline` — move the `_reserved` block out of `metadata` and into `metadata.frontmatter`, where `canvas_std` resolves it. The carrier already existed as an empty object, which is exactly why the old shape failed quietly: the validator found `{}` rather than a missing path and reported nothing to complain about. **This fixes what every future fork receives; canvases in already-forked vaults are unaffected and are not migrated by this release.**
+
 ## [v8.10] — 2026-09-07
 
 > **Governance 8.9 → 8.10 · Standard track: v2.5 (unchanged)** — operator-ratified **security-gate repair** release (Operation Lantern). The `pre-push-sanitize` hook goes **4.0.1 → 4.3.0**, closing a **fail-open** in which any file flagged `confidential: true` was pushed **UNSCANNED** unless it ended in `.md`. Ships with **R5's first fixtures in the project's history**. **Count change: NONE** — no skill and no template is added, so no governance count moves.

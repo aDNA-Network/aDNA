@@ -12,7 +12,7 @@ tags: [home, lattice_home, gallery, "{{persona_lower}}", node_adna]
 
 # Lattice — {{node_hostname}} (operator: {{operator}})
 
-> The integrated control plane for this node's lattice. {{persona}} lives here ([[CLAUDE]]). Use this page to browse the catalog of context graphs on this machine, jump into specific vaults, and link out to the marketplace.
+> The integrated control plane for this node's lattice. {{persona}} lives here ([[CLAUDE]]). Use this page to browse the catalog of context graphs on this machine, jump into specific vaults, and find other people's graphs.
 
 | | |
 |---|---|
@@ -71,11 +71,9 @@ Triage and resolution belong in node-operational campaigns or the aDNA standard'
 
 ---
 
-## Marketplace
+## Find other context graphs
 
-[Lattice Protocol marketplace](https://lattice-protocol.com/marketplace) — discover, publish, and federate context graphs across the LP network.
-
-> _Link target may be a `[TBD per LP marketplace launch]` placeholder until the marketplace is live. Update this section when the destination is confirmed._
+[Browse the public vault registry](https://adna.network/vaults) — context graphs are plain files in a documented layout, so they can be copied, forked, and shared directly, without a platform in between.
 
 ---
 

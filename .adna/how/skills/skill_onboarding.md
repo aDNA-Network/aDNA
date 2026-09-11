@@ -2,7 +2,7 @@
 type: skill
 skill_type: agent
 created: 2026-02-19
-updated: 2026-03-23
+updated: 2026-09-11
 status: active
 category: onboarding
 trigger: "First-run detection in CLAUDE.md indicates uncustomized forked project (no role: template, last_edited_by: agent_init)"
@@ -201,13 +201,15 @@ Conversational offer — don't make it a big deal:
 **If user keeps the default:**
 - Substitute the `{{persona}}` placeholder → `Berthier` (the default chief-of-staff) throughout `CLAUDE.md`, then confirm and move on.
 
-### Step 9: Marketplace Teaser
+### Step 9: Portability Note
 
 Brief mention — 2-3 sentences max:
 
 "One more thing — what you build here has value beyond your project. Ontology extensions, lattice definitions, skills, and templates are portable and composable by design: they are plain files in a documented layout, so they can be copied, forked, and shared directly, without a platform in between. There is no marketplace today and none is promised here."
 
-This is a teaser, not a tutorial. Don't oversell.
+State it and move on. **Do not restore a forward-looking frame** — the value being described is *present-tense and real* (plain files, documented layout, no platform in between), and it does not need one.
+
+> **Renamed at v8.11.** This step was headed *"Marketplace Teaser"* and told the agent *"this is a teaser… don't oversell"*. The marketplace it named does not exist and is not promised. v8.10 rewrote this step's **body** to be honest and left its **heading** naming the thing, so an agent reading the heading rather than the paragraph under it reconstructed the pitch the release had just removed. ⇒ **a fix aimed at the sentence that was filed does not look up, and a heading is the last place anyone re-reads** — it was true when written, it frames everything beneath it, and a diff of the body never shows it.
 
 ### Step 10: Next Steps and Session Close
 

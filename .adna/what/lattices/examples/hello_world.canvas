@@ -11,12 +11,13 @@
 	],
 	"metadata":{
 		"version":"1.0-1.0",
-		"frontmatter":{},
-		"_reserved":{
-			"authority":"view",
-			"source_yaml":"hello_world.lattice.yaml",
-			"last_sync":"2026-03-02T00:00:00Z",
-			"sync_hash":"sha256:pending"
+		"frontmatter":{
+			"_reserved":{
+				"authority":"view",
+				"source_yaml":"hello_world.lattice.yaml",
+				"last_sync":"2026-03-02T00:00:00Z",
+				"sync_hash":"sha256:pending"
+			}
 		}
 	}
 }

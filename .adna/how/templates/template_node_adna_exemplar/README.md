@@ -27,7 +27,7 @@ theming + gallery + topology layer on top.
 
 A bootstrapped node gets:
 - **`HOME.md`** — the Prytaneion-elevated themed home: persona banner, a **landing strip** (aDNA-network
-  intro + an `adna.network` meta-bind CTA + marketplace link), a one-line **dashboard band** (5-second
+  intro + an `adna.network` meta-bind CTA + registry link), a one-line **dashboard band** (5-second
   status: N vaults · drift · blocked · last check), greeting, a **Bases-rendered §Gallery** of per-vault
   curation cards, a §Topology link, and four progressive-disclosure callout folds holding all audit-grade
   detail (node detail · all-vaults index · non-vault projects · operator utilities). Resting view ≈1.5 viewports.
