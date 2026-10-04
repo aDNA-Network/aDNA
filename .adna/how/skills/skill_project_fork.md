@@ -2,12 +2,12 @@
 type: skill
 skill_type: agent
 created: 2026-03-23
-updated: 2026-06-19
+updated: 2026-10-04   # v8.12: Step 1.5 (license — recorded as a MANIFEST field, never only asked) · Step 3 provenance stamp on inherited decision records (ADR-060) · Step 4.6 root-shape advisory (ADR-045 companion). The dev-graph and template copies of this skill are reconciled at this release.
 status: active
 category: onboarding
 trigger: "Root CLAUDE.md project creation flow — user wants to create a new project"
 last_edited_by: agent_rosetta
-tags: [skill, project, fork, onboarding, lattice, exemplar_home, hearthstone_p4]
+tags: [skill, project, fork, onboarding, lattice, exemplar_home, hearthstone_p4, licensing, adr_013, adr_060]
 
 requirements:
   tools: []
@@ -72,6 +72,27 @@ Validate the project name (per ADR-009 §1 + §4):
 
 **Home-class fork**: `project_name = Home` (or a `--home` flag) is a recognized special class — it creates the per-node operational vault `Home.aDNA/` and triggers the Hestia governance install in **Step 3.5**. It is normally invoked by the workspace router's Step 0.3 "offer to bootstrap Home" chain (followed by `skill_inventory_refresh` → `skill_node_bootstrap_interview` → `skill_node_health_check`).
 
+### Step 1.5: Ask which license the project takes
+
+**R4 (Step 3) strips the template's `LICENSE` at fork — correctly.** A template must not impose its license on every downstream project. **This step is the other half: the choice must be *recorded*.** Without it a project is born unlicensed **by design** and then placed on a host whose terms assume it is not.
+
+**First read the node default — do not ask for what the node already answered:**
+
+```bash
+grep '^default_new_vault_license:' ~/aDNA/Home.aDNA/who/identity/identity_node.yaml
+```
+
+- **Field present** → use its value as the offered default (`private` maps to `license: unset` in `MANIFEST.md` — *private* is a posture, not an SPDX identifier). Confirm rather than re-ask.
+- **Field absent, or no `Home.aDNA`** → ask:
+
+> "This project needs a license. It won't inherit one from the template — that's deliberate, so the choice is yours. **MIT** is the network default for open work. If this is private or proprietary, or you'd rather decide later, say so and I'll record `unset`. Note that **`unset` restricts where it can be hosted**: the git-ops framework places FOSS-bound work on Codeberg and released-FOSS on GitHub-public, and both key off an actual license."
+
+Record the answer as `license:` in `MANIFEST.md` at **Step 4** — an SPDX identifier (`MIT`, `Apache-2.0`, `BSL-1.1`, …) or the literal `unset`.
+
+⛔ **`unset` is a valid, recorded answer — never a blank and never a skipped field.** *"Undecided"* and *"nobody asked"* must not look identical downstream, and a missing field cannot tell them apart. Write the field either way.
+
+> ⭐ **Why the repair is a *field* and not another prompt.** The node bootstrap interview already *asks* about a default license and names this skill as its consumer — and for months nothing here read the answer. ***Key a condition to the observable it waits for, never to a phase expected to deliver it — a phase can complete by deciding.*** The `license:` field in `MANIFEST.md` is an observable: a node health check can count `license: unset` across a node, and a host-placement rule finally has something to read. **The prompt is convenience; the field is the repair.** Which license a given project should take is an org/legal call, not this skill's.
+
 ### Step 2: Confirm Target Location
 
 The target directory is `<workspace_root>/<project_name>.aDNA/` (the `.aDNA` suffix marks it as an aDNA project — see Standard §3.5).
@@ -110,6 +131,25 @@ git init
 ```
 
 Note: pre-v7.0 the inner `.adna/` had no `.git/` (it was inside the outer `adna/` repo). Post-v7.0 (M03 flatten), `.adna/` IS the cloned repo with its own `.git/`. The `rm -rf .git` step above is required to discard template git history before `git init` creates the fresh repo for the new project.
+
+**Provenance stamp on inherited decision records (ADR-060, v8.12).** Every `what/decisions/adr_*.md` the fork copied from the template was decided *at template altitude* — no fork operator authored it and none can ratify it. Mark each one so a fleet census can exclude inherited rows mechanically; a fork that genuinely re-opens an inherited decision does so by **removing** the stamp, an act visible in its own history. The version is **derived from the copied `CLAUDE.md`**, never typed:
+
+```bash
+# run inside <project_name>.aDNA/ after the cp -r above
+TEMPLATE_VERSION="v$(grep -m1 '^version:' CLAUDE.md | sed -E 's/^version:[[:space:]]*"?([0-9]+\.[0-9]+)"?.*$/\1/')"
+for f in what/decisions/adr_*.md; do
+  grep -q '^provenance:' "$f" && continue          # idempotent: never double-stamp
+  python3 - "$f" "$TEMPLATE_VERSION" <<'PY'
+import sys
+p, v = sys.argv[1], sys.argv[2]
+s = open(p).read()
+assert s.startswith('---\n'), p
+head, sep, rest = s[4:].partition('\n---\n')
+open(p, 'w').write('---\n' + head + f'\nprovenance: template_inherited\ninherited_from_template: "{v}"' + sep + rest)
+PY
+done
+grep -L '^inherited_from_template:' what/decisions/adr_*.md   # must print nothing
+```
 
 This gives the new project:
 - The full `who/what/how/` triad structure
@@ -157,6 +197,7 @@ Edit the forked project's governance files to set up first-run detection:
 - Set `last_edited_by: agent_init`
 - Set `updated: <today's date>`
 - If the user provided a project description in Step 1, update the project description section
+- **Set `license:` to the Step 1.5 answer** — an SPDX identifier or the literal `unset`. The template ships `license: unset`, so a fork that skipped Step 1.5 is *visible* rather than silent. ⛔ Never delete the field.
 
 **STATE.md:**
 - Set `last_edited_by: agent_init`
@@ -181,7 +222,7 @@ Run only when `exemplar_mode == true` (Step 2). The base fork already laid down 
 2. **Materialize each `*.template`**: substitute every `{{var}}` per `SUBSTITUTIONS.md`, then drop the `.template` suffix. The two `{{persona_lower}}_*.css.template` files are renamed with the persona too (e.g. `hestia_accent.css` + `hestia_canvas.css` — the canvas-chrome snippet is **required** for the topology canvas). `HOME.md.template` → `HOME.md` (replaces the base `.adna/HOME.md`). **Callout-fold rule (load-bearing):** each `{{vaults_table}}` / `{{named_projects_table}}` body line must be `>`-prefixed so it renders INSIDE the `> [!abstract]-` / `> [!note]-` disclosure folds — never a `<div>` or a blank-line-bearing markdown table (see `skill_node_bootstrap_interview.md` Step 9(b) + `SUBSTITUTIONS.md`).
    *(Dry-run/skeleton tool: `python smoke_render.py --materialize DIR` renders the whole bundle with a fabricated profile — useful for smoke-testing the overlay, not for production values.)*
 3. **Copy the generators verbatim** (`what/code/build_*.py` — they carry no `{{vars}}`; they read env + inventory at runtime) and rename `topology_relationships.yaml.template` → `topology_relationships.yaml`.
-4. **Lay down the skeleton** (`who/assets/` subdirs incl. the icon classes + `who/curation/curation_schema.yaml` + the `canvasforge/` wrapper + the optional `webforge/` wrapper for web-surface generation — laid down **scaffold-only** and **degrading cleanly when WebForge is absent**, the same optional-with-degradation pattern as `canvas_core` in step 6) and enable **both** CSS snippets under Appearance → CSS snippets.
+4. **Lay down the skeleton** (`who/assets/` subdirs incl. the icon classes + `who/curation/curation_schema.yaml` + the CanvasForge wrapper + the optional WebForge wrapper for web-surface generation — each placed per the vault's wrapper convention (`how/federation/<forge>/` under ADR-045, or flat `<forge>/` where the template still ships flat); the WebForge wrapper is laid down **scaffold-only** and **degrading cleanly when WebForge is absent**, the same optional-with-degradation pattern as `canvas_core` in step 6) and enable **both** CSS snippets under Appearance → CSS snippets.
 5. **Copy `ONBOARDING.md` to the fork root** — the first-run walkthrough the operator reads before anything else; it covers steps 4–6 from the fork's side and is deleted after setup.
 6. **First regen** (after `skill_inventory_refresh` populates inventory): `CANVAS_CORE_HOME=… TOPOLOGY_GENERATED_DATE=$(date +%F) python what/code/build_topology_canvas.py` and `python what/code/build_curation_cards.py` — these fill §Topology and §Gallery. (`CANVAS_CORE_HOME` locates the `canvas_core` producer in `Canvas.aDNA`, ADR-004; the generator degrades with a clear message if absent — `SUBSTITUTIONS.md` §3. Deprecated alias: `CANVASFORGE_CODE`.)
 
@@ -195,13 +236,19 @@ Before the fork is declared done, verify the **4-file root governance kit** is p
 |----------|------|-----------------------|
 | `CLAUDE.md` | master agent context + first-run detection | yes (Step 4) |
 | `AGENTS.md` | root agent-orientation ladder (root → layer → local) | yes (Step 4) |
-| `MANIFEST.md` | project overview, `role: template` stripped | yes (Step 4) |
+| `MANIFEST.md` | project overview, `role: template` stripped, **`license:` recorded** | yes (Step 4) |
 | `STATE.md` | operational snapshot | yes (Step 4) |
 
 ```bash
 for f in CLAUDE.md AGENTS.md MANIFEST.md STATE.md; do
   test -f "<project_name>.aDNA/$f" || echo "KIT-INCOMPLETE: missing $f"
 done
+
+# License predicate (Step 1.5) — the field must EXIST. Its value may legitimately be `unset`.
+grep -q '^license:' "<project_name>.aDNA/MANIFEST.md" \
+  || echo "KIT-INCOMPLETE: MANIFEST.md carries no license: field (Step 1.5 was skipped)"
+grep -q '^license: unset' "<project_name>.aDNA/MANIFEST.md" \
+  && echo "NOTE: license is unset — host placement cannot be established until it is decided"
 ```
 
 Any `KIT-INCOMPLETE` line is a fork failure — re-copy the missing file from `.adna/` and re-stamp it `agent_init` before proceeding. The Step 3 `cp -r .adna/` normally carries all four; this gate catches the historical class where a fork came through a non-standard path and silently shipped without a root `AGENTS.md`.
@@ -209,6 +256,8 @@ Any `KIT-INCOMPLETE` line is a fork failure — re-copy the missing file from `.
 **Genesis-stub carve-out.** A `genesis_planning` fork (SO-1 — persona/identity deferred to its own P0) may defer the *content* of these files to P0, but still receives the kit *files*: a minimal `AGENTS.md` routing stub is orientation, not governance — it makes no identity/persona claim, so SO-1 is respected. The gate checks **presence**, not completeness, for genesis stubs.
 
 **Census hook.** Once every fork ships the complete kit, node health checks (`skill_node_health_check`) treat a missing kit file as **drift**, not ambiguity — a missing root `AGENTS.md` becomes a flaggable finding rather than an "is this intentional?" judgment call.
+
+**Root-shape advisory (v8.12 — advisory only; ADR-045 companion, decision record owed at a later release).** A graph root is **triad + standard files** — that is ADR-045's rule for wrappers and the default for everything else. Before declaring the fork done, list the root (`ls -A <project_name>.aDNA/`) and name any entry that is not `what/ how/ who/`, a governance file, `.obsidian/`, `.adna`-shipped tooling, or a git/Obsidian dotfile. Three exception classes are *recognised* today, each with the artifact that makes it legitimate: a **gitignored sovereign mount** (e.g. `my/`) — only when the ignore-the-whole-subtree property is load-bearing, with a tracked README stub and a rationale note in `who/coordination/`; a **generated build surface** (e.g. `site/`) — with a ledger entry naming the generator and the fold-in trigger; a **back-compat shim symlink** — already governed by the shim-window rule. Everything else folds into a triad leg (question test: *what we know / how we work / who is involved*). This step **reports**; it does not block — the enforcement half (a fork-time check and a health-check upgrade from "count strays" to "flag strays without an exception artifact") ships with its decision record.
 
 ### Step 5: Offer Immediate Onboarding
 
@@ -237,12 +286,13 @@ Confirm to the user:
 | Output | Type | Description |
 |--------|------|-------------|
 | Project directory | Directory | Full aDNA structure at `<workspace_root>/<project_name>/` |
-| Prepared MANIFEST.md | File | `role: template` removed, `agent_init` marker set |
+| Prepared MANIFEST.md | File | `role: template` removed, `agent_init` marker set, `license:` recorded (Step 1.5) |
 | Prepared STATE.md | File | `agent_init` marker set |
 | Prepared CLAUDE.md | File | `agent_init` marker set |
 | Prepared AGENTS.md | File | inherited from `.adna/` root, `agent_init` marker set |
 | Complete 4-file governance kit | Gate | CLAUDE · AGENTS · MANIFEST · STATE presence-verified (Step 4.6) |
 | Fresh git repo | Git | `git init` with no history |
+| Inherited decisions stamped | Frontmatter | every copied `adr_*.md` carries `provenance: template_inherited` + `inherited_from_template` (Step 3, ADR-060) |
 
 ## Error Handling
 

@@ -1,7 +1,7 @@
 ---
 type: directory_index
 created: 2026-02-19
-updated: 2026-07-24
+updated: 2026-10-04
 last_edited_by: agent_rosetta
 tags: [directory_index, templates]
 ---
@@ -55,7 +55,7 @@ These templates have no Templater auto-trigger. Copy their structure manually or
 | `template_quest_result.md` | Side-quest result record | `how/quests/` | `quest_result` | Quest dir mixes definitions + results |
 | `template_side_quest.md` | Side-quest definition | `how/quests/` | `side_quest` | Quest dir mixes definitions + results |
 
-### Operational / Lifecycle Templates (6)
+### Operational / Lifecycle Templates (7)
 
 Vault-agnostic operational templates (manual-apply; not entity-type templates). Added since the original index was written:
 
@@ -64,6 +64,7 @@ Vault-agnostic operational templates (manual-apply; not entity-type templates). 
 | `template_disposition_ledger.md` | Workspace-houseclean disposition ledger (§A–H; §C = standing shim registry) | fleet spring-clean (`skill_workspace_spring_clean`) | `disposition_ledger` |
 | `template_lattice_home_render.md` | Lattice-home render — vault-agnostic terminal cold-start splash | `Home.aDNA/` / any vault root | `template` |
 | `template_ratification_record.md` | Ratification record (ceremony header + per-ADR/decision block) | `what/decisions/` · `how/gates/` | `ratification_record` |
+| `template_ruling_record.md` | Ruling record — one gate sitting: items put, rulings taken, packet pinned to its commit *(v8.12; doc-only `how/gates/` placement convention)* | `how/gates/<gate_id>.md` | `ruling_record` |
 | `template_second_genesis_dossier.md` | Second-genesis intake dossier (9-section read of a stale vault) | new `<Name>.aDNA/` re-genesis intake | `second_genesis_dossier` |
 | `template_workspace_claude.md` | Workspace-root router CLAUDE.md (the `~/aDNA/CLAUDE.md` project-routing file) | workspace root (fork / init) | `template` |
 | `template_STATE_history.md` | STATE-graduation immortal-spine seed (append-only `## Graduated` sections) | `<Vault>.aDNA/` (STATE lifecycle) | `state_history` |

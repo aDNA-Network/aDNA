@@ -3,10 +3,14 @@ type: decision
 adr_id: adr_003
 adr_number: 3
 title: "Claude Code Runtime as Cross-Triad Context Topic"
-status: proposed
+status: accepted   # ratified at template altitude per ADR-060 (2026-09-17); flipped by the v8.12 release gate, never by a fork
 created: 2026-03-27
-updated: 2026-03-28
-last_edited_by: agent_aria
+updated: 2026-10-04
+last_edited_by: agent_rosetta
+template_decision: true
+ratified_in: aDNA.aDNA
+ratified_on: 2026-09-17
+template_version: v8.12
 supersedes:
 superseded_by:
 tags: [adr, decision, claude_code, context, triad, runtime]
@@ -63,3 +67,11 @@ The lattice provides the unified navigation layer: each node references its tria
 ### Neutral
 - Establishes a precedent for how future cross-triad domains should be structured
 - The context_graph lattice type gets a concrete example beyond the existing knowledge_base.lattice.yaml
+
+## Ratification (§7.7) — template altitude
+
+- **Decision:** adopt option 3 as stated above. This decision is in force by construction in every fork — the runtime *is* the environment and `what/context/claude_code/` ships in the template — so it is ratified **once, at template altitude**, rather than left `proposed` in every copy for an operator who did not author it to resolve (the state measured across 26 forks on 2026-09-15).
+- **Ratified-by:** the template maintainer (aDNA.aDNA, the dev graph of this standard), under its decision record ADR-060 *Template decisions carry provenance* (ratified 2026-09-17).
+- **Date:** 2026-09-17 (ratification) · applied to the template at release v8.12, 2026-10-04.
+- **Status:** accepted.
+- **Scope note:** forks copy this file **with** `provenance: template_inherited` (stamped by `skill_project_fork`, v8.12+). A fork that wishes to re-open the decision removes the stamp and sets its own status — an act visible in that vault's history. Existing forks are not modified by this release.

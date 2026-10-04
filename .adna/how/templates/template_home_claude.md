@@ -1,14 +1,14 @@
 ---
 type: governance
 version: "0.1"
-created: {{created_date}}
-updated: {{created_date}}
+created: "{{created_date}}"
+updated: "{{created_date}}"
 status: active
 last_edited_by: agent_init
 _template_version: "8.0"
-node_hostname: {{node_hostname}}
-operator: {{operator}}
-persona: {{persona}}
+node_hostname: "{{node_hostname}}"
+operator: "{{operator}}"
+persona: "{{persona}}"
 tags: [governance, home_adna, node]
 ---
 

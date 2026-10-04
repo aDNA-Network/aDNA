@@ -61,14 +61,17 @@ who/operators/
 
 # Publishing pipeline artifacts (NEW v7.0 — per Obj 5 G-1 + pre-push hook R1)
 deploy/
-dist/                 # publish output dist (also covers Python's dist/ — single line serves both meanings)
+# publish output dist (also covers Python's dist/ — single line serves both meanings)
+# (v8.12: the comment moved off the pattern line — gitignore has no inline comments, so the pattern never matched)
+dist/
 .publish-clone/
 .publish-clone.bak/
 private/
 *.dryrun.log
 
 # Milestone tarballs at repo root (NEW v7.0 — per Obj 5 G-4)
-/*.tar.gz             # only at repo root; preserves tarballs under who/peers/published/ if any
+# only at repo root; preserves tarballs under who/peers/published/ if any (v8.12: comment moved off the pattern line)
+/*.tar.gz
 
 # Note: `*.aDNA/` (workspace-level subproject exclusion) is intentionally OMITTED here per
 # Obj 5 G-2 — the template repo doesn't contain subprojects. The workspace-level

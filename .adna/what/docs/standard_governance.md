@@ -67,6 +67,13 @@ This promise is normative (defined in `adna_standard.md` §15.4):
 
 ### Lightweight RFC Process
 
+> ⛩ **Superseded in practice — annotated at v8.12 (first annotated in the dev graph 2026-09-24), not deleted.** Every release since
+> v8.6 has shipped through a different, operator-fired route: **a decision record (ADR) in the proposing vault → an
+> `idea_upstream_*` filing per `how/skills/skill_upstream_contribution.md` → the `skill_template_release` gate** (dev graph
+> `aDNA.aDNA` → public image `aDNA-Network/aDNA`). That is the normative route today; the issue-label flow below is the
+> pre-release-gate design (`agent_init`, 2026-03-20) and is retained as history. Reconciling this document wholesale rides a
+> release, not a quiet edit.
+
 1. **Open a GitHub Issue** with the `standard-change` label
 2. **Describe**: What you want to change, why, and the impact on existing conformant instances
 3. **Classification**: Is this a minor (additive) or major (breaking) change?

@@ -340,6 +340,11 @@ def check_governance_sync(root, result):
                 continue
             with open(gf_path, "r") as f:
                 content = f.read()
+            # v8.12: HTML comments are version HISTORY, not live claims — the image CLAUDE.md
+            # header carries lines like "Count change: 30→31 templates" that were true when
+            # written and must stay (archive, never delete). Strip them before scanning, or the
+            # first count change after such a line reads as drift against history.
+            content = re.sub(r"<!--.*?-->", "", content, flags=re.S)
             # Look for patterns like "20 templates" or "Templates (20)"
             for m in re.finditer(r"(\d+)\s*templates|Templates?\s*\((\d+)\)", content):
                 documented = int(m.group(1) or m.group(2))
@@ -360,6 +365,7 @@ def check_governance_sync(root, result):
                 continue
             with open(gf_path, "r") as f:
                 content = f.read()
+            content = re.sub(r"<!--.*?-->", "", content, flags=re.S)  # v8.12: history comments are not live claims (see the template scan)
             # Look for patterns like "45 skills" or "Skills (45)"
             for m in re.finditer(r"(\d+)\s*skills|Skills?\s*\((\d+)\)", content):
                 documented = int(m.group(1) or m.group(2))

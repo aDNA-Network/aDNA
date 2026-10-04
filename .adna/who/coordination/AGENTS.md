@@ -1,8 +1,8 @@
 ---
 type: directory_index
 created: 2026-02-17
-updated: 2026-02-19
-last_edited_by: agent_init
+updated: 2026-10-04
+last_edited_by: agent_rosetta
 tags: [directory_index, coordination]
 ---
 
@@ -20,6 +20,9 @@ Files should be named: `note_YYYYMMDD_{topic}.md`
 ---
 created: YYYY-MM-DD
 author: agent_{username}
+from_persona:            # optional (ADR-061)
+from_vault: <Name>.aDNA  # required (ADR-061) — the one value a recipient can resolve on disk
+authority:               # optional (ADR-061) — the ruling or grant the send was made under
 urgency: info | warning | blocking
 expires: YYYY-MM-DD
 ---
@@ -28,6 +31,8 @@ expires: YYYY-MM-DD
 
 Brief description of what other agents need to know.
 ```
+
+**Authorship is three-valued (ADR-061).** Beside the free `author:`/`from:` line a memo carries `from_persona:` (optional), `from_vault:` (**required** — the one value a recipient can resolve on disk) and `authority:` (optional — the ruling or grant it was sent under); `how/templates/template_coordination.md` ships the three fields.
 
 ## Urgency Levels
 

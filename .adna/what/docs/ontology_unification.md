@@ -503,7 +503,7 @@ function detect_collisions(source, target):
 
 **Source instance**: `org_formation` sub-lattice — 12 entity types, deployed as a bare triad within the Lattice Labs vault at `what/lattices/org_formation/`.
 
-**Target instance**: Lattice Labs vault — 22 entity types (14 base + 8 extension), ontology v3.0.
+**Target instance**: Lattice Labs vault — 22 entity types (14 base + 8 extension), ontology v3.0. *(⚠ Worked-example figure, frozen at authoring: the base ontology is **16** entity types since ADR-035 promoted `inventory` + `identity` (aDNA standard v2.3); the example's 14 + 8 arithmetic is kept as written so its merge steps still add up. Annotated at v8.12.)*
 
 **Goal**: Unify the org_formation ontology with the vault ontology, demonstrating every step of the merge algorithm.
 

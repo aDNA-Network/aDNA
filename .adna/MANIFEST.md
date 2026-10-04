@@ -2,7 +2,7 @@
 type: manifest
 role: template
 created: 2026-02-17
-updated: 2026-06-29
+updated: 2026-10-04
 last_edited_by: agent_rosetta
 tags: [manifest, governance]
 ---
@@ -35,7 +35,7 @@ aDNA/
 | Layer | Question | Contains |
 |-------|----------|----------|
 | **what/** | WHAT does this project know? | Context library (5 topics, 27 subtopics), decisions, aDNA docs, lattice YAML tools + schema + examples |
-| **how/** | HOW does this project work? | Missions, sessions, 31 templates, 33 skills, backlog, campaigns, PRD/RFC pipeline |
+| **how/** | HOW does this project work? | Missions, sessions, 32 templates, 33 skills, backlog, campaigns, PRD/RFC pipeline |
 | **who/** | WHO is involved? | People, teams, coordination, governance |
 
 ### Base Ontology
@@ -84,7 +84,7 @@ how/pipelines/prd_rfc/
 └── 04_review/        → Final approval (human gate)
 ```
 
-### Templates (31)
+### Templates (32)
 
 | Template | Auto-triggers in |
 |----------|-----------------|
@@ -129,7 +129,7 @@ how/pipelines/prd_rfc/
 | Lattice YAML tools | Shipped | Validate, convert (YAML↔canvas), JSON Schema, 15 example lattices + 3 canvas templates |
 | Mermaid-enhanced spec docs | Shipped | 19 diagrams across 3 aDNA specification documents |
 | PRD/RFC pipeline | Shipped | 4-stage planning pipeline (research → requirements → design → review) |
-| 31 templates | Shipped | Session, mission, campaign, campaign mission, context, ADR, backlog, coordination, PRD, RFC, skill, AAR, lightweight AAR, strategic compass, campaign CLAUDE.md, registry, data record, folder note, governance, migration, side quest, quest result, workspace CLAUDE.md, home CLAUDE.md, inventory entry, identity entry, ratification record, lattice-home render, second-genesis dossier, disposition ledger, STATE history |
+| 32 templates | Shipped | Session, mission, campaign, campaign mission, context, ADR, backlog, coordination, PRD, RFC, skill, AAR, lightweight AAR, strategic compass, campaign CLAUDE.md, registry, data record, folder note, governance, migration, side quest, quest result, workspace CLAUDE.md, home CLAUDE.md, inventory entry, identity entry, ratification record, lattice-home render, second-genesis dossier, disposition ledger, STATE history, ruling record |
 | Execution hierarchy v2 | Shipped | OODA cascade (3-level evaluation loops), AAR protocol, mission classes, escalation cascade |
 | Quality framework | Shipped | 10-dimension compliance rubric, quality audit skill, context graduation pipeline |
 

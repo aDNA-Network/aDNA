@@ -9,6 +9,12 @@ user: {username}
 started: {ISO_TIMESTAMP}
 status: active
 intent: "Brief description of what this session will do"
+mission:           # optional (v8.12) — the mission_id this session serves, if any
+# lease:           # optional (v8.12) — declare it when you hold a single-writer lease on shared files
+#   mode: exclusive | shared
+#   fence: <monotonic token, e.g. the commit SHA or ISO timestamp the lease was taken at>
+#   read_graphs: []            # other vaults read (not written) under this lease
+#   declared_at: {ISO_TIMESTAMP}
 files_modified: []
 files_created: []
 completed:
