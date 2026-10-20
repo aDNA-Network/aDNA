@@ -38,20 +38,18 @@ lattice:
     - from: target_selection
       to: binder_generation
       label: "target structures"
-      port: target_pdb
       data_mapping:
-        target_structures: pdb_file
+        target_structures: target_pdb
     - from: binder_generation
       to: docking_assessment
       label: "designed sequences"
-      port: designed_sequences
       data_mapping:
         designed_sequences: input_sequences
     - from: docking_assessment
       to: clinical_ranking
       label: "validation results"
       data_mapping:
-        binding_scores: candidate_scores
+        candidate_scores: binding_scores
   fair:
     license: "MIT"
     creators:

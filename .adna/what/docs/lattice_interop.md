@@ -1,11 +1,11 @@
 ---
 type: specification
 title: "Lattice Interop Standard"
-version: "1.0.0"
+version: "1.1.0"   # 2026-10-20: canonical port form {name, node, field} in §2.2/§5.1; §2.3 aliases; §2.5 `port` informative
 created: 2026-02-20
-updated: 2026-02-20
+updated: 2026-10-20
 status: active
-last_edited_by: agent_init
+last_edited_by: agent_rosetta
 token_estimate: ~5500
 tags: [specification, interop, interface, runtime, version-drift, lattice-yaml]
 banner: "who/assets/banners/banner_what.jpg"
@@ -81,14 +81,17 @@ nodes:
       ports:
         inputs:
           - name: input_sequences
-            maps_to: structure_prediction
+            node: structure_prediction
+            field: sequences
             description: "Designed binder sequences for validation"
           - name: input_complexes
-            maps_to: interface_analysis
+            node: interface_analysis
+            field: complex_structures
             description: "Pre-computed complex structures (bypass prediction)"
         outputs:
           - name: candidate_scores
-            maps_from: ranking
+            node: ranking
+            field: binding_scores
             description: "Ranked binding assessment results"
 ```
 
@@ -100,6 +103,8 @@ nodes:
 | `entry_nodes` | Yes | Nodes that accept external input, with typed `accepts` map |
 | `exit_nodes` | Yes | Nodes that produce external output, with typed `produces` map |
 | `ports` | Recommended | Named input/output ports for seam edge binding |
+
+**Canonical spelling** (v1.1, 2026-10-20 — the lattice master's ruling): `entry_nodes` and `exit_nodes` are **lists** of `{id, accepts}` / `{id, produces}`, and each port is **`{name, node, field}`** (optional `description`) under the plural **`inputs`** / **`outputs`**. `node` names an entry (or exit) node of this lattice; `field` names the field on it that the port binds. Three older spellings still validate as **deprecated aliases**: the map form of `entry_nodes`/`exit_nodes` (keyed by node id), the singular `input`/`output`, and `maps_to`/`maps_from` (which name a node but not a field). Use one form per list. The `binder_generation` example shows the canonical form. *Plain version:* a port says which node and which of its fields an outside graph plugs into, not just which node.
 
 **Schema validity**: `lattice_interface` is a valid node — `id` matches `^[a-z][a-z0-9_]*$`, `type: process` is in the enum, and `config` allows arbitrary keys. The node has no edges connecting it to operational nodes — it is a metadata-only declaration.
 
@@ -132,7 +137,7 @@ edges:
     label: "binder candidates"
     data_mapping:
       designed_sequences: input_sequences     # maps to child port name
-    port: structure_prediction                # target entry node
+    port: structure_prediction                # informative: names the entry node for a reader
   - from: docking_assessment
     to: clinical_ranking
     label: "validation results"
@@ -140,7 +145,7 @@ edges:
       candidate_scores: binding_scores        # maps from child port name
 ```
 
-The `port` field on an edge (already in the schema) identifies which child entry node receives the data. The `data_mapping` keys correspond to the interface port names declared in `config.ports`.
+The `data_mapping` carries the wire: each key is a source output and each value is the receiving field. On a seam edge, the child-side name is a port declared in the child's `config.ports`: an input port as the value going in, an output port as the key coming out. The `port` field on an edge (already in the schema) is **informative, not wiring** (v1.1): it may name the child entry node for a human reader, but no tool routes data by it, and a lattice that omits it composes the same way.
 
 ---
 
@@ -371,11 +376,13 @@ nodes:
       ports:
         inputs:
           - name: input_sequences
-            maps_to: structure_prediction
+            node: structure_prediction
+            field: sequences
             description: "Binder sequences for validation"
         outputs:
           - name: candidate_scores
-            maps_from: ranking
+            node: ranking
+            field: binding_scores
             description: "Ranked binding assessment results"
 ```
 

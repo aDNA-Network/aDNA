@@ -28,6 +28,40 @@ Changelog entries are organized by **governance version** (primary heading). Sta
 
 ---
 
+## [v8.13] — 2026-10-20
+
+> **Governance 8.12 → 8.13 · Standard track: v2.5 → v2.6** — operator-ratified **standard minor** release. The standard gains conformance profiles, release integrity, an optional data-tier label and three new practice sections; the validators and the lattice examples catch up with what the standard says. **Count change: 32 → 33 templates · 33 → 34 skills.** Minor (§15.4): no instance that conformed to v2.5 stops conforming.
+
+### Standard (v2.6)
+- **§5.5 conformance profiles.** A profile is a named, versioned overlay on one conformance level, declared `adna_conformance: <level>+<profile>` with `adna_profile_version:`. It keeps every base MUST and relaxes none; a validator that does not know the profile checks the base level and reports the profile as *unverified*, never failed. `who/coordination/` is optional at Starter when one agent writes the instance (§5.5 · §11.3). `token_estimate` gets a stated method, `ceil(bytes / 4)`.
+- **§15.5 release integrity** (new): a release carries `manifest_sha256.txt` at its root, computed by a stated algorithm, so a copy can be checked against its release. **§15.1** gains archive-don't-delete language and a purge exception for secrets and regulated data, leaving a payload-free incident record. **§7.2** gains the optional `data_tier: GREEN | AMBER | RED` label.
+- **§5.3** states the `federation_ref` minimum; **§6.4** adds the `adr_` · `campaign_` · `coord_` prefixes; **§19.6** asks that an ADR number be qualified by the vault that holds it wherever it is cited outside that vault.
+- **New §19.7 Graph Exchange · §19.8 Campaigns · §19.9 Memorialized Data Models** (one master, many generated faces, each face pinned to its master's hash).
+
+### Added
+- **`how/skills/skill_mesh_probe_discipline.md`** (+1 skill) — *new process skill `skill_mesh_probe_discipline`, the probe half of `pattern_channel_proof`*: eight rules for any reachability claim about a mesh peer, with mesh specifics as `{{MESH_NAME}}` · `{{MESH_CIDR}}` · `{{HEALTH_SURFACE}}` tokens and RFC 5737 examples only.
+- **`what/patterns/pattern_channel_proof.md`** — the consuming side proves a channel; a read-back from the provisioning side leaves it *provisioned*.
+- **`how/templates/template_profile_spec.md`** (+1 template) and **`what/docs/profiles/AGENTS.md`** — the skeleton a steward writes a profile in, and the standard's list of named profiles (a list, not a library; listing certifies nothing; empty at this release).
+- **Derivability, the 11th compliance dimension** (`compliance_checker.py`, gap G-015): a registry-class object names its consumer or its discovery pass.
+- **Stamp-currency check** in `adna_validate.py`: a warning when a stamp disagrees with what it stamps; an unverifiable stamp never fails.
+- **`what/lattices/tools/faces/`** — `lattice_validate.py` now reads its enums from a vendored, hash-pinned LinkML face (`faces/upstream.json`). In a fork the master is absent, so the pin reads *unverifiable* by design.
+
+### Fixed
+- **`deep_research.lattice.yaml`**: the two review-gate conditions now test membership (`effort_level in [...]`); before, a comprehensive run skipped the review gate. **`claude_code.lattice.yaml`**: `runtime` moves under `execution` and the stray `updated` key is dropped — *forks carry the old file until their next upgrade.* `binder_generation`, `full_therapeutics` and `composed_therapeutics` now use the canonical interface form (`lattice_interop.md` v1.1.0).
+- **Compliance-dimension text** in `CLAUDE.md` and `adna_reference.md` said "10 dimensions, 0–5 each, 50 max"; the checker has always scored 0–3. It now reads 11 dimensions, 0–3, 33 max.
+- **The four example canvases now carry the Canvas Standard v2.5.0 partition**: `hello_world` is a generated view of its lattice, and the three templates are primary and claim no source. Forks made before v8.13 keep the old `authority: "view"` stamp until their next upgrade.
+- **`skill_l1_upgrade.md` no longer carries a real overlay address**; it uses placeholders resolved in your node vault, with RFC 5737 examples. Forks made before v8.13 carry the literal until their next upgrade.
+- `how/templates/AGENTS.md` index line said 31 templates / 6 operational against a table of 32 / 7; it now matches disk (33 / 8).
+
+### Changed
+- Template rows: `template_aar` §Carries · `template_campaign` · `template_campaign_mission` and `template_mission` §Premise pass + §Descoped · `template_session` `issued_by:` / `continues:` and open-and-seal reads · `template_aar_lightweight` §Boundary.
+- `what/ontology.md` Base Invariance row cites its one recorded exception; `entity_count` derived as 27 (16 base + 11 extension rows; worked-example rows uncounted); `completed` canonical, `complete` an alias. Date-loader note: frontmatter dates are read as ISO strings before validation.
+- Governance and standard badges bumped (root + `.adna/` READMEs); `MANIFEST.md` standard row v2.5 → v2.6.
+
+*Released via `skill_template_release` at the operator's release gate (governance 8.12 → 8.13; standard v2.5 → v2.6). Two decision records planned for this release move to v8.14.*
+
+---
+
 ## [v8.12] — 2026-10-04
 
 > **Governance 8.11 → 8.12 · Standard track: v2.5 (unchanged)** — operator-ratified **memo-derived** release: every row traces to an inbound coordination memo answered 2026-09-24 / 2026-10-03 or to a decision ratified 2026-09-17 / 2026-10-03. Decision provenance at template altitude (ADR-060), three-valued memo authorship (ADR-061), one additive template touch (gate states · executor lane · harness · session lease), a ruling-record template, two image-only repairs (a YAML seed that did not parse; two `.gitignore` patterns that never matched) and the advisories below. **Count change: 31 → 32 templates; skills unchanged at 33.**

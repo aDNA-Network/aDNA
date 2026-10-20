@@ -80,7 +80,7 @@
               },
               "type": {
                 "type": "string",
-                "description": "Node type. Aligned with AgentNodeType enum (objects/agents/modes.py). Module=reference to a Lattice module. Dataset=reference to a Lattice dataset. Process=generic processing step. Reasoning=LLM reasoning step (hybrid/reasoning mode).",
+                "description": "Node type. Aligned with AgentNodeType enum (objects/agents/modes.py). Module=reference to a Lattice module. Dataset=reference to a Lattice dataset. Process=generic processing step. Reasoning=LLM reasoning step (hybrid/reasoning mode). Recorded divergence (v8.13, operator ruling R48): the LinkML generated face that lattice_validate.py reads (tools/faces/lattice.schema.json) also admits agent, the face's ruled divergence matching the five node kinds of the Lattice Protocol runtime; this canonical enum keeps four until the master is adopted, which aDNA.aDNA ADR-067 makes a separate decision. A lattice using type agent passes lattice_validate.py and fails this schema.",
                 "enum": ["module", "dataset", "process", "reasoning"]
               },
               "ref": {
@@ -143,7 +143,7 @@
               },
               "condition": {
                 "type": "string",
-                "description": "Condition expression for conditional edges. Edge is only traversed when condition evaluates to true. Maps to AgentEdge.condition.",
+                "description": "Condition expression for conditional edges, written in CEL (Common Expression Language; LinkML.aDNA ADR-018). Edge is only traversed when condition evaluates to true. Compare ordered values with `in [...]` membership, not string `<`/`>=` (CEL compares strings lexically). This schema does not parse the expression. Maps to AgentEdge.condition.",
                 "examples": ["results.confidence > 0.8", "data.size > 0", "iteration < max_iterations"]
               }
             }

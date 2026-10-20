@@ -1,8 +1,8 @@
 ---
 type: context
-title: "aDNA Universal Standard v2.5"
+title: "aDNA Universal Standard v2.6"
 created: 2026-02-11
-updated: 2026-07-02
+updated: 2026-10-20
 status: approved
 last_edited_by: agent_rosetta
 tags: [adna, standard, spec, normative]
@@ -14,6 +14,8 @@ tags: [adna, standard, spec, normative]
 <!-- v2.3 errata | 2026-06-29 | §3.5 reconciled to ADR-006 (repo rename Agentic-DNA→aDNA) + ADR-008 (airlock embedding at .adna/): base template is the `aDNA` repo embedded at `.adna/`, not a visible `Agentic-DNA/` dir. No normative change. -->
 <!-- v2.4 | 2026-06-29 | §6.5 Rename Protocol (rename-time self-routing sweep) + §13.2 Tier-1 harness-injection safeguard (ADR-042, Drydock M03 fork-template hygiene & rename protocol). -->
 <!-- v2.5 | 2026-07-02 | §7.2 per-class frontmatter profile + §5.5 walk scope (ADR-044 fold) · new §7.7 decision-record ratification discipline · §5.3 federation/ optional row (ADR-045) · §15.4 version-cut checklist. ADR-046, ratified at Champollion G2. -->
+<!-- v2.6 | 2026-10-20 | §4.1 read against §5.5 + §15.1 archive-don't-delete (aDNA.aDNA ADR-063 E-1 · E-2) · §5.5 conformance profiles `<level>+<profile>` + `who/coordination/` optional at Starter (§5.5 · §11.3) + §7.2 optional `data_tier` + §15.1 purge exception + new §15.5 release integrity (aDNA.aDNA ADR-066 clauses 1–4) · §5.3 `federation_ref` minimum + `exchange/` example · §5.5 `token_estimate` method · §6.4 `adr_`/`campaign_`/`coord_` prefixes + §19.6 ADR numbering (ARCADE R10) · new §19.7 Graph Exchange · §19.8 Campaigns · §19.9 Memorialized Data Models (aDNA.aDNA ADR-067) — ARCADE G4, operator R43. Minor: no v2.5-conformant instance un-conforms (§15.4). -->
+<!-- v2.6 errata | 2026-10-20 | §19.9 item 2 'exactly as committed, with no normalization' restored · item 5 admits a pin file for a byte-for-byte copy (path + full sha256), the check compares the copy with the master's hash, item 4 reconciled · roster sentence: held by its steward graph, not publicly readable — Noether's 2026-10-20 post-fold read; operator R51–R52, before publication. The text now agrees with aDNA.aDNA ADR-067 L75 (Q5). No instance un-conforms; one that held a pinned byte copy now conforms (§15.4). -->
 
 **Agentic DNA (aDNA)** — A knowledge architecture standard for AI-native projects.
 
@@ -230,9 +232,11 @@ The following ALLCAPS files constitute the governance layer:
 |------|----------|---------|----------------|
 | **CLAUDE.md** | MUST | Agent root context — persona, project map, safety rules, startup protocol | When structure or protocols change |
 | **MANIFEST.md** | MUST | Static project overview — what the project is, architecture, entry points | When project scope or architecture changes |
-| **STATE.md** | SHOULD | Dynamic operational state — current phase, blockers, recent decisions, next steps | Every session close-out |
-| **AGENTS.md** | MUST | Root-level agent guide — directory purpose, key files, patterns | When directory structure changes |
+| **STATE.md** | MUST (Standard+) · SHOULD (Starter) | Dynamic operational state — current phase, blockers, recent decisions, next steps | Every session close-out |
+| **AGENTS.md** | MUST (Standard+) · SHOULD (Starter) | Root-level agent guide — directory purpose, key files, patterns | When directory structure changes |
 | **README.md** | MUST | Root-level human guide — navigation, setup, how to browse | When onboarding experience changes |
+
+Requirement levels in this table are read against the conformance level declared in §5.5; where the two disagree, §5.5 governs (v2.6, aDNA.aDNA ADR-063 E-1).
 
 ```mermaid
 flowchart LR
@@ -454,7 +458,9 @@ how/ contains everything about HOW the project works.
 | `skills/` | Reusable agent procedures (see §19.3) |
 | `processes/` | Human-readable workflow documentation |
 | `deliverables/` | Output artifacts |
-| `federation/` | Consumer federation wrappers — one `<wrapper>/` per federated software-element/service graph (v2.5, ADR-045) |
+| `federation/` | Consumer federation wrappers — one `<wrapper>/` per federated software-element/service graph (v2.5, ADR-045) (e.g. `how/federation/exchange/` for a graph published through an aDNA Exchange, §19.7) |
+
+A federation wrapper's `CLAUDE.md` SHOULD carry a `federation_ref:` block naming at least `source_vault` and `version` (the version is recorded as the source states it, never normalised), and SHOULD add `pinned_at_commit` when it pins a commit. A reader treats the block as what the consumer **declares**, not as a fact the source has verified (v2.6).
 
 ### 5.4 Universal Skeleton
 
@@ -522,7 +528,7 @@ An aDNA instance at Starter conformance MUST have:
 
 1. **Governance files**: `CLAUDE.md`, `MANIFEST.md`, `README.md` at the root (bare) or repository root (embedded)
 2. **Triad directories**: `what/`, `how/`, `who/` (bare) or `.agentic/what/`, `.agentic/how/`, `.agentic/who/` (embedded)
-3. **Required subdirectories**: `what/context/`, `how/missions/`, `how/sessions/`, `how/templates/`, `who/coordination/`, `who/governance/`
+3. **Required subdirectories**: `what/context/`, `how/missions/`, `how/sessions/`, `how/templates/`, `who/governance/` — plus `who/coordination/` when more than one agent writes the instance (v2.6, aDNA.aDNA ADR-066 clause 3)
 4. **Frontmatter**: All content files inside the triad MUST include the base fields defined in §7.2, per its per-class profile (`type`, `status`, `created`, `updated`, `last_edited_by`, `tags`; `status` optional for `directory_index` + `coordination` — v2.5, ADR-044)
 
 Starter conformance represents the minimum viable aDNA instance — sufficient for a single-agent project with basic session tracking.
@@ -535,7 +541,7 @@ An aDNA instance at Standard conformance MUST satisfy all Starter requirements A
 
 5. **Additional governance files**: `STATE.md` and a root `AGENTS.md`
 6. **Per-directory AGENTS.md**: Every triad leg (`what/`, `how/`, `who/`) MUST have an `AGENTS.md` file
-7. **Recommended directories**: `what/decisions/`, `how/backlog/`, `how/sessions/active/`, `how/sessions/history/`
+7. **Recommended directories**: `what/decisions/`, `how/backlog/`, `how/sessions/active/`, `how/sessions/history/`, `who/coordination/`
 8. **Session lifecycle**: Sessions MUST follow the lifecycle defined in §8 (creation → execution → close-out with SITREP)
 
 Standard conformance represents an active multi-agent project with operational discipline.
@@ -544,7 +550,7 @@ Standard conformance represents an active multi-agent project with operational d
 
 An aDNA instance at Full conformance MUST satisfy all Standard requirements AND:
 
-9. **Context library**: `what/context/` MUST contain at least one topic directory with its own `AGENTS.md` and at least one context file with `token_estimate` in frontmatter
+9. **Context library**: `what/context/` MUST contain at least one topic directory with its own `AGENTS.md` and at least one context file with `token_estimate` in frontmatter `token_estimate` SHOULD be computed as `ceil(bytes / 4)` over the file's UTF-8 bytes unless the instance's `MANIFEST.md` declares another method (v2.6).
 10. **FAIR metadata**: Deployable objects (modules, datasets, lattices) MUST include a `fair:` frontmatter block with at minimum `keywords` and `license`
 11. **Ontology artifact**: `what/ontology.md` MUST exist with a Mermaid ER diagram (per §5.1)
 12. **Template compliance**: All content types used in the project MUST have corresponding templates in `how/templates/`
@@ -556,10 +562,25 @@ Full conformance represents a mature, federatable aDNA instance ready for cross-
 Projects MAY declare their conformance level in `MANIFEST.md` using the `adna_conformance` frontmatter field:
 
 ```yaml
-adna_conformance: starter  # or: standard, full
+adna_conformance: starter  # or: standard, full — or <level>+<profile>, e.g. starter+medical (v2.6)
 ```
 
 An instance that does not declare a conformance level is assumed to be unverified. The `adna_validate.py` tool (see `what/lattices/tools/`) can determine conformance level programmatically.
+
+#### Profiles (v2.6, aDNA.aDNA ADR-066 clause 1)
+
+A **profile** is a named, versioned overlay on exactly one conformance level. A profile MUST keep every MUST of its base
+level, MAY add requirements of its own, and MUST NOT relax a base MUST. An instance declares it as
+`adna_conformance: <level>+<profile>` (profile names are snake_case, §6.1) with `adna_profile_version: <semver>`.
+A validator that does not know a profile MUST evaluate the base level and report the profile as unverified; it MUST NOT
+fail the instance for the suffix. A release of a declared profile MUST carry a release manifest (§15.5).
+
+**Named profiles.** The standard lists profiles; it does not host them. A profile's text and releases stay with its
+steward. Listing is recorded by the standard's maintainer at the steward's request (§7.7) and certifies nothing.
+
+| Profile | Steward | Version | Release manifest root | Status |
+|---|---|---|---|---|
+| *(none listed yet)* | | | | |
 
 ---
 
@@ -616,6 +637,9 @@ The `type_` prefix pattern is RECOMMENDED for aDNA content files. It enables sor
 | `context_` | Context library files |
 | `idea_` | Backlog ideas |
 | `skill_` | Skill procedures |
+| `adr_` | Architecture Decision Records (§19.6) |
+| `campaign_` | Campaign directories and charters (§19.8) |
+| `coord_` | Coordination notes (§11) |
 
 ### 6.5 Rename Protocol
 
@@ -664,6 +688,11 @@ tags: []
 | `tags` | Categorization array for filtering and discovery |
 
 **Per-class profile** (v2.5, ADR-044): the six base fields are required for content and session entities. **`status` is optional for `type: directory_index` and `type: coordination`** — an index or correspondence record has no lifecycle state, and their canonical templates omit it. The other five base fields remain required for all classes.
+
+**Optional base label** (v2.6, aDNA.aDNA ADR-066 clause 4a): `data_tier: GREEN | AMBER | RED`. It records how far a
+file's content may travel (GREEN ⊂ AMBER ⊂ RED in what may be seen). The value space is the fleet's `DataTier`
+(LatticeProtocol `lattice_core`; LinkML.aDNA compliance slots); this standard names the key and mints no values. A profile
+MAY make it required and MAY narrow it. It is a label, never data.
 
 ### 7.3 Tag Conventions
 
@@ -935,7 +964,7 @@ A coordination note MUST include:
 - **When** it was created and when it expires
 - **Action needed** — what the target agent should do
 
-Agents MUST check `who/coordination/` during every session startup.
+Agents MUST check `who/coordination/`, when it exists, during every session startup.
 
 ---
 
@@ -1118,6 +1147,14 @@ The archive pattern varies by environment:
 - `archive/` subdirectories for visibly-deprecated items (documents users should see are retired)
 - Session history follows the same `YYYY-MM/` pattern regardless of environment
 
+**Archive-don't-delete** (both environments; v2.6, aDNA.aDNA ADR-063 E-2): governance records, decisions, mission and session
+files are archived — moved under `archive/`, `history/`, or kept in git history with a status flip — never deleted.
+Deletion of a record is itself a recorded decision.
+
+**Purge exception** (v2.6, aDNA.aDNA ADR-066 clause 4b): secrets, and regulated data (RED material, or data under a legal
+erasure duty), found where they must not be MUST be purged from the working tree and from history. The purge leaves an
+incident record that holds no payload — class, location, date, actor, and how the purge was verified.
+
 ### 15.2 Retention
 
 Session history SHOULD NOT be auto-deleted. Manual cleanup after 6 months is acceptable if storage is a concern.
@@ -1142,6 +1179,26 @@ The aDNA standard uses two versioning tracks:
 - Governance version changes are operational and do not affect standard conformance.
 
 **Version-cut checklist** (v2.5, ADR-046 — the footer-lag anti-recurrence rule): on every version bump, the document's four version-bearing surfaces MUST agree before the cut commits — (1) the frontmatter `title`, (2) the frontmatter `updated` date, (3) a new changelog comment line in the header block, and (4) the *End of …* footer line. A cut that leaves any of the four stale is incomplete. *(This rule exists because the footer lagged the title across multiple historical bumps — most recently shipping "v2.3" inside the published v2.4 document.)*
+
+### 15.5 Release Integrity (v2.6, aDNA.aDNA ADR-066 clause 2)
+
+A release MAY ship `manifest_sha256.txt` at its root; a release of a declared profile (§5.5) MUST.
+
+- **Input**: the files listed by `git ls-files -s` at the release commit, minus the manifest and any paths the header
+  declares excluded. Untracked files are never in a manifest.
+- **Normalization** (checked, never applied): UTF-8 without BOM, LF line endings; relative, `/`-separated,
+  NFC-normalized paths with no `..`, leading `/`, or newline. A validator rejects un-normalized input. Hashes are over
+  raw bytes.
+- **Lines**: `<sha256-hex>  <git-mode>  <path>`, two-space separated, sorted by bytewise-ascending path; a symlink
+  (`120000`) hashes its target string.
+- **Header** (bound into the root): `# adna-release-manifest v1`, `# profile:`, `# profile_version:`, `# upstream:`
+  (standard version and commit), `# scope: release | instance_profile`, `# algorithm: sha256`, `# files:`, `# excluded:`.
+- **Root**: `# root: <sha256>` over the exact bytes of every line above it, each terminated by `\n`.
+
+`scope: instance_profile` covers the rule surface a profile defines. It MUST include the governance files and any
+module that changes data egress or model routing. An instance whose instance-profile root equals the release's (after
+declared modules) runs unmodified rules. A manifest root identifies files; it is not a package address, and neither
+stands in for the other. Anchoring a root anywhere external is outside this standard.
 
 ---
 
@@ -1299,7 +1356,7 @@ flowchart TB
 
 ## 19. Optional Extensions
 
-> **Scan**: Six opt-in subsystems — machine registry, backlog, skill files, testing/CI awareness, reference code, ADRs. Adopt based on need.
+> **Scan**: Nine opt-in subsystems — machine registry, backlog, skill files, testing/CI awareness, reference code, ADRs, graph exchange, campaigns, memorialized data models. Adopt based on need.
 
 The following patterns are available but not required. Projects adopt them based on need.
 
@@ -1377,7 +1434,42 @@ Lightweight records of significant project decisions.
 
 **Template sections**: context, decision, consequences.
 
+**Numbering** (v2.6): an ADR number SHOULD be qualified by the vault that holds it wherever it is cited outside that vault (`aDNA.aDNA ADR-066`, not `ADR-066`). A campaign that numbers its own ADRs SHOULD prefix them with the campaign's one-letter code (`ADR-B08` is a campaign's ADR 08, not the vault's `ADR-008`).
+
 ADRs are knowledge artifacts — decisions outlive the process that produced them. A 2-year-old ADR is reference knowledge, not an active operation. This is why they live in what/, not how/.
+
+### 19.7 Graph Exchange
+
+*Decision: v2.6 (ARCADE G4)*
+
+A graph MAY be published, discovered and fetched as an artifact through an aDNA Exchange. The standard-side contract is `aDNA.aDNA/what/specs/spec_graph_exchange.md`; it cites the Exchange's own specifications and copies none of them. A publishing graph places its consumer wrapper at `how/federation/exchange/` (§5.3).
+
+### 19.8 Campaigns
+
+*Decision: v2.6 (ARCADE G4)*
+
+A project MAY organise work above the mission (§9) as **campaigns**: Campaign → Mission → Objective, each level narrowing the context the next one needs.
+
+- **Containment**: a campaign lives at `how/campaigns/campaign_<name>/` with its charter; its missions live at `how/campaigns/campaign_<name>/missions/`. Standalone missions stay in `how/missions/`.
+- **Phases and gates**: a campaign runs in phases, and the gate between two phases is a human gate. The ruling is recorded per §7.7; an agent SHOULD NOT advance a campaign across a gate without it.
+- **After-action review**: a mission SHOULD carry a short after-action review (what worked · what didn't · the finding · the change · the follow-up) before it is set `status: completed`.
+- **Archive-don't-delete** (§15.1): campaign, mission and session records are completed or abandoned, never removed.
+- **OODA cascade** (MAY): each level MAY run an observe–orient–decide–act loop; anomalies escalate upward (session → mission → campaign) and restructuring flows downward.
+
+### 19.9 Memorialized Data Models
+
+*Decision: aDNA.aDNA ADR-067 (v2.6)*
+
+A data model **qualifies** when a graph other than its owner's reads, validates against, or copies it; the owner judges. A conforming instance that owns a qualifying model:
+
+1. SHOULD hold it as one master and generate its other surfaces from that master rather than write them by hand. The master SHOULD be LinkML (aDNA.aDNA ADR-062 clause 2); a master in another schema language is not nonconformant.
+2. SHOULD stamp each generated face with the master's path and the first 16 hex characters of its sync hash (sha256 over the master's bytes, exactly as committed, with no normalization). The stamp is a pattern, not a literal: `GENERATED — DO NOT EDIT. Master: <path …>  <label>: <16 hex>`, where `<label>` is `sync_hash`, or `source_sha256` on a face whose own standard uses `sync_hash` for another value (a canvas). The path part MAY carry a parenthetical. A face whose format cannot hold a stamp MAY carry it in a sidecar file.
+3. SHOULD record the full 64-hex sync hash on the master's descriptor.
+4. SHOULD keep one check that recomputes the sync hash, regenerates every face, and fails on any difference; the check trusts no value it finds recorded.
+5. SHOULD treat a copy of the master held in another graph as a generated face: the copy carries the stamp, or, for a byte-for-byte copy, the copying graph keeps a pin file that records the master's path and its full sha256; either way, the copying graph's check compares the copy with the master's hash. Item 4 binds the owner's check; a pin is the copier's record of what it copied, and the copier's check recomputes the master's hash wherever the master is present.
+6. MAY apply all of the above to a model read only inside its owning graph.
+
+Where the face is a canvas, the Canvas Standard's own sync block governs: `_reserved.sync.sync_hash` is the canvas topology hash, and the master's hash is carried as `source_sha256`. A validator that checks stamps reports a mismatch as a warning and a stamp whose master is absent as unverifiable, never as a failure. The qualifying models known at the cut are listed, informatively, in the roster that accompanies aDNA.aDNA ADR-067; the roster is held by its steward graph (LatticeProtocol.aDNA) and is not publicly readable, so a public reader learns that it exists and who holds it, not its rows. A sync hash identifies one master and a release manifest (§15.5) identifies a release's files; neither stands in for the other.
 
 ---
 
@@ -1519,4 +1611,4 @@ This appendix maps every design decision to its location in the standard, ensuri
 
 ---
 
-*End of aDNA Universal Standard v2.5*
+*End of aDNA Universal Standard v2.6*

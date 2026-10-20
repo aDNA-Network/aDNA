@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""aDNA Compliance Checker — scores vault objects across 10 compliance dimensions.
+"""aDNA Compliance Checker — scores vault objects across 11 compliance dimensions.
 
 Validates objects against the aDNA Universal Standard v2.5 and produces
 YAML scorecards and Markdown reports.
@@ -65,6 +65,15 @@ DISCOVERY_MAP: dict[str, list[str]] = {
     "context": ["what/context/**/*.md"],
     "hardware": ["what/hardware/hardware_*.md"],
     "manifest": ["how/campaigns/**/.campaign.yaml"],
+    # Registry-class objects (d11): hand-maintained lists, found by name. A registry
+    # that is not named like one is still a registry; declare it with
+    # `subtype: registry` and a `*_registry.md` / `*_index.md` name.
+    "registry": [
+        "what/**/*_registry.md",
+        "who/**/*_registry.md",
+        "what/**/*_index.md",
+        "who/**/*_index.md",
+    ],
 }
 
 EXCLUDE_NAMES = {"AGENTS.md", "README.md", "CLAUDE.md", "STATE.md"}
@@ -97,7 +106,10 @@ VALID_FM_TYPES: dict[str, set[str] | None] = {
     "context": None,  # accepts any type starting with "context" (see CONTEXT_TYPES)
     "hardware": {"hardware"},
     "manifest": None,  # YAML files, no frontmatter type check
+    "registry": None,  # found by name; any frontmatter type except those below
 }
+# A memo or a pattern *about* a registry is named like one but is not one.
+REGISTRY_EXCLUDED_FM_TYPES = {"coordination", "pattern"}
 
 CANONICAL_IO_TYPES = frozenset(
     {
@@ -126,7 +138,7 @@ CANONICAL_IO_TYPES = frozenset(
 REQUIRED_FM_FIELDS = {"type", "created", "updated", "status", "tags", "last_edited_by"}
 SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+")
 
-ALL_DIMS = [f"d{i:02d}" for i in range(1, 11)]
+ALL_DIMS = [f"d{i:02d}" for i in range(1, 12)]
 DIM_NAMES = {
     "d01": "triad",
     "d02": "governance",
@@ -138,21 +150,28 @@ DIM_NAMES = {
     "d08": "registration",
     "d09": "companion",
     "d10": "reproducibility",
+    "d11": "derivability",
 }
+# Each dimension scores 0-3, so the maximum total is 3 x 11 = 33.
+MAX_TOTAL = 3 * len(ALL_DIMS)
 
 # N/A dimensions per type (scored as 3 in totals)
 # Skills: HOW-layer skills are EXEMPT-AS-POLICY from d04/d07/d08 (FAIR ·
 # federation · registry-readiness) per Champollion G3-D5 (2026-07-02) — the same
 # posture as the pre-existing d05/d06/d09/d10 exemptions. A skill that federates
 # MAY still carry those blocks voluntarily; they are not scored as mandatory.
+# d11 (derivability) applies to registry-class objects only, so it is N/A for every
+# other type; scored 3 there, it moves each existing total by exactly +3, and the tier
+# thresholds below moved by the same +3, so no existing object changes tier.
 NA_MAP: dict[str, list[str]] = {
-    "module": [],
-    "dataset": ["d02", "d08"],
-    "lattice": ["d02", "d08"],
-    "skill": ["d04", "d05", "d06", "d07", "d08", "d09", "d10"],
-    "context": ["d04", "d05", "d06", "d07", "d08", "d09", "d10"],
-    "hardware": ["d02", "d04", "d05", "d08", "d09"],
-    "manifest": ["d02", "d04", "d05", "d06", "d07", "d08", "d09", "d10"],
+    "module": ["d11"],
+    "dataset": ["d02", "d08", "d11"],
+    "lattice": ["d02", "d08", "d11"],
+    "skill": ["d04", "d05", "d06", "d07", "d08", "d09", "d10", "d11"],
+    "context": ["d04", "d05", "d06", "d07", "d08", "d09", "d10", "d11"],
+    "hardware": ["d02", "d04", "d05", "d08", "d09", "d11"],
+    "manifest": ["d02", "d04", "d05", "d06", "d07", "d08", "d09", "d10", "d11"],
+    "registry": ["d04", "d05", "d06", "d07", "d08", "d09", "d10"],
 }
 
 FEDERATION_CRITICAL = {"module", "dataset", "lattice"}
@@ -183,7 +202,7 @@ class ComplianceResult:
     na_dims: list[str] = field(default_factory=list)
     gaps: list[str] = field(default_factory=list)
     total: int = 0
-    max_total: int = 30
+    max_total: int = MAX_TOTAL
     pct: float = 0.0
     tier: int = 3
 
@@ -274,6 +293,9 @@ def discover_objects(
                     elif obj_type == "context":
                         if not fm_type.startswith("context"):
                             continue
+                    elif obj_type == "registry":
+                        if fm_type in REGISTRY_EXCLUDED_FM_TYPES:
+                            continue
 
                 results.append((path, obj_type))
 
@@ -287,9 +309,10 @@ def discover_objects(
 
 def compute_tier(total: int, scores: dict[str, int], object_type: str) -> int:
     """Classify object into compliance tier (1=critical, 2=gaps, 3=compliant)."""
-    if total < 15:
+    # Was < 15 / >= 23 out of 30; +3 for d11 (N/A outside registries).
+    if total < 18:
         return 1
-    if total >= 23:
+    if total >= 26:
         return 3
     return 2
 
@@ -301,7 +324,7 @@ def identify_gaps(
 ) -> list[str]:
     """Map dimension deficiencies to gap IDs.
 
-    Gap ID Registry (G-001 to G-014):
+    Gap ID Registry (G-001 to G-015):
       G-001 — (retired, merged into D1 triad scoring)
       G-002 — Lattice missing companion YAML
       G-003 — Skill missing lattice_type field
@@ -317,6 +340,8 @@ def identify_gaps(
               N/A per EXEMPT-AS-POLICY (G3-D5), so d04 is never 0 for a skill.
       G-013 — Federation-critical object missing federation metadata (D7=0)
       G-014 — (reserved for hardware migration gaps)
+      G-015 — Registry names neither a consumer nor a discovery pass (D11=0):
+              the "third state" (hand-maintained, read by nothing)
 
     Note (EXEMPT-AS-POLICY, Champollion G3-D5): skill→lattice promotion is
     optional-by-design (d08 is N/A for skills). G-003 therefore fires only when
@@ -346,6 +371,8 @@ def identify_gaps(
         gaps.append("G-012")
     if object_type in FEDERATION_CRITICAL and scores.get("d07", 3) == 0:
         gaps.append("G-013")
+    if object_type == "registry" and scores.get("d11", 3) == 0:
+        gaps.append("G-015")
 
     return sorted(set(gaps))
 
@@ -376,7 +403,7 @@ def build_result(
             full_scores[dim] = 0
 
     total = sum(full_scores.values())
-    pct = round((total / 30) * 100, 1)
+    pct = round((total / MAX_TOTAL) * 100, 1)
     tier = compute_tier(total, full_scores, object_type)
     gaps = identify_gaps(object_type, full_scores, fm)
 
@@ -392,7 +419,7 @@ def build_result(
         na_dims=na_dims,
         gaps=gaps,
         total=total,
-        max_total=30,
+        max_total=MAX_TOTAL,
         pct=pct,
         tier=tier,
     )
@@ -668,7 +695,7 @@ def _score_execution(fm: dict[str, Any]) -> int:
 def handle_module(
     path: Path, fm: dict[str, Any], body: str, vault_path: Path
 ) -> dict[str, int]:
-    """Score a module across all 10 dimensions."""
+    """Score a module across its applicable dimensions (all but d11)."""
     return {
         "d01": 3 if fm.get("type") == "module" else (2 if fm.get("type") else 0),
         "d02": _check_agents_md(path),
@@ -894,6 +921,47 @@ def handle_manifest(path: Path, vault_path: Path) -> dict[str, int]:
     return {"d01": d01, "d03": d03}
 
 
+def _score_derivability(fm: dict[str, Any], vault_path: Path) -> int:
+    """D11 — a registry names what fails when it drifts, or what enumerates it.
+
+    Reads the frontmatter block
+        derivability:
+          consumer: <path or command that fails on drift>
+          discovery_pass: <what enumerates the territory>
+          last_run: <date the discovery pass last ran>
+    3 = a consumer that resolves (a named path must exist), or a discovery pass with
+        its last_run date
+    2 = a discovery pass with no last_run date
+    1 = a consumer named as a path that does not exist
+    0 = neither (the third state)
+    """
+    d = fm.get("derivability")
+    if not isinstance(d, dict):
+        return 0
+    consumer = str(d.get("consumer") or "").strip()
+    if consumer:
+        looks_like_path = " " not in consumer and (
+            "/" in consumer or consumer.endswith((".py", ".sh", ".mjs", ".js", ".ts"))
+        )
+        if not looks_like_path or (vault_path / consumer).exists():
+            return 3
+    if str(d.get("discovery_pass") or "").strip():
+        return 3 if d.get("last_run") else 2
+    return 1 if consumer else 0
+
+
+def handle_registry(
+    path: Path, fm: dict[str, Any], body: str, vault_path: Path
+) -> dict[str, int]:
+    """Score a registry-class object on applicable dimensions."""
+    return {
+        "d01": 3 if fm.get("type") else 0,
+        "d02": _check_agents_md(path),
+        "d03": _score_frontmatter(fm),
+        "d11": _score_derivability(fm, vault_path),
+    }
+
+
 # Handler dispatch for MD-based objects
 HANDLERS: dict[str, Any] = {
     "module": handle_module,
@@ -901,6 +969,7 @@ HANDLERS: dict[str, Any] = {
     "skill": handle_skill,
     "context": handle_context,
     "hardware": handle_hardware,
+    "registry": handle_registry,
 }
 
 
@@ -975,7 +1044,7 @@ def format_report_md(
     ]
     for t, info in sorted(by_type.items()):
         lines.append(
-            f"| {t} | {info['count']} | {info['avg_score']}/30 "
+            f"| {t} | {info['count']} | {info['avg_score']}/{MAX_TOTAL} "
             f"| {info['avg_pct']}% | {info['tier_1']} | {info['tier_2']} | {info['tier_3']} |"
         )
 
@@ -1000,7 +1069,7 @@ def format_report_md(
             gap_str = ", ".join(r.gaps) if r.gaps else "none"
             lines.append(
                 f"- **{r.path}** ({r.object_type}) — "
-                f"{r.total}/30 ({r.pct}%) — {gap_str}"
+                f"{r.total}/{MAX_TOTAL} ({r.pct}%) — {gap_str}"
             )
 
     # Weakest dimensions
@@ -1021,7 +1090,7 @@ def format_report_md(
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="aDNA Compliance Checker — scores vault objects across 10 dimensions",
+        description="aDNA Compliance Checker — scores vault objects across 11 dimensions",
         epilog=(
             "Runtime: requires python3.13 (yaml dep). Output defaults to "
             "./.compliance_out (git-ignored); use --outdir . to write reports into the tree."
@@ -1139,7 +1208,7 @@ def main(argv: list[str] | None = None) -> int:
         results.append(result)
 
         if args.verbose:
-            print(f"  {result.path}: {result.total}/30 ({result.pct}%) T{result.tier}")
+            print(f"  {result.path}: {result.total}/{MAX_TOTAL} ({result.pct}%) T{result.tier}")
 
     # Aggregate
     summary = compute_aggregate(results)

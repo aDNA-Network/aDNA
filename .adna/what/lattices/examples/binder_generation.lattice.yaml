@@ -20,23 +20,25 @@ lattice:
       config:
         interface_version: "1.0.0"
         entry_nodes:
-          target_structure:
+          - id: backbone_design
             accepts:
-              pdb_file: "str"
+              input_pdb: "str"
         exit_nodes:
-          sequence_design:
+          - id: sequence_design
             produces:
-              designed_sequences: "list[dict]"
+              sequences: "list[dict]"
               backbone_pdbs: "list[str]"
         ports:
-          input:
+          inputs:
             - name: target_pdb
               node: backbone_design
               field: input_pdb
-          output:
+              description: "Target protein structure (PDB path)"
+          outputs:
             - name: designed_sequences
               node: sequence_design
               field: sequences
+              description: "Designed binder sequences"
     - id: backbone_design
       type: module
       ref: "what/modules/module_rfdiffusion"

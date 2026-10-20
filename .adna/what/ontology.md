@@ -1,14 +1,14 @@
 ---
 type: ontology
 created: 2026-02-20
-updated: 2026-06-18
+updated: 2026-10-20
 status: active
 last_edited_by: agent_rosetta
 tags:
   - ontology
   - architecture
   - adna
-entity_count: 26
+entity_count: 27   # 16 base + the 11 example extension rows below; the Network.aDNA rows are a second, uncounted illustration
 base_version: "v3.1"
 quality_score: 4.2
 signal_density: 5
@@ -66,7 +66,9 @@ This artifact documents the base layer in full. Extensions are shown as illustra
 
 **Merge behavior**: All 16 base types are `invariant` — during [ontology unification](docs/ontology_unification.md), base types are never renamed, removed, or reassigned. Only extension types use `extension/namespace` merge behavior.
 
-### Rosetta Extensions (10 Entity Types)
+### Rosetta Extensions (11 Entity Types)
+
+> `entity_count` in this file's frontmatter counts the 16 base types and these 11 example rows. The Network.aDNA rows further down are a second illustration and are not counted.
 
 Domain-specific entity types added by the aDNA.aDNA project for documentation, education, and community architecture.
 
@@ -82,6 +84,7 @@ Domain-specific entity types added by the aDNA.aDNA project for documentation, e
 | 24 | adopter | WHO | `who/adopters/` | Adopter personas and deployment profiles | extension/rosetta |
 | 25 | workshop | HOW | `how/workshops/` | Workshop kits and facilitation guides | extension/rosetta |
 | 26 | publishing | HOW | `how/publishing/` | Vault-to-web content publishing pipeline | extension/rosetta |
+| 27 | reviewer | WHO | `who/reviewers/` | Specialist UX/design reviewer personas, invoked at a decadal AAR's review step | extension/rosetta |
 
 ### Network.aDNA Extensions (2 Entity Types)
 
@@ -89,8 +92,8 @@ Domain-specific entity types added by the `LatticeNetwork.aDNA` (Alpha Lattice) 
 
 | # | Entity | Triad | Directory | Purpose | Merge Behavior |
 |---|--------|-------|-----------|---------|----------------|
-| 27 | network_node_mirror | WHAT | `what/network/nodes/<hostname>.aDNA/` | Per-node mirror directory (source: each node's own `node.aDNA`; SO-7 read-mostly invariant; aggregator-side; full sub-triad structurally distinct from base `context` per peer ADR-002 §a) | extension/network |
-| 28 | permission_edge | WHAT | `what/network/permissions/<edge_id>.yaml` | Directed authentication edge between nodes (10-field body per peer ADR-008 §g; lifecycle bound to LIP-0003 ledger events at peer arch_01 §6.4 call-site 3) | extension/network |
+| 28 | network_node_mirror | WHAT | `what/network/nodes/<hostname>.aDNA/` | Per-node mirror directory (source: each node's own `node.aDNA`; SO-7 read-mostly invariant; aggregator-side; full sub-triad structurally distinct from base `context` per peer ADR-002 §a) | extension/network |
+| 29 | permission_edge | WHAT | `what/network/permissions/<edge_id>.yaml` | Directed authentication edge between nodes (10-field body per peer ADR-008 §g; lifecycle bound to LIP-0003 ledger events at peer arch_01 §6.4 call-site 3) | extension/network |
 
 ### Triad Structure (Diagram 1)
 
@@ -344,10 +347,12 @@ Base entity types are **structurally invariant** across all aDNA instances at th
 | Entity type name | YES — no renaming |
 | Triad assignment | YES — no reassignment |
 | Directory location | YES — canonical paths |
-| Base frontmatter fields | YES — always present |
+| Base frontmatter fields | YES — always present, with one exception: `status` is optional for the `directory_index` and `coordination` classes, which have no lifecycle (aDNA.aDNA ADR-044) |
 | Execution hierarchy | YES — Campaign → Mission → Objective |
 | Type-specific fields | NO — instances may add fields (additive only) |
 | Extension relationships | NO — extensions may define new relationships |
+
+**Status values.** `completed` is the canonical spelling of the finished state. `complete` is a registered alias: a reader treats it as `completed`, and a writer writes `completed`.
 
 ### Merge Algorithm (4-Step Summary)
 

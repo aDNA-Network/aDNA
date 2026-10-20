@@ -6,7 +6,7 @@ between .lattice.yaml and Obsidian .canvas formats.
 
 Tools:
     - lattice_validate: Validate .lattice.yaml against schema
-    - compliance_checker: Score vault objects across 10 compliance dimensions
+    - compliance_checker: Score vault objects across 11 compliance dimensions
     - lattice2canvas: Convert .lattice.yaml → .canvas JSON
     - canvas2lattice: Convert .canvas JSON → .lattice.yaml
 """

@@ -26,6 +26,14 @@ tags: [plan]
 
 One-paragraph description of what this plan achieves when all tasks are complete.
 
+## Premise pass
+
+*(v8.13.)* Every premise this card depends on, re-read **first-hand, read-only, on the tree at `<HEAD>`** at the plan gate, with its result. A bounded grep or count is a premise until it is re-run first-hand at the sitting that depends on it. **A premise pass may delegate the search; it never delegates the read**: every `file:line` in this card is tagged `[D]` (VERIFIED — this sitting read the line) or `[R]` (REPORTED — the subagent or peer that returned it, named), the vault's own provenance tags. "No premises beyond the card's own inputs" is a valid single row.
+
+| # | Premise | Where read (`file:line` @ HEAD) | Result | Tag |
+|---|---|---|---|---|
+| 1 | {what the card assumes to be true} | {path:line @ sha} | {holds / corrected to … } | [D] / [R] (by whom) |
+
 ## Tasks
 
 ### 1. {Task title}
@@ -55,6 +63,7 @@ Any cross-cutting observations, risks, or decisions made during execution.
 
 ### Descoped
 - {Tasks skipped or deferred, with justification}
+- *(v8.13)* A carry handed in across a gate is dispositioned **by name with a pointer** — MET `file:line` · retired (reason) · next (reason) — or it is open ("none vanishes").
 
 ### Key Findings
 - {Insights, patterns, or discoveries from execution}

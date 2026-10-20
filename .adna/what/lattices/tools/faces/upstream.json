@@ -1,0 +1,19 @@
+{
+  "$comment": "Pin file for byte copies held in this graph (standard §19.9, aDNA.aDNA ADR-067 clause 2: a copy held in another graph is a face; a pin file is accepted in place of an in-file stamp for a byte copy). Never edit a pinned copy: re-vendor it from its source and update this pin. adna_validate.py --governance checks it (aDNA.aDNA ADR-067 clause 4: a mismatch is a warning; an absent source is unverifiable, never failed).",
+  "copies": [
+    {
+      "path": "lattice.schema.json",
+      "source_vault": "LinkML.aDNA",
+      "source_path": "what/schemas/generated/lattice.schema.json",
+      "source_commit": "2ac5ac0",
+      "source_head_at_pin": "77c1c6b",
+      "sha256": "92ec25025ab417736ebaf376a29378679ef16da3530ecee57f0163bc4d45deaf",
+      "md5": "45a816a2504f1d237a44b3ffb7405e96",
+      "master_path": "what/schemas/lattice_master.linkml.yaml",
+      "master_version": "0.1.0-proposed",
+      "master_sha256": "98e01967ec41bf5da6bb6fd7aa463eab9b4212f20a2089f0f4dc07d898218531",
+      "pinned": "2026-10-20",
+      "consumer": "lattice_validate.py (enum vocabularies)"
+    }
+  ]
+}

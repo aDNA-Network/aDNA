@@ -73,6 +73,8 @@ tags: [campaign]
 |---|------|----------|--------|
 | 1 | Before Mission N | [What needs user approval] | pending |
 
+*(v8.13.)* Decision rows name the question and the gate that rules it; **options listed before that gate are tagged INFERRED** and re-drawn from the tree at the gate's premise pass (see the mission template's `## Premise pass`). An options column is optional: `| … | Decision | Options (INFERRED until the gate) | Status |`.
+
 ## Risk Register
 
 | Risk | Severity | Mitigation |
@@ -98,6 +100,7 @@ tags: [campaign]
 | Phase exit criteria met | Campaign doc phase exit gate | Yes — user approval required |
 | Risk register updated | Campaign doc risk register | No — recommended |
 | Scope changes documented | Campaign doc scope section | Yes — all changes recorded |
+| Boundary AAR-light filed *(v8.13)* | `template_aar_lightweight.md` §Boundary AAR-light: a gap register read from the **live system**, improvements each dispositioned by name, a campaign update for the operator | No — recommended at every phase seam, beside the D5-triggered AAR-light and the closing AAR |
 
 ### Campaign Validation
 
@@ -117,6 +120,8 @@ tags: [campaign]
 | Phase 1 | 0-N | X-Y |
 | **Total** | **N missions** | **X-Y sessions** |
 
+**Estimation guidance** *(v8.13; the field `calibrated_sessions` above points here).* A phase (or slice) costs, beyond its build sessions, **three gate rows the table must draw**: **close** (the report) · **verdict** (independent, fresh-context) · **rulings / next plan gate**. Size a phase **at its plan gate, from the tree** (carries + the counted work items + the ruled build items), never from the charter alone; **re-base the band at every phase close**; the drift trigger (> 2× the band, ADR-016 of `aDNA.aDNA`) reads against the **re-based** band, not the genesis one. *(Evidence: 64 sittings against a 22–32 band in Terminal's Bastide campaign — wrong by 1.5–4× wherever sized before the tree existed, right wherever a plan gate read the tree.)*
+
 ## Notes
 
 [Cross-cutting observations, architectural decisions, coordination notes]
@@ -130,6 +135,7 @@ tags: [campaign]
 
 ### Descoped
 - [Missions skipped or deferred, with justification]
+- *(v8.13)* A carry handed across a gate is dispositioned **by name with a pointer** — MET `file:line` · retired (reason) · next (reason) — or it is open; the AAR's `## Carries` section holds the ledger and its count line.
 
 ### Key Findings
 - [Insights and discoveries from campaign execution]

@@ -2,11 +2,11 @@
 type: skill
 skill_type: agent
 created: 2026-03-21
-updated: 2026-05-11
+updated: 2026-10-20
 status: active
 category: deployment
 trigger: "User asks about compute, L1, JupyterHub, or 'upgrade to L1'"
-last_edited_by: agent_stanley
+last_edited_by: agent_rosetta
 tags: [skill, deployment, l1, compute, upgrade]
 preflight_script: how/skills/l1_upgrade/prepare_for_onboarding.sh  # added M03 Session 2 B2 per Operator Decision 1 Option A (script relocated from outer adna/ to its skill home)
 
@@ -229,11 +229,12 @@ sudo chmod 600 /opt/homebrew/etc/nebula/config.yml
 # Start the daemon
 sudo /opt/homebrew/bin/nebula -config /opt/homebrew/etc/nebula/config.yml &
 
-# Verify lighthouse connectivity
-ping -c 2 10.42.0.1
+# Verify lighthouse connectivity — <overlay-ip> is the lighthouse's overlay address, recorded in your node vault
+# (Home.aDNA/what/inventory/inventory_connectivity.md). Example form only: ping -c 2 198.51.100.1 (RFC 5737)
+ping -c 2 <overlay-ip>
 ```
 
-Report the assigned overlay IP (10.42.0.x — shown in config.yml) to the Lattice admin for state file registration.
+Report the assigned overlay IP (an address in `<overlay-subnet>`, shown in config.yml) to the Lattice admin for state file registration.
 
 ### Step 4: Install Persistent Daemon
 
@@ -389,7 +390,7 @@ JupyterHub's configurable-http-proxy listens on port 8100 (API) in addition to 8
 | Output | Type | Description |
 |--------|------|-------------|
 | JupyterHub running | Service | Local compute at `http://127.0.0.1:8000` |
-| Nebula connected | Network | Mesh connectivity to Lattice overlay (10.42.0.x) |
+| Nebula connected | Network | Mesh connectivity to Lattice overlay (`<overlay-subnet>`) |
 | SSH relay tunnel | Network | Admin access via L2 relay |
 | TLS + HMAC (Phase 4) | Security | Production compliance |
 

@@ -2,14 +2,12 @@ lattice:
   name: claude_code
   version: "1.0.0"
   lattice_type: context_graph
-  runtime: claude_code
   description: >
     Context graph for the Claude Code runtime implementation of aDNA. Nodes
     reference Claude Code-specific documentation; the patterns they document
     apply to any runtime. Maps how system components — config cascade, hook
     system, memory layers, vault architecture, and orchestration tiers — relate
     to and depend on each other.
-  updated: "2026-03-28"
   execution:
     mode: reasoning
     runtime: local

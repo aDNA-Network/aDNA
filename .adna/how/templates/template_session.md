@@ -15,6 +15,12 @@ mission:           # optional (v8.12) — the mission_id this session serves, if
 #   fence: <monotonic token, e.g. the commit SHA or ISO timestamp the lease was taken at>
 #   read_graphs: []            # other vaults read (not written) under this lease
 #   declared_at: {ISO_TIMESTAMP}
+# issued_by:      # optional (v8.13) — set when this sitting runs UNATTENDED under another station's order: `<station> <stamp>` (e.g. `berthier_automator S30-terminal-1`); then also carry:
+#   order: |                 # the order's text, verbatim
+#   halt_list: []            # what the sitting was forbidden or told to halt on
+#   recommended_taken: []    # every "(Recommended)" option taken as such, so a reader sees no human was present
+# continues:      # optional (v8.13) — the session_id this record continues, when one sitting was split (a context clear, a usage pause) into two records
+# Record-identity rule (v8.13): ONE record names ONE sitting. A split sitting names the record it continues (`continues:`); a delegated sitting names its issuer (`issued_by:`); a record whose transcript or ids are not this sitting's is refused before any write.
 files_modified: []
 files_created: []
 completed:
@@ -22,7 +28,9 @@ completed:
 
 ## Activity Log
 
-- HH:MM — Session started
+- HH:MM — Session started. **Open reads** *(v8.13)*: `ls who/coordination/inbox/` · `ls who/coordination/` · `git status`; cite any new memo where it acts.
+- …
+- HH:MM — **Seal reads**: the same three reads, before "sealed" / `status: completed`.
 
 ## SITREP
 

@@ -1,12 +1,13 @@
 ---
 type: governance
-version: "8.12"
-token_estimate: ~6100
-updated: 2026-10-04
+version: "8.13"
+token_estimate: ~7200
+updated: 2026-10-20
 last_edited_by: agent_rosetta
 ---
 
 # CLAUDE.md — aDNA
+<!-- v8.13 | 2026-10-20 | Standard v2.5 -> v2.6 (governance 8.12->8.13): conformance profiles <level>+<profile>, release integrity (§15.5), data_tier, purge exception, Graph Exchange (§19.7), Campaigns (§19.8), Memorialized Data Models (§19.9); compliance_checker 11th dimension (Derivability, 0-3/33 — the 0-5/50 text corrected here and in adna_reference); adna_validate stamp-currency check; lattice_validate reads a vendored LinkML face (faces/); lattice examples + lattice_interop v1.1.0 (deep_research review-gate condition, claude_code runtime placement, canonical interface form); example canvases partitioned (Canvas Standard v2.5.0); skill_l1_upgrade overlay literal -> placeholders; NEW skill_mesh_probe_discipline + pattern_channel_proof + template_profile_spec + what/docs/profiles/; template rows (AAR carries, campaign, mission premise pass/descoped, session issued_by/continues). Count change: 32->33 templates; 33->34 skills. token_estimate re-measured (~6100 -> ~7200). Operator release gate 2026-10-20. -->
 <!-- v8.12 | 2026-10-04 | Memo-derived release (governance 8.11->8.12; standard stays v2.5): adr_003 accepted at template altitude + provenance block (ADR-060); skill_project_fork stamps every inherited decision record (provenance: template_inherited + inherited_from_template, derived) + Step 1.5 license field + root-shape advisory; template_coordination gains from_persona / from_vault (required) / authority (ADR-061); template_mission gains status awaiting_operator|escalated + gate: + executor_lane + optional harness block; template_session gains mission: + lease block; NEW template_ruling_record (how/gates/ placement, doc-only); template_home_claude: all 5 placeholder frontmatter scalars quoted (image YAML did not parse); .gitignore dist/ + /*.tar.gz inline comments moved (patterns never matched); docs annotations (RFC flow superseded in practice; ontology worked-example figure). Count change: 31->32 templates; skills stay 33. Operator release gate 2026-10-04. -->
 <!-- v8.11 | 2026-09-11 | Content honesty + canvas metadata (governance 8.10->8.11; standard stays v2.5): the marketplace promise removed from the CLASS, not the filed sites - HOME.md's whole ## Marketplace section (a live link measured 404 at release, on the first page a bootstrapped node opens, named in no prior list), skill_onboarding.md Step 9's HEADING (v8.10 fixed the body and left the heading), and three exemplar-template structure comments. Bootstrap interview 19 -> 18 questions: C4 (marketplace categories) retired, old C5 renumbered, marketplace_interests dropped. Canvas examples adopt metadata.frontmatter._reserved per Canvas.aDNA ADR-011 (4 files). Count change: NONE (no skill, no template added). Operator release gate 2026-09-11. -->
 <!-- v8.10 | 2026-09-07 | Operation Lantern (governance 8.9→8.10; standard stays v2.5): pre-push-sanitize hook 4.0.1→4.3.0 — closes the R5/R6 FAIL-OPEN that pushed any confidential NON-.md file UNSCANNED (two sites), + R8 content deny list scoped to added lines, + per-rule coverage; + R5's first fixtures ever (dirty/control_confidential.md + dirty/test_confidential.yaml) — the fixture README had carried R5 as "deferred" since M05 S2, so the rule shipped untested; the dead tty guard (the operator-facing WARN confirmation had never once printed); F-w marketplace promise struck from skill_onboarding.md + the HOME exemplar template. Count change: NONE (no skill, no template added). Operator release gate 2026-09-07. -->
@@ -317,7 +318,7 @@ Objects that have been through a schema migration carry an optional `_migration_
 
 ### Compliance Dimensions
 
-Object quality is scored across 10 dimensions (0–5 each, 50 max): triad structure · governance · frontmatter · FAIR · type vocabulary · versioning · federation · registration · companions · reproducibility. Full definitions + the `what/lattices/tools/compliance_checker.py` reference: `what/docs/adna_reference.md`.
+Object quality is scored across 11 dimensions (0–3 each, 33 max; a dimension that does not apply to an object type scores 3): triad structure · governance · frontmatter · FAIR · type vocabulary · versioning · federation · registration · companions · reproducibility · derivability. Full definitions + the `what/lattices/tools/compliance_checker.py` reference: `what/docs/adna_reference.md`.
 
 ### Linking
 

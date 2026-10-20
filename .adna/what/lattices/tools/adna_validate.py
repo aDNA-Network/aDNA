@@ -5,10 +5,15 @@ Usage:
     python adna_validate.py <path>                     # Validate instance at path
     python adna_validate.py <path> --level standard    # Check specific level
     python adna_validate.py <path> --governance        # Governance sync + harness-injection hygiene (§13.2)
+                                                       #   + stamp currency (ADR-067 clause 4; warnings only)
+
+Frontmatter dates: YAML loads an unquoted date as a date object. Convert dates to ISO
+strings before validating frontmatter against a JSON Schema.
     python adna_validate.py <path> --verbose           # Detailed output
     python adna_validate.py <path> --json              # Machine-readable JSON output
 """
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -87,6 +92,15 @@ def _is_nested_instance(dirpath):
 GOVERNANCE_FILES_FOR_HYGIENE = ("CLAUDE.md", "STATE.md", "AGENTS.md")
 # Harness boundaries the agent runtime injects: `# userEmail`, `# currentDate (Today's date is ...)`
 HARNESS_INJECTION_RE = re.compile(r"^#\s+(userEmail|currentDate)\b")
+
+# Stamp currency (ADR-067 clause 4). A generated face carries "Master: <path>  sync_hash: <hex>"
+# (or source_sha256 on a canvas twin): the master's path in its owning graph and the leading hex of
+# the sha256 over its bytes. A byte copy may carry a pin file (upstream.json) instead of a stamp.
+STAMP_RE = re.compile(r"Master:\s*(\S+)\s+(?:sync_hash|source_sha256):\s*([0-9a-f]{16,64})")
+STAMP_EXTS = (".json", ".yaml", ".yml", ".canvas")
+STAMP_PIN_FILE = "upstream.json"
+STAMP_PRUNE_DIRS = {".git", "node_modules", "dist", ".astro", ".vercel", "__pycache__", ".venv"}
+STAMP_MAX_BYTES = 5 * 1024 * 1024
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -410,6 +424,103 @@ def check_governance_sync(root, result):
 
     # Harness-injection hygiene (§13.2, ADR-042)
     check_harness_injection(root, result)
+
+    # Stamp currency (ADR-067 clause 4)
+    check_stamp_currency(root, result)
+
+
+def _sha256(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 16), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def check_stamp_currency(root, result):
+    """Recompute the master behind every stamped face and every pinned copy (ADR-067 clause 4).
+
+    A mismatch is a WARNING (SHOULD-level at standard v2.6). A stamp or pin whose master or source
+    is not present on this node is reported UNVERIFIABLE (info), never failed. Whether a model
+    qualifies (clause 1) is the owner's judgement and is not checked here.
+    """
+    workspace = os.path.dirname(os.path.abspath(root))
+    counts = {"current": 0, "stale": 0, "unverifiable": 0}
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames[:] = [d for d in dirnames if d not in STAMP_PRUNE_DIRS]
+        for fn in filenames:
+            fp = os.path.join(dirpath, fn)
+            rel = os.path.relpath(fp, root)
+            if fn == STAMP_PIN_FILE:
+                _check_pin_file(fp, rel, workspace, result, counts)
+                continue
+            if not fn.endswith(STAMP_EXTS):
+                continue
+            try:
+                if os.path.getsize(fp) > STAMP_MAX_BYTES:
+                    continue
+                with open(fp, "r", encoding="utf-8") as f:
+                    text = f.read()
+            except (OSError, UnicodeDecodeError):
+                continue
+            for m in STAMP_RE.finditer(text):
+                master_rel, stamped = m.group(1), m.group(2)
+                master = os.path.join(root, master_rel)
+                if not os.path.isfile(master):
+                    counts["unverifiable"] += 1
+                    result.info.append(f"Stamp unverifiable: '{rel}' names master '{master_rel}', not present here")
+                elif _sha256(master).startswith(stamped):
+                    counts["current"] += 1
+                else:
+                    counts["stale"] += 1
+                    result.warnings.append(
+                        f"Stamp stale: '{rel}' was generated from an older '{master_rel}' "
+                        f"(stamp {stamped[:16]}) — regenerate the face (ADR-067 clause 4)"
+                    )
+    if any(counts.values()):
+        result.info.append(
+            "Stamp currency: {current} current · {stale} stale · {unverifiable} unverifiable".format(**counts)
+        )
+
+
+def _check_pin_file(fp, rel, workspace, result, counts):
+    try:
+        with open(fp, "r", encoding="utf-8") as f:
+            pin = json.load(f)
+    except (OSError, ValueError):
+        return
+    copies = pin.get("copies") if isinstance(pin, dict) else None
+    if not isinstance(copies, list):
+        return  # not a pin file (e.g. some other tool's upstream.json)
+    base = os.path.dirname(fp)
+    for c in copies:
+        if not isinstance(c, dict) or not c.get("path") or not c.get("sha256"):
+            continue
+        local = os.path.join(base, c["path"])
+        local_rel = os.path.join(os.path.dirname(rel), c["path"])
+        if not os.path.isfile(local):
+            result.warnings.append(f"Pin: '{rel}' pins '{local_rel}', which is missing")
+            continue
+        if _sha256(local) != c["sha256"]:
+            counts["stale"] += 1
+            result.warnings.append(
+                f"Pin: '{local_rel}' no longer matches its pin in '{rel}' — a pinned copy is "
+                "re-vendored from its source, never edited (ADR-067)"
+            )
+            continue
+        src = os.path.join(workspace, c.get("source_vault", ""), c.get("source_path", ""))
+        if not (c.get("source_vault") and c.get("source_path") and os.path.isfile(src)):
+            counts["unverifiable"] += 1
+            result.info.append(f"Pin unverifiable: '{local_rel}' — source {c.get('source_vault')}/"
+                               f"{c.get('source_path')} not present on this node")
+        elif _sha256(src) == c["sha256"]:
+            counts["current"] += 1
+        else:
+            counts["stale"] += 1
+            result.warnings.append(
+                f"Pin stale: '{local_rel}' — its source {c['source_vault']}/{c['source_path']} has moved "
+                f"since the pin ({c.get('pinned', 'undated')}); re-vendor it and update '{rel}' (ADR-067 clause 4)"
+            )
 
 
 # ---------------------------------------------------------------------------

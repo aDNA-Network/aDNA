@@ -47,7 +47,7 @@ lattice:
       to: clinical_ranking
       label: "validation results"
       data_mapping:
-        binding_scores: candidate_scores
+        candidate_scores: binding_scores
   fair:
     license: "MIT"
     creators:

@@ -4,6 +4,8 @@ Lattice YAML Schema Validator.
 Validates .lattice.yaml files against the Lattice YAML Schema
 (lattice_yaml_schema.json). Checks structural constraints, required
 fields, enum values, node/edge integrity, and graph connectivity.
+Enum values come from the lattice master's generated face
+(faces/lattice.schema.json), not from constants typed here.
 
 Usage:
     >>> from objects.lattices.tools.lattice_validate import validate_lattice_file
@@ -15,6 +17,7 @@ Usage:
 
 from __future__ import annotations
 
+import json
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -22,13 +25,33 @@ from typing import Any
 
 import yaml
 
-# Schema constants aligned with lattice_yaml_schema.json
-VALID_LATTICE_TYPES = {"pipeline", "agent", "context_graph", "workflow", "skill", "infrastructure", "context_set"}
-VALID_EXECUTION_MODES = {"workflow", "reasoning", "hybrid"}
-VALID_RUNTIMES = {"ray", "local", "kubernetes"}
-VALID_TIERS = {"L1", "L2", "L3"}
-VALID_NODE_TYPES = {"module", "dataset", "process", "reasoning"}
-VALID_VERSION_POLICIES = {"locked", "patch", "minor", "latest"}
+# Enum vocabularies are read from the generated face of the lattice master, never
+# hand-typed, so the validator and the master cannot drift (the hand-typed set once
+# carried four node types where the runtime had five). The face is a byte copy
+# pinned in faces/upstream.json; re-vendor it from its source, never edit it.
+# See aDNA.aDNA ADR-067 and LinkML.aDNA ADR-005.
+FACE_PATH = Path(__file__).resolve().parent / "faces" / "lattice.schema.json"
+
+
+def _load_face_enums(path: Path = FACE_PATH) -> dict[str, set[str]]:
+    """Return {face $defs name: enum values} for every enum the face defines."""
+    try:
+        defs = json.loads(path.read_text(encoding="utf-8"))["$defs"]
+    except (OSError, ValueError, KeyError) as e:
+        raise RuntimeError(
+            f"lattice_validate: cannot read the lattice face at {path} ({e}); "
+            "it ships beside this tool — re-vendor it per faces/upstream.json"
+        ) from e
+    return {name: set(d["enum"]) for name, d in defs.items() if isinstance(d, dict) and "enum" in d}
+
+
+_ENUMS = _load_face_enums()
+VALID_LATTICE_TYPES = _ENUMS["LatticeType"]
+VALID_EXECUTION_MODES = _ENUMS["ExecutionMode"]
+VALID_RUNTIMES = _ENUMS["Runtime"]
+VALID_TIERS = _ENUMS["Tier"]
+VALID_NODE_TYPES = _ENUMS["NodeType"]
+VALID_VERSION_POLICIES = _ENUMS["LatticeVersionPolicy"]
 
 # Pattern: lowercase, underscores, starts with letter
 ID_PATTERN = re.compile(r"^[a-z][a-z0-9_]*$")

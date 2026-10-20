@@ -36,6 +36,16 @@ tags: [aar, artifact]
 |---|-----|----------|--------|-------------|
 | 1 | {gap description} | critical / high / medium / low | {where discovered} | {action or backlog ref} |
 
+## Carries
+
+*(v8.13.)* Every row handed into this mission across a gate — a carry list, an owed item, a sub-item inside one — is dispositioned here by name with **one of three words and one pointer**: **MET** with `file:line` · **retired** by name, with the reason · **next** (the follow-on mission or version), with the reason. *None vanishes* is the test: a row that is neither MET, retired nor carried forward is open, and an open row blocks GO. The count line reads `n MET · n retired · n next — N of N`; `none carried` is a valid whole section.
+
+| # | Carried row (from where) | Word | Pointer / reason |
+|---|---|---|---|
+| 1 | {row, and the gate or mission it came from} | MET / retired / next | {`file:line`, or the reason} |
+
+**Count**: {n} MET · {n} retired · {n} next — {N} of {N}
+
 ## Technical Debt
 
 | # | Debt | Impact | Priority | Tracking |

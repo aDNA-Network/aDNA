@@ -88,11 +88,11 @@ lattice:
     - from: standardize
       to: review_gate
       label: "formatted context object"
-      condition: "effort_level >= 'standard'"
+      condition: "effort_level in ['standard', 'comprehensive']"
     - from: standardize
       to: context_output
       label: "direct filing"
-      condition: "effort_level < 'standard'"
+      condition: "effort_level in ['minimal', 'focused']"
     - from: review_gate
       to: context_output
       label: "approved output"

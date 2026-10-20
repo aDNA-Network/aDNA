@@ -1,0 +1,1454 @@
+{
+    "$defs": {
+        "Any": {
+            "additionalProperties": true,
+            "description": "The metamodel's any-value class (range of an untyped operational-node config).",
+            "title": "Any",
+            "type": [
+                "null",
+                "boolean",
+                "object",
+                "number",
+                "string"
+            ]
+        },
+        "CanvasAnnotation": {
+            "description": "Annotation keys a derived schema's header carries to declare its canvas twin (the dual-mode schema pack: LinkML master · .canvas twin · prose page). Each key names one Canvas Standard _reserved key the twin must carry; the VALUE sets are Canvas.aDNA's and are validated by canvas_std, never restated here.",
+            "enum": [
+                "canvas_twin",
+                "canvas_conformance_level",
+                "canvas_authority",
+                "canvas_production",
+                "canvas_sync_hash"
+            ],
+            "title": "CanvasAnnotation",
+            "type": "string"
+        },
+        "ConventionAnnotation": {
+            "description": "Annotation keys that carry the conventions LinkML cannot express (aDNA.aDNA ADR-062 rider i). The values are the derived schema's; the keys are registered here so one validator can read every schema's conventions.",
+            "enum": [
+                "nullable",
+                "present",
+                "forbid_keys_any_depth",
+                "map_of",
+                "map_pattern"
+            ],
+            "title": "ConventionAnnotation",
+            "type": "string"
+        },
+        "DataMappingEntry": {
+            "additionalProperties": false,
+            "description": "One entry of an edge's data_mapping simple dict.",
+            "properties": {
+                "source_output": {
+                    "description": "A source output name (the simple-dict key).",
+                    "type": "string"
+                },
+                "target_input": {
+                    "description": "The target input name it feeds (the simple-dict value).",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "source_output",
+                "target_input"
+            ],
+            "title": "DataMappingEntry",
+            "type": "object"
+        },
+        "DataMappingEntry__identifier_optional": {
+            "additionalProperties": false,
+            "description": "One entry of an edge's data_mapping simple dict.",
+            "properties": {
+                "source_output": {
+                    "description": "A source output name (the simple-dict key).",
+                    "type": "string"
+                },
+                "target_input": {
+                    "description": "The target input name it feeds (the simple-dict value).",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "target_input"
+            ],
+            "title": "DataMappingEntry",
+            "type": "object"
+        },
+        "Edge": {
+            "additionalProperties": false,
+            "description": "A directed edge (AgentEdge; serialized from/to).",
+            "properties": {
+                "condition": {
+                    "description": "Condition expression; the edge is traversed only when it evaluates true. Makes the edge conditional for the cycle rule.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_mapping": {
+                    "additionalProperties": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/$defs/DataMappingEntry__identifier_optional"
+                            },
+                            {
+                                "description": "The target input name it feeds (the simple-dict value).",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "description": "Source output name → target input name (AgentEdge.data_mapping). A simple dict.",
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "from": {
+                    "description": "Source node id (AgentEdge.source).",
+                    "type": "string"
+                },
+                "label": {
+                    "description": "Human-readable edge label for documentation and visualization (AgentEdge.label). The profile's `label` slot, refined here to canonical's meaning (canon:lattice.edges.items.label).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "port": {
+                    "description": "An optional INFORMATIVE label — not wiring; data_mapping carries the wire (D-AC-17 (iii), ADR-004). Four meanings have been written for this key (schema: a source output; docs: a child entry node; full_therapeutics: both directions; slot names / branch labels); none is normative.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "to": {
+                    "description": "Target node id (AgentEdge.target).",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "from",
+                "to"
+            ],
+            "title": "Edge",
+            "type": "object"
+        },
+        "EntryNode": {
+            "additionalProperties": false,
+            "description": "An entry node in the list form (canonical): {id, accepts}.",
+            "properties": {
+                "accepts": {
+                    "additionalProperties": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/$defs/TypedField__identifier_optional"
+                            },
+                            {
+                                "description": "The field's type description (the simple-dict value).",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "description": "Input field name → type description. A simple dict.",
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {
+                    "description": "Stable identifier of the entity; a rename changes the label, never the id.",
+                    "pattern": "^[a-z][a-z0-9_]*$",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "title": "EntryNode",
+            "type": "object"
+        },
+        "Execution": {
+            "additionalProperties": false,
+            "description": "The execution block.",
+            "properties": {
+                "mode": {
+                    "$ref": "#/$defs/ExecutionMode",
+                    "description": "Execution mode."
+                },
+                "model": {
+                    "description": "Default model for reasoning nodes; a node's model_override takes precedence.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "runtime": {
+                    "$ref": "#/$defs/Runtime",
+                    "description": "Target runtime environment."
+                },
+                "tier": {
+                    "$ref": "#/$defs/Tier",
+                    "description": "Compute tier."
+                }
+            },
+            "required": [
+                "mode",
+                "runtime",
+                "tier"
+            ],
+            "title": "Execution",
+            "type": "object"
+        },
+        "ExecutionMode": {
+            "description": "Execution mode, aligned with LP AgentMode.",
+            "enum": [
+                "workflow",
+                "reasoning",
+                "hybrid"
+            ],
+            "title": "ExecutionMode",
+            "type": "string"
+        },
+        "ExitNode": {
+            "additionalProperties": false,
+            "description": "An exit node in the list form (canonical): {id, produces}.",
+            "properties": {
+                "id": {
+                    "description": "Stable identifier of the entity; a rename changes the label, never the id.",
+                    "pattern": "^[a-z][a-z0-9_]*$",
+                    "type": "string"
+                },
+                "produces": {
+                    "additionalProperties": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/$defs/TypedField__identifier_optional"
+                            },
+                            {
+                                "description": "The field's type description (the simple-dict value).",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "description": "Output field name → type description. A simple dict.",
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "title": "ExitNode",
+            "type": "object"
+        },
+        "FairMetadata": {
+            "additionalProperties": false,
+            "description": "The FAIR block — license, creators, keywords, and optionally a persistent identifier and a provenance note.",
+            "properties": {
+                "creators": {
+                    "description": "Who made the entity — at least one person or organization.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": "array"
+                },
+                "keywords": {
+                    "description": "Semantic tags — at least three.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 3,
+                    "type": "array"
+                },
+                "license": {
+                    "description": "SPDX license identifier or expression (MIT · Apache-2.0 · MIT OR Apache-2.0 · LicenseRef-All-Rights-Reserved). The pattern checks the SHAPE of a flat SPDX expression; membership of the SPDX license list is a lookup, not encoded at v0.1, and parenthesized compound expressions — (MIT OR Apache-2.0) AND BSD-3-Clause — are not admitted at v0.1.",
+                    "pattern": "^(LicenseRef-[A-Za-z0-9.-]+|[A-Za-z0-9][A-Za-z0-9.+-]*)( (AND|OR|WITH) (LicenseRef-[A-Za-z0-9.-]+|[A-Za-z0-9][A-Za-z0-9.+-]*))*$",
+                    "type": "string"
+                },
+                "persistent_identifier": {
+                    "description": "DOI or other persistent identifier, when one exists.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "provenance_note": {
+                    "description": "Origin and methodology, in prose.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "license",
+                "creators",
+                "keywords"
+            ],
+            "title": "FairMetadata",
+            "type": "object"
+        },
+        "FederatedEntity": {
+            "additionalProperties": false,
+            "description": "Mixin for every class whose instances cross a graph boundary: a stable id, a label, the FAIR block and the sharing policy. A derived class mixes it in; if the derived class already names a different identifier slot, it keeps that one and id stays a required plain slot.",
+            "properties": {
+                "fair": {
+                    "$ref": "#/$defs/FairMetadata",
+                    "description": "The FAIR metadata block of a federated entity."
+                },
+                "federation": {
+                    "$ref": "#/$defs/FederationPolicy",
+                    "description": "The sharing policy of a federated entity."
+                },
+                "id": {
+                    "description": "Stable identifier of the entity; a rename changes the label, never the id.",
+                    "type": "string"
+                },
+                "label": {
+                    "description": "Human-readable display name; may change without changing identity.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "id",
+                "fair",
+                "federation"
+            ],
+            "title": "FederatedEntity",
+            "type": "object"
+        },
+        "FederationPolicy": {
+            "additionalProperties": false,
+            "description": "The sharing policy — whether the entity may be published, where it originates, and how updates propagate.",
+            "properties": {
+                "shareable": {
+                    "description": "True when the entity may be published to the federation. Validity admits either value; publication requires true, and that is the publishing registry's check (template_registry Federation Readiness Checklist), not the schema's.",
+                    "type": "boolean"
+                },
+                "source_instance": {
+                    "description": "The graph or instance the entity originates from, as a graph slug.",
+                    "pattern": "^[a-z][a-z0-9_]*$",
+                    "type": "string"
+                },
+                "version_policy": {
+                    "$ref": "#/$defs/VersionPolicy",
+                    "description": "How downstream consumers receive updates."
+                }
+            },
+            "required": [
+                "shareable",
+                "source_instance",
+                "version_policy"
+            ],
+            "title": "FederationPolicy",
+            "type": "object"
+        },
+        "GeneratedArtifact": {
+            "additionalProperties": false,
+            "description": "One generated artifact — its kind, path, generator pin, source version, and byte witness.",
+            "properties": {
+                "artifact_kind": {
+                    "$ref": "#/$defs/GeneratedArtifactKind",
+                    "description": "What the artifact is."
+                },
+                "artifact_md5": {
+                    "description": "md5 of the artifact bytes at publication — the byte-stability witness.",
+                    "pattern": "^[0-9a-f]{32}$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "artifact_path": {
+                    "description": "Path of the artifact, relative to the schema file.",
+                    "type": "string"
+                },
+                "generated_by": {
+                    "description": "The generator and toolchain pin that produced the artifact, as <generator>@linkml==<version>.",
+                    "pattern": "^[a-z][a-z0-9-]*@linkml==[0-9]+\\.[0-9]+\\.[0-9]+$",
+                    "type": "string"
+                },
+                "source_schema_version": {
+                    "description": "The schema version the artifact was generated from.",
+                    "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?$",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "artifact_kind",
+                "artifact_path",
+                "generated_by",
+                "source_schema_version"
+            ],
+            "title": "GeneratedArtifact",
+            "type": "object"
+        },
+        "GeneratedArtifactKind": {
+            "description": "The kinds of artifact the pinned toolchain generates from a derived schema and publishes by reference.",
+            "enum": [
+                "json_schema",
+                "pydantic"
+            ],
+            "title": "GeneratedArtifactKind",
+            "type": "string"
+        },
+        "InputPortMapping": {
+            "additionalProperties": false,
+            "description": "DEPRECATED input port entry (lattice_interop.md §2.2): {name, maps_to, description}.",
+            "properties": {
+                "description": {
+                    "description": "Human-readable description (length floor refined per class).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "maps_to": {
+                    "description": "DEPRECATED — the entry node an input port maps to. Expands to `node`, with `field` = the port name (exact only where the two names agree; Terminal's rule).",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Identifier or name (pattern refined per class).",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "maps_to"
+            ],
+            "title": "InputPortMapping",
+            "type": "object"
+        },
+        "InterfaceConfigListForm": {
+            "additionalProperties": false,
+            "description": "The canonical form (lattice_interop.md §2.2; D-AC-18 (x)): entry_nodes: [{id, accepts}] · exit_nodes: [{id, produces}].",
+            "properties": {
+                "entry_nodes": {
+                    "description": "Nodes that accept external input, each with a typed `accepts` map.",
+                    "items": {
+                        "$ref": "#/$defs/EntryNode"
+                    },
+                    "type": "array"
+                },
+                "exit_nodes": {
+                    "description": "Nodes that produce external output, each with a typed `produces` map.",
+                    "items": {
+                        "$ref": "#/$defs/ExitNode"
+                    },
+                    "type": "array"
+                },
+                "interface_version": {
+                    "description": "Semver of the interface contract itself.",
+                    "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9.]+)?(\\+[a-zA-Z0-9.]+)?$",
+                    "type": "string"
+                },
+                "ports": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/InterfacePorts"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Named input/output ports for seam-edge binding (recommended, not required)."
+                }
+            },
+            "required": [
+                "interface_version",
+                "entry_nodes",
+                "exit_nodes"
+            ],
+            "title": "InterfaceConfigListForm",
+            "type": "object"
+        },
+        "InterfaceConfigMapForm": {
+            "additionalProperties": false,
+            "description": "The DEPRECATED alias form (the binder_generation example; D-AC-18 (x), ADR-003): entry_nodes: {node_id: {accepts}} · exit_nodes: {node_id: {produces}}.",
+            "properties": {
+                "entry_nodes": {
+                    "additionalProperties": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/$defs/KeyedEntryNode__identifier_optional"
+                            },
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/$defs/TypedField__identifier_optional"
+                                        },
+                                        {
+                                            "description": "The field's type description (the simple-dict value).",
+                                            "type": "string"
+                                        }
+                                    ]
+                                },
+                                "description": "Input field name → type description. A simple dict.",
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "description": "Nodes that accept external input, each with a typed `accepts` map.",
+                    "type": "object"
+                },
+                "exit_nodes": {
+                    "additionalProperties": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/$defs/KeyedExitNode__identifier_optional"
+                            },
+                            {
+                                "additionalProperties": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/$defs/TypedField__identifier_optional"
+                                        },
+                                        {
+                                            "description": "The field's type description (the simple-dict value).",
+                                            "type": "string"
+                                        }
+                                    ]
+                                },
+                                "description": "Output field name → type description. A simple dict.",
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "description": "Nodes that produce external output, each with a typed `produces` map.",
+                    "type": "object"
+                },
+                "interface_version": {
+                    "description": "Semver of the interface contract itself.",
+                    "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9.]+)?(\\+[a-zA-Z0-9.]+)?$",
+                    "type": "string"
+                },
+                "ports": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/InterfacePorts"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Named input/output ports for seam-edge binding (recommended, not required)."
+                }
+            },
+            "required": [
+                "interface_version",
+                "entry_nodes",
+                "exit_nodes"
+            ],
+            "title": "InterfaceConfigMapForm",
+            "type": "object"
+        },
+        "InterfaceNode": {
+            "additionalProperties": false,
+            "description": "The interface descriptor (lattice_interop.md §2.2): id lattice_interface, type process, metadata in config. Not an execution node. Its config is typed — the master's second ruled divergence (canonical leaves config open; ADR-003).",
+            "properties": {
+                "config": {
+                    "$ref": "#/$defs/Any",
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/InterfaceConfigListForm"
+                        },
+                        {
+                            "$ref": "#/$defs/InterfaceConfigMapForm"
+                        }
+                    ],
+                    "description": "Node configuration overrides (AgentNode.config). Untyped on an operational node — linkml:Any, which the face emits as any non-array JSON type where canonical says object (register row R-07). Typed on the interface node."
+                },
+                "description": {
+                    "description": "Human-readable description (length floor refined per class).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "id": {
+                    "const": "lattice_interface",
+                    "description": "Stable identifier of the entity; a rename changes the label, never the id.",
+                    "type": "string"
+                },
+                "model_override": {
+                    "description": "Override the lattice's default model for this reasoning node.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "prompt": {
+                    "description": "Prompt template for reasoning nodes ({variable} interpolation).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "ref": {
+                    "description": "Reference to a vault record (wikilink path) or an external URI.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "type": {
+                    "const": "process",
+                    "description": "Node kind (serialized as `type`).",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "type",
+                "config"
+            ],
+            "title": "InterfaceNode",
+            "type": "object"
+        },
+        "InterfacePorts": {
+            "additionalProperties": false,
+            "description": "Named ports. `inputs`/`outputs` are canonical; `input`/`output` are deprecated aliases (ADR-003).",
+            "properties": {
+                "input": {
+                    "description": "DEPRECATED alias of `inputs` (the singular key of the canonical binder_generation example; ADR-003).",
+                    "items": {
+                        "$ref": "#/$defs/PortEntry",
+                        "anyOf": [
+                            {
+                                "$ref": "#/$defs/PortBinding"
+                            },
+                            {
+                                "$ref": "#/$defs/InputPortMapping"
+                            }
+                        ]
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "inputs": {
+                    "description": "Input ports — canonical spelling (D-AC-17 (ii)).",
+                    "items": {
+                        "$ref": "#/$defs/PortEntry",
+                        "anyOf": [
+                            {
+                                "$ref": "#/$defs/PortBinding"
+                            },
+                            {
+                                "$ref": "#/$defs/InputPortMapping"
+                            }
+                        ]
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "output": {
+                    "description": "DEPRECATED alias of `outputs` (ADR-003).",
+                    "items": {
+                        "$ref": "#/$defs/PortEntry",
+                        "anyOf": [
+                            {
+                                "$ref": "#/$defs/PortBinding"
+                            },
+                            {
+                                "$ref": "#/$defs/OutputPortMapping"
+                            }
+                        ]
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "outputs": {
+                    "description": "Output ports — canonical spelling (D-AC-17 (ii)).",
+                    "items": {
+                        "$ref": "#/$defs/PortEntry",
+                        "anyOf": [
+                            {
+                                "$ref": "#/$defs/PortBinding"
+                            },
+                            {
+                                "$ref": "#/$defs/OutputPortMapping"
+                            }
+                        ]
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                }
+            },
+            "title": "InterfacePorts",
+            "type": "object"
+        },
+        "KeyedEntryNode": {
+            "additionalProperties": false,
+            "description": "An entry node in the map form — keyed by its node id.",
+            "properties": {
+                "accepts": {
+                    "additionalProperties": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/$defs/TypedField__identifier_optional"
+                            },
+                            {
+                                "description": "The field's type description (the simple-dict value).",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "description": "Input field name → type description. A simple dict.",
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {
+                    "description": "Stable identifier of the entity; a rename changes the label, never the id.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "title": "KeyedEntryNode",
+            "type": "object"
+        },
+        "KeyedEntryNode__identifier_optional": {
+            "additionalProperties": false,
+            "description": "An entry node in the map form — keyed by its node id.",
+            "properties": {
+                "accepts": {
+                    "additionalProperties": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/$defs/TypedField__identifier_optional"
+                            },
+                            {
+                                "description": "The field's type description (the simple-dict value).",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "description": "Input field name → type description. A simple dict.",
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "id": {
+                    "description": "Stable identifier of the entity; a rename changes the label, never the id.",
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "KeyedEntryNode",
+            "type": "object"
+        },
+        "KeyedExitNode": {
+            "additionalProperties": false,
+            "description": "An exit node in the map form — keyed by its node id.",
+            "properties": {
+                "id": {
+                    "description": "Stable identifier of the entity; a rename changes the label, never the id.",
+                    "type": "string"
+                },
+                "produces": {
+                    "additionalProperties": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/$defs/TypedField__identifier_optional"
+                            },
+                            {
+                                "description": "The field's type description (the simple-dict value).",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "description": "Output field name → type description. A simple dict.",
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "title": "KeyedExitNode",
+            "type": "object"
+        },
+        "KeyedExitNode__identifier_optional": {
+            "additionalProperties": false,
+            "description": "An exit node in the map form — keyed by its node id.",
+            "properties": {
+                "id": {
+                    "description": "Stable identifier of the entity; a rename changes the label, never the id.",
+                    "type": "string"
+                },
+                "produces": {
+                    "additionalProperties": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/$defs/TypedField__identifier_optional"
+                            },
+                            {
+                                "description": "The field's type description (the simple-dict value).",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "description": "Output field name → type description. A simple dict.",
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                }
+            },
+            "required": [],
+            "title": "KeyedExitNode",
+            "type": "object"
+        },
+        "Lattice": {
+            "additionalProperties": false,
+            "description": "The lattice definition.",
+            "properties": {
+                "description": {
+                    "description": "Human-readable description (length floor refined per class).",
+                    "pattern": "^[\\s\\S]{10,}",
+                    "type": "string"
+                },
+                "edges": {
+                    "description": "Directed edges defining data flow between nodes (an explicit edge list, graph-native).",
+                    "items": {
+                        "$ref": "#/$defs/Edge"
+                    },
+                    "type": "array"
+                },
+                "execution": {
+                    "$ref": "#/$defs/Execution",
+                    "description": "Execution configuration; maps to LP AgentMode and the tier system."
+                },
+                "fair": {
+                    "$ref": "#/$defs/LatticeFair",
+                    "description": "FAIR metadata block; required for marketplace compliance and reproducibility."
+                },
+                "federation": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/LatticeFederation"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Federation metadata for cross-instance sharing and composition."
+                },
+                "lattice_type": {
+                    "$ref": "#/$defs/LatticeType",
+                    "description": "Classification of the lattice (default pipeline)."
+                },
+                "name": {
+                    "description": "Identifier or name (pattern refined per class).",
+                    "pattern": "^[a-z][a-z0-9_]*$",
+                    "type": "string"
+                },
+                "nodes": {
+                    "description": "Ordered list of nodes. The interface descriptor validates as InterfaceNode, every other node as OperationalNode.",
+                    "items": {
+                        "$ref": "#/$defs/LatticeNode",
+                        "anyOf": [
+                            {
+                                "$ref": "#/$defs/InterfaceNode"
+                            },
+                            {
+                                "$ref": "#/$defs/OperationalNode"
+                            }
+                        ]
+                    },
+                    "minItems": 1,
+                    "type": "array"
+                },
+                "version": {
+                    "description": "Semantic version of this lattice definition.",
+                    "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9.]+)?(\\+[a-zA-Z0-9.]+)?$",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "version",
+                "description",
+                "execution",
+                "nodes",
+                "edges",
+                "fair"
+            ],
+            "title": "Lattice",
+            "type": "object"
+        },
+        "LatticeDocument": {
+            "additionalProperties": false,
+            "description": "A whole .lattice.yaml file — one `lattice:` root.",
+            "properties": {
+                "lattice": {
+                    "$ref": "#/$defs/Lattice",
+                    "description": "The root lattice definition object."
+                }
+            },
+            "required": [
+                "lattice"
+            ],
+            "title": "LatticeDocument",
+            "type": "object"
+        },
+        "LatticeFair": {
+            "additionalProperties": false,
+            "description": "FAIR metadata block (lattice-local — not the profile's FairMetadata; ADR-007).",
+            "properties": {
+                "creators": {
+                    "description": "Creator names or identifiers.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "identifier": {
+                    "description": "DOI or persistent id (FAIR F1).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "keywords": {
+                    "description": "Semantic tags for findability (FAIR F4); at least one.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": "array"
+                },
+                "license": {
+                    "description": "SPDX license identifier.",
+                    "type": "string"
+                },
+                "provenance": {
+                    "description": "Free-text provenance: origin, derivation, methodology.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "license",
+                "keywords"
+            ],
+            "title": "LatticeFair",
+            "type": "object"
+        },
+        "LatticeFederation": {
+            "additionalProperties": false,
+            "description": "Federation metadata for cross-instance sharing (lattice-local — not the profile's FederationPolicy; ADR-007).",
+            "properties": {
+                "extracted_nodes": {
+                    "description": "Node ids extracted from parent_lattice.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "parent_lattice": {
+                    "description": "Name of the lattice this was extracted from.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "shareable": {
+                    "description": "Whether this lattice may be shared with other aDNA instances.",
+                    "type": [
+                        "boolean",
+                        "null"
+                    ]
+                },
+                "source_instance": {
+                    "description": "The aDNA instance that originated this lattice.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "version_policy": {
+                    "$ref": "#/$defs/LatticeVersionPolicy",
+                    "description": "How this lattice tracks upstream version changes."
+                }
+            },
+            "title": "LatticeFederation",
+            "type": "object"
+        },
+        "LatticeNode": {
+            "additionalProperties": false,
+            "description": "What every node carries. Concrete nodes are InterfaceNode or OperationalNode (disjoint by id).",
+            "properties": {
+                "config": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Any"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Node configuration overrides (AgentNode.config). Untyped on an operational node — linkml:Any, which the face emits as any non-array JSON type where canonical says object (register row R-07). Typed on the interface node."
+                },
+                "description": {
+                    "description": "Human-readable description (length floor refined per class).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "id": {
+                    "description": "Stable identifier of the entity; a rename changes the label, never the id.",
+                    "type": "string"
+                },
+                "model_override": {
+                    "description": "Override the lattice's default model for this reasoning node.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "prompt": {
+                    "description": "Prompt template for reasoning nodes ({variable} interpolation).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "ref": {
+                    "description": "Reference to a vault record (wikilink path) or an external URI.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "type": {
+                    "$ref": "#/$defs/NodeType",
+                    "description": "Node kind (serialized as `type`)."
+                }
+            },
+            "required": [
+                "id",
+                "type"
+            ],
+            "title": "LatticeNode",
+            "type": "object"
+        },
+        "LatticeType": {
+            "description": "Classification of the lattice; maps to the vault ontology discriminator.",
+            "enum": [
+                "pipeline",
+                "agent",
+                "context_graph",
+                "workflow",
+                "skill",
+                "infrastructure",
+                "context_set"
+            ],
+            "title": "LatticeType",
+            "type": "string"
+        },
+        "LatticeVersionPolicy": {
+            "description": "How this lattice tracks upstream versions. Lattice-local: the profile's VersionPolicy core is a different vocabulary (minor · locked · major) and is not reused (ADR-007).",
+            "enum": [
+                "locked",
+                "patch",
+                "minor",
+                "latest"
+            ],
+            "title": "LatticeVersionPolicy",
+            "type": "string"
+        },
+        "NodeType": {
+            "description": "Node kind — the five-member LP runtime set (AgentNodeType). `agent` is the master's first deliberate divergence from canonical v1.0.0, which lists four (Exhibit A; D-AC-17 (iv); ADR-005).",
+            "enum": [
+                "module",
+                "dataset",
+                "process",
+                "reasoning",
+                "agent"
+            ],
+            "title": "NodeType",
+            "type": "string"
+        },
+        "OperationalNode": {
+            "additionalProperties": false,
+            "description": "Any node other than the interface descriptor.",
+            "properties": {
+                "config": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Any"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Node configuration overrides (AgentNode.config). Untyped on an operational node — linkml:Any, which the face emits as any non-array JSON type where canonical says object (register row R-07). Typed on the interface node."
+                },
+                "description": {
+                    "description": "Human-readable description (length floor refined per class).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "id": {
+                    "description": "Stable identifier of the entity; a rename changes the label, never the id.",
+                    "pattern": "^(?!lattice_interface(?![\\s\\S]))[a-z][a-z0-9_]*$",
+                    "type": "string"
+                },
+                "model_override": {
+                    "description": "Override the lattice's default model for this reasoning node.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "prompt": {
+                    "description": "Prompt template for reasoning nodes ({variable} interpolation).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "ref": {
+                    "description": "Reference to a vault record (wikilink path) or an external URI.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "type": {
+                    "$ref": "#/$defs/NodeType",
+                    "description": "Node kind (serialized as `type`)."
+                }
+            },
+            "required": [
+                "id",
+                "type"
+            ],
+            "title": "OperationalNode",
+            "type": "object"
+        },
+        "OutputPortMapping": {
+            "additionalProperties": false,
+            "description": "DEPRECATED output port entry (lattice_interop.md §2.2): {name, maps_from, description}.",
+            "properties": {
+                "description": {
+                    "description": "Human-readable description (length floor refined per class).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "maps_from": {
+                    "description": "DEPRECATED — the exit node an output port maps from. Expands like maps_to.",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Identifier or name (pattern refined per class).",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "maps_from"
+            ],
+            "title": "OutputPortMapping",
+            "type": "object"
+        },
+        "PortBinding": {
+            "additionalProperties": false,
+            "description": "The canonical port entry (D-AC-17 (ii)): {name, node, field}, plus an optional description so the deprecated {name, maps_to|maps_from, description} migrates losslessly (D-AC-19 (xiii)).",
+            "properties": {
+                "description": {
+                    "description": "Human-readable description (length floor refined per class).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "field": {
+                    "description": "The field of that node the port binds to.",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Identifier or name (pattern refined per class).",
+                    "type": "string"
+                },
+                "node": {
+                    "description": "The node id the port binds to.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "node",
+                "field"
+            ],
+            "title": "PortBinding",
+            "type": "object"
+        },
+        "PortEntry": {
+            "additionalProperties": false,
+            "description": "The union of every port-entry key — the slot range under the any_of (permissive by construction, so the any_of alone decides; F-AC-20 probe 5). Never valid on its own terms: an entry must match PortBinding or a *PortMapping.",
+            "properties": {
+                "description": {
+                    "description": "Human-readable description (length floor refined per class).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "field": {
+                    "description": "The field of that node the port binds to.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "maps_from": {
+                    "description": "DEPRECATED — the exit node an output port maps from. Expands like maps_to.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "maps_to": {
+                    "description": "DEPRECATED — the entry node an input port maps to. Expands to `node`, with `field` = the port name (exact only where the two names agree; Terminal's rule).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "name": {
+                    "description": "Identifier or name (pattern refined per class).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "node": {
+                    "description": "The node id the port binds to.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "title": "PortEntry",
+            "type": "object"
+        },
+        "Runtime": {
+            "description": "Target runtime environment.",
+            "enum": [
+                "ray",
+                "local",
+                "kubernetes"
+            ],
+            "title": "Runtime",
+            "type": "string"
+        },
+        "SchemaDescriptor": {
+            "additionalProperties": false,
+            "description": "The record a derived schema publishes beside its generated artifacts (its wrapper's federation entry): which schema, which version and status, which profile it derives from, which artifacts were generated, and which convention and canvas annotations it uses.",
+            "properties": {
+                "canvas_annotations": {
+                    "description": "Which canvas-twin annotation keys the schema header carries.",
+                    "items": {
+                        "$ref": "#/$defs/CanvasAnnotation"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "convention_annotations": {
+                    "description": "Which rider-i convention annotation keys the schema uses anywhere.",
+                    "items": {
+                        "$ref": "#/$defs/ConventionAnnotation"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "generated_artifacts": {
+                    "description": "The artifacts generated from the schema and published beside it.",
+                    "items": {
+                        "$ref": "#/$defs/GeneratedArtifact"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "profile_contract": {
+                    "description": "The profile version the schema derives from, as profile@<semver>.",
+                    "pattern": "^profile@(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?$",
+                    "type": "string"
+                },
+                "schema_id": {
+                    "description": "The derived schema's id, under the aDNA namespace rule (D-AC-10).",
+                    "format": "uri",
+                    "pattern": "^https://w3id\\.org/adna/[a-z][a-z0-9_]*/[a-z][a-z0-9_]*$",
+                    "type": "string"
+                },
+                "schema_license": {
+                    "description": "The derived schema header's license as written — an SPDX expression or a license URL (fleet headers use both: MIT · Apache-2.0 · https://opensource.org/licenses/MIT · https://creativecommons.org/licenses/by/4.0/).",
+                    "pattern": "^((LicenseRef-[A-Za-z0-9.-]+|[A-Za-z0-9][A-Za-z0-9.+-]*)( (AND|OR|WITH) (LicenseRef-[A-Za-z0-9.-]+|[A-Za-z0-9][A-Za-z0-9.+-]*))*|https?://[^ ]+)$",
+                    "type": "string"
+                },
+                "schema_name": {
+                    "description": "The derived schema's name (snake_case; matches its file stem before .linkml.yaml).",
+                    "pattern": "^[a-z][a-z0-9_]*$",
+                    "type": "string"
+                },
+                "schema_status": {
+                    "$ref": "#/$defs/SchemaStatus",
+                    "description": "The derived schema's lifecycle status."
+                },
+                "schema_version": {
+                    "description": "The derived schema's semantic version.",
+                    "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?$",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "schema_id",
+                "schema_name",
+                "schema_version",
+                "schema_status",
+                "schema_license",
+                "profile_contract"
+            ],
+            "title": "SchemaDescriptor",
+            "type": "object"
+        },
+        "SchemaStatus": {
+            "description": "Lifecycle status of a derived schema, as its SchemaDescriptor declares it.",
+            "enum": [
+                "draft",
+                "proposed",
+                "accepted",
+                "deprecated",
+                "superseded"
+            ],
+            "title": "SchemaStatus",
+            "type": "string"
+        },
+        "Tier": {
+            "description": "Compute tier. L1 = edge/local, L2 = regional/cluster, L3 = cloud/HPC. Values kept upper-case as canonical writes them (naming exception, header).",
+            "enum": [
+                "L1",
+                "L2",
+                "L3"
+            ],
+            "title": "Tier",
+            "type": "string"
+        },
+        "TypedField": {
+            "additionalProperties": false,
+            "description": "One entry of an accepts/produces simple dict — field name → type description.",
+            "properties": {
+                "field_name": {
+                    "description": "The field name (the simple-dict key).",
+                    "type": "string"
+                },
+                "field_type": {
+                    "description": "The field's type description (the simple-dict value).",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "field_name",
+                "field_type"
+            ],
+            "title": "TypedField",
+            "type": "object"
+        },
+        "TypedField__identifier_optional": {
+            "additionalProperties": false,
+            "description": "One entry of an accepts/produces simple dict — field name → type description.",
+            "properties": {
+                "field_name": {
+                    "description": "The field name (the simple-dict key).",
+                    "type": "string"
+                },
+                "field_type": {
+                    "description": "The field's type description (the simple-dict value).",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "field_type"
+            ],
+            "title": "TypedField",
+            "type": "object"
+        },
+        "VersionPolicy": {
+            "description": "How a downstream consumer receives updates of a federated entity.",
+            "enum": [
+                "minor",
+                "locked",
+                "major"
+            ],
+            "title": "VersionPolicy",
+            "type": "string"
+        }
+    },
+    "$id": "https://w3id.org/adna/base/lattice_master/lattice",
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "additionalProperties": false,
+    "description": "A whole .lattice.yaml file — one `lattice:` root.",
+    "metamodel_version": "1.11.0",
+    "properties": {
+        "lattice": {
+            "$ref": "#/$defs/Lattice",
+            "description": "The root lattice definition object."
+        }
+    },
+    "required": [
+        "lattice"
+    ],
+    "title": "lattice_master",
+    "type": "object",
+    "version": "0.1.0-proposed"
+}

@@ -111,7 +111,7 @@ Each `AGENTS.md` helps agents decide whether to load its directory. See
 
 ## Compliance Dimensions
 
-Object quality is measured across 10 dimensions (scored 0-5 each, 50 max):
+Object quality is measured across 11 dimensions, each scored 0–3 by the checker (33 max; a dimension that does not apply to an object type scores 3):
 
 1. **Triad structure** — correct directory placement
 2. **Governance** — CLAUDE.md, MANIFEST.md, STATE.md coherence
@@ -123,5 +123,6 @@ Object quality is measured across 10 dimensions (scored 0-5 each, 50 max):
 8. **Registration** — lattice registry readiness
 9. **Companions** — YAML companion files for non-YAML objects
 10. **Reproducibility** — clear inputs, outputs, and execution context
+11. **Derivability** — a registry-class object (a hand-maintained list) names, in its frontmatter `derivability:` block, either its **consumer** (what fails when it drifts) or its **discovery pass** (what enumerates its territory, with `last_run`). A registry with neither is correct today and read by nothing (gap G-015). Applies to registries only.
 
 Reference: `what/lattices/tools/compliance_checker.py` for automated checking.

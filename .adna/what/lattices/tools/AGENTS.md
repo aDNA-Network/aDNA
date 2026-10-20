@@ -1,8 +1,8 @@
 ---
 type: directory_index
 created: 2026-02-19
-updated: 2026-03-21
-last_edited_by: agent_init
+updated: 2026-10-20
+last_edited_by: agent_rosetta
 tags: [directory_index, lattice, tools, compliance]
 ---
 
@@ -16,9 +16,10 @@ Python utilities for validating aDNA objects, scoring compliance, and converting
 
 | Tool | Function |
 |------|----------|
-| `compliance_checker.py` | Score vault objects across 10 aDNA compliance dimensions. Outputs YAML scorecard + MD report. |
-| `lattice_validate.py` | Validate `.lattice.yaml` against JSON Schema + federation readiness checks |
-| `adna_validate.py` | Validate aDNA instance conformance per §5.5 (starter/standard/full levels) |
+| `compliance_checker.py` | Score vault objects across 11 aDNA compliance dimensions (0–3 each; d11 derivability applies to registries only). Outputs YAML scorecard + MD report. |
+| `lattice_validate.py` | Validate `.lattice.yaml` against JSON Schema + federation readiness checks. Enum values come from `faces/lattice.schema.json` |
+| `adna_validate.py` | Validate aDNA instance conformance per §5.5 (starter/standard/full levels). `--governance` also checks stamp currency (aDNA.aDNA ADR-067 clause 4) |
+| `faces/` | `lattice.schema.json`: a byte copy of the lattice master's generated face (LinkML.aDNA), pinned in `faces/upstream.json`. Re-vendor it from its source and update the pin; never edit it |
 | `lattice2canvas.py` | Convert `.lattice.yaml` → Obsidian `.canvas` |
 | `canvas2lattice.py` | Convert Obsidian `.canvas` → `.lattice.yaml` |
 | `frontmatter_schema.json` | JSON Schema for aDNA frontmatter validation |
@@ -58,8 +59,12 @@ for error in result.errors:
 ```bash
 python adna_validate.py ~/aDNA/adna                     # Auto-detect level
 python adna_validate.py ~/aDNA/adna --level standard    # Check specific level
-python adna_validate.py ~/aDNA/adna --governance        # Governance sync checks
+python adna_validate.py ~/aDNA/adna --governance        # Governance sync checks + stamp currency
 ```
+
+**Stamp currency** (`--governance`): every generated face that carries `Master: <path>  sync_hash: <hex>` (or `source_sha256:` on a canvas twin), and every copy pinned in an `upstream.json`, is re-hashed against its master or source. A mismatch is a **warning**. A master or source that is not on this node is reported **unverifiable** (an info line), never failed.
+
+**Dates in frontmatter**: YAML loads an unquoted `2026-10-20` as a date object, not a string. Before validating frontmatter against a JSON Schema (such as `frontmatter_schema.json`), convert date values to ISO strings, for example `json.loads(json.dumps(data, default=str))`. Otherwise every date field fails a `type: string` rule.
 
 ### Convert lattice to canvas
 
