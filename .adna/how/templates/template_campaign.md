@@ -10,6 +10,10 @@ estimated_sessions: "<min>-<max>"
 calibrated_sessions: "<min>-<max>"     # Post-compression estimate (see estimation guidance below)
 estimation_class: ""                   # infrastructure | governance-tight | governance-broad | content-novel
 priority: high | medium | low
+executor_tier_default: fable | opus | sonnet   # the tier a mission inherits unless it declares its own
+executor_runtime: ""                   # optional — the agent runtime executing the campaign (e.g. claude)
+token_budget_estimated: "<kT, per ADR-016>"    # campaign total; missions carry their own estimate + actual
+token_budget_unit: kT_content_load
 created: <% tp.date.now("YYYY-MM-DD") %>
 updated: <% tp.date.now("YYYY-MM-DD") %>
 last_edited_by: agent_<username>
@@ -91,6 +95,14 @@ tags: [campaign]
 | AAR produced | 5-step AAR protocol | Yes — scorecard + GO/NO-GO required |
 | Deliverables validated | AAR scorecard (validated/total) | Yes — all deliverables must be validated or justified |
 | Files committed | Git status clean | Yes — no orphaned changes |
+
+**Instrument discipline** *(v8.14)*. A check whose green anyone acts on must earn that trust in two ways:
+
+1. **Demonstrated to fail.** Before relying on it, make it go red on purpose: mutate what it asserts, watch it fail,
+   restore, watch it pass. Record that this was done.
+2. **Reached its target.** It must show that it measured the thing it names (a success status, the expected host, a
+   non-empty scope), and it must say **CANNOT VERIFY** rather than pass when it did not. An honest gap beats a false
+   green. Corollary: *presence is not conformance*; checking that a field exists is weaker than checking its value.
 
 ### Per-Phase
 

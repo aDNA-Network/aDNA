@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """aDNA Compliance Checker — scores vault objects across 11 compliance dimensions.
 
-Validates objects against the aDNA Universal Standard v2.5 and produces
+Validates objects against the aDNA Universal Standard v2.6 and produces
 YAML scorecards and Markdown reports.
 
 Runtime: requires python3.13 (the vault's `yaml` dependency is installed there); a

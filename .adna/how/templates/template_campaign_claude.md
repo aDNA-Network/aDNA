@@ -17,6 +17,11 @@ tags: [governance, campaign]
 | Owner | {username} |
 | Status | {planning / active / completed} |
 | Current Phase | Phase {N}: {phase_name} |
+| Live pointer | {≤ 200 characters: the one next act and where it is recorded — e.g. "M03 next (opus), prompt in missions/session_prompts.md; DP2 open"} |
+
+> **Keep the live pointer short and current.** It answers "what happens next?" in one line, ≤ 200 characters.
+> History, findings and counts belong in the campaign master doc and `STATE.md`; a pointer that grows into a log
+> stops being read and starts disagreeing with them. Rewrite it at every mission close — never append to it.
 
 ## Quick Start
 

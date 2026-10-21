@@ -2,8 +2,8 @@
 type: context
 title: "aDNA Tool-Agnostic Setup Guide"
 created: 2026-03-20
-updated: 2026-03-20
-last_edited_by: agent_init
+updated: 2026-10-21
+last_edited_by: agent_rosetta
 status: approved
 tags: [context, setup, tools, vscode, terminal, obsidian]
 ---
@@ -56,7 +56,8 @@ claude
 
 ### Tips
 
-- Use `grep -r "type: mission" how/missions/` to find active missions
+- Use `grep -rlE "^type: (plan|mission)$" how/missions/` to find mission files (the templates write `type: plan`; older
+  files may carry `type: mission`), then `grep -l "^status: active"` on that list for the active ones
 - Use `grep -r "status: active" --include="*.md"` for active items
 - Session files are your changelog — check `how/sessions/active/`
 

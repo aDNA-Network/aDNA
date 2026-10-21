@@ -283,7 +283,7 @@ Inventory / health / membership / credentials queries route here ({{persona}}). 
 
 ### Compliance Dimensions
 
-Object quality is measured across 11 dimensions (scored 0–3 each, 33 max) — same rubric as `aDNA.aDNA/CLAUDE.md` §Compliance Dimensions. Run `skill_node_health_check` to score this vault.
+Object quality is measured across 11 dimensions (scored 0–3 each, 33 max) — the rubric `what/lattices/tools/compliance_checker.py` implements. Run `skill_node_health_check` to score this vault.
 
 ### FAIR Metadata
 

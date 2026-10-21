@@ -2,11 +2,11 @@
 type: skill
 skill_type: agent
 created: 2026-02-20
-updated: 2026-02-20
+updated: 2026-10-21
 status: active
 category: ontology
 trigger: "User requests a new entity type or onboarding Step 6 suggests extensions"
-last_edited_by: agent_init
+last_edited_by: agent_rosetta
 tags: [skill, ontology, scaffolding]
 
 requirements:
@@ -86,7 +86,9 @@ If the directory exists, inform the user and offer to update the existing AGENTS
 mkdir -p {triad_leg}/{entity_name}s/
 ```
 
-Use the plural form for the directory name (e.g., `who/customers/`, `what/experiments/`).
+Use the plural form for the directory name (e.g., `who/customers/`, `what/experiments/`). Mass nouns and
+collectives stay singular, as the base ontology's own `what/context/`, `how/backlog/` and `who/governance/` do
+(e.g. `what/craft/`, not `what/crafts/`); record the singular choice in `what/ontology.md`.
 
 ### Step 3: Generate AGENTS.md
 

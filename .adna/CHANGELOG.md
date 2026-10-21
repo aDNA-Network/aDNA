@@ -28,6 +28,29 @@ Changelog entries are organized by **governance version** (primary heading). Sta
 
 ---
 
+## [v8.14] — 2026-10-21
+
+> **Governance 8.13 → 8.14 · Standard track: v2.6 (unchanged)** — a governance-only release. New projects start with the template fields recent projects kept adding by hand, plus two template sections, a schema fix and a portability fix. **No file is added: 33 templates · 34 skills.** No instance that conformed under v8.13 stops conforming.
+
+### Added
+- **`template_campaign_mission.md` frontmatter**: `executor_tier`, `token_budget_estimated` and `token_budget_actual` (the one actuals key), plus the optional `executor_lane`, `gate` and `depends_on`, worded as in `template_mission.md`. `depends_on` is the forward edge; what a mission unblocks is derived from it, never kept by hand.
+- **`template_campaign_mission.md` §Acceptance coherence**: before a gate ratifies the budget, read every method criterion against every test criterion and record which pairs were read.
+- **`template_campaign.md` frontmatter**: `executor_tier_default`, `executor_runtime`, `token_budget_estimated`, `token_budget_unit`. **§Verification Strategy** gains *instrument discipline*: a check must be shown to fail, and must show it reached its target (or say CANNOT VERIFY).
+- **`template_campaign_claude.md`**: a **Live pointer** row in Campaign Identity, capped at 200 characters and rewritten at each mission close, never appended to.
+- **`template_coordination.md`**: `to:`, `reply_to:`, `status: staged | delivered` and `delivered_on:` (stamp *delivered* after the copy, then re-sync the delivered copy).
+
+### Fixed
+- **`frontmatter_schema.json`** required `status` on every file, but standard §7.2 makes it optional for `directory_index` and `coordination`. The schema now requires it for every other type only.
+- **`skill_mesh_probe_discipline.md` rule 1**: `ping`'s timing flags mean different things on macOS and Linux (`-t` is a timeout on one and the TTL on the other; `-W` is milliseconds on one and seconds on the other). Probes are now bounded with `timeout`.
+- **`tool_setup_guide.md`**: the mission-finding grep matched only `type: mission`, while the templates write `type: plan`. It now accepts both.
+- **Currency**: the `ontology.md` standard link reads v2.6 (it said v2.1); the `compliance_checker.py` and `adna_validate.py` docstrings read v2.6; `template_home_claude.md` points at the rubric every fork carries (`compliance_checker.py`); the `MANIFEST.md` standard row reads "16 base + 11 example extension", matching the ontology's `entity_count: 27`.
+
+### Changed
+- **`skill_new_entity_type.md` Step 2**: mass nouns and collectives keep a singular directory name, as the base ontology's own `context/`, `backlog/` and `governance/` do.
+- Governance badges bumped (root + `.adna/` READMEs).
+
+---
+
 ## [v8.13] — 2026-10-20
 
 > **Governance 8.12 → 8.13 · Standard track: v2.5 → v2.6** — operator-ratified **standard minor** release. The standard gains conformance profiles, release integrity, an optional data-tier label and three new practice sections; the validators and the lattice examples catch up with what the standard says. **Count change: 32 → 33 templates · 33 → 34 skills.** Minor (§15.4): no instance that conformed to v2.5 stops conforming.

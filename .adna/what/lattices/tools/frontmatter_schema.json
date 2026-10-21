@@ -2,9 +2,14 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://adna.network/schemas/frontmatter/v2.3",
   "title": "aDNA Frontmatter Schema",
-  "description": "JSON Schema for validating aDNA content file frontmatter per §7 of the aDNA Universal Standard v2.3",
+  "description": "JSON Schema for validating aDNA content file frontmatter per §7 of the aDNA Universal Standard v2.6 (§7.2 per-class profile: status is optional for directory_index and coordination)",
   "type": "object",
-  "required": ["type", "created", "updated", "status", "last_edited_by", "tags"],
+  "required": ["type", "created", "updated", "last_edited_by", "tags"],
+  "if": {
+    "properties": { "type": { "enum": ["directory_index", "coordination"] } },
+    "required": ["type"]
+  },
+  "else": { "required": ["status"] },
   "properties": {
     "type": {
       "type": "string",

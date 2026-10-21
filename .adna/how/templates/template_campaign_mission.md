@@ -8,6 +8,12 @@ campaign_id: campaign_<name>
 campaign_phase: <N>
 campaign_mission_number: <N>
 mission_class:                        # Optional: reconnaissance | implementation | verification | integration | closeout
+executor_tier: fable | opus | sonnet  # planned model-routing class (see pattern_model_tiered_campaign_execution)
+token_budget_estimated: "<kT, per ADR-016>"   # per-mission budget declaration
+token_budget_actual: "<kT, filled at close>"  # the ONE actuals key — record actuals here, not under another name
+executor_lane: oauth | key | local      # optional (v8.12) — how the executor is reached: a subscription/OAuth session, an API key, or a local model; distinct from the tier (what class), this names the lane (which route)
+gate:             # optional — pointer to the gate this mission is waiting on (e.g. how/gates/<gate_id>.md or an ISS gate URL); set with awaiting_operator / escalated
+depends_on: []    # optional — missions that must complete first (the forward edge; "what this unblocks" is derived from it, never kept by hand)
 created: <% tp.date.now("YYYY-MM-DD") %>
 updated: <% tp.date.now("YYYY-MM-DD") %>
 last_edited_by: agent_<username>
@@ -27,6 +33,18 @@ One-paragraph description of what this mission achieves when all objectives are 
 ## Exit Gate
 
 [Specific, verifiable criteria that must be true for this mission to be considered complete. Copied from the campaign master document.]
+
+### Acceptance coherence
+
+*(v8.14.)* Before a gate ratifies this mission's budget, the author reads the criteria against each other and asks one
+question: **can the stated method satisfy the stated test?** This is not a review of whether the criteria are good or the
+budget right. Run the question against **every** pair of a method-bearing criterion and a test-bearing criterion, not
+only the pairs that look suspicious, and record which pairs were read. A partial pass and a complete pass otherwise
+produce the same sentence, and the ratifying operator cannot tell them apart.
+
+| Method criterion | Test criterion | Can the method satisfy the test? |
+|---|---|---|
+| {criterion} | {criterion} | {yes / no — and what changed} |
 
 ## Premise pass
 

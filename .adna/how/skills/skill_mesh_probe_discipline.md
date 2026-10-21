@@ -2,7 +2,7 @@
 type: skill
 skill_type: process
 created: 2026-10-20
-updated: 2026-10-20
+updated: 2026-10-21
 status: active
 category: network_operations
 trigger: "Any reachability claim about a mesh peer — UP or DOWN — before recording, relaying, or acting on it"
@@ -40,7 +40,11 @@ port depends on the *probing* side's groups as well.
 ## The rule
 
 1. **Warm, then measure.** Send a throwaway `ping -c2 <peer>` first, then the real measurement, e.g.
-   `ping -c5 -t15 <peer>` (example form: `ping -c5 -t15 198.51.100.7`). Never conclude anything from a single cold probe.
+   `timeout 20 ping -c5 <peer>` (example form: `timeout 20 ping -c5 198.51.100.7`). Never conclude anything from a single cold probe.
+   ⚠ **`ping`'s timing flags are not portable.** On macOS `-t N` is a total timeout in seconds and `-W N` a per-reply
+   wait in **milliseconds**; on Linux (iputils) `-t N` sets the **TTL** (no time bound at all) and `-W N` is seconds.
+   So bound the probe with `timeout` (rule 5) rather than a `ping` flag, check `uname -s` on the vantage, and record
+   the command as typed beside the result. A `-W 5` that waits 5 ms reads a healthy peer as 0/5.
 2. **State the vantage.** Every recorded reachability fact names the machine it was measured from (`A→peer 5/5 0%`
    is not the same fact as `B→peer`). A claim without a vantage is not a fact.
 3. **Cross-check before declaring DOWN.** A peer is down when it fails a warm probe **and** sibling peers answer

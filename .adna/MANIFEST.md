@@ -124,7 +124,7 @@ how/pipelines/prd_rfc/
 
 | Component | Status | Description |
 |-----------|--------|-------------|
-| aDNA Standard v2.6 | Shipped | Core specification — triad, ontology (16 base + 8 extension), sessions, missions, campaigns |
+| aDNA Standard v2.6 | Shipped | Core specification — triad, ontology (16 base + 11 example extension), sessions, missions, campaigns |
 | Context library | Shipped | 5 topics, 27 subtopics, ~75K tokens. Cross-topic recipe system with 6 recipes |
 | Lattice YAML tools | Shipped | Validate, convert (YAML↔canvas), JSON Schema, 15 example lattices + 3 canvas templates |
 | Mermaid-enhanced spec docs | Shipped | 19 diagrams across 3 aDNA specification documents |
